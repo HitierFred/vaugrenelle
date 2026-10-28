@@ -1,0 +1,152 @@
+---
+// Calendrier mensuel de disponibilité + alternative en tableau par période.
+// Chaque case porte un texte et une icône : la couleur n'est jamais seule.
+import Icon from './Icon.astro';
+
+interface Props {
+  year: number;
+  month: number; // 1 à 12
+  total: number; // quantité en parc
+  // Disponibles par jour (AAAA-MM-JJ). Jour absent = tout est disponible.
+  availability: Record<string, number>;
+  title?: string;
+}
+
+const { year, month, total, availability, title = 'Disponibilités' } = Astro.props;
+
+type DayState = 'libre' | 'partiel' | 'complet';
+interface Day {
+  iso: string;
+  day: number;
+  dispo: number;
+  state: DayState;
+}
+
+const pad = (n: number) => String(n).padStart(2, '0');
+const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+// Décalage pour une semaine commençant le lundi
+const offset = (new Date(Date.UTC(year, month - 1, 1)).getUTCDay() + 6) % 7;
+
+const days: Day[] = Array.from({ length: daysInMonth }, (_, i) => {
+  const iso = `${year}-${pad(month)}-${pad(i + 1)}`;
+  const dispo = availability[iso] ?? total;
+  const state: DayState = dispo >= total ? 'libre' : dispo > 0 ? 'partiel' : 'complet';
+  return { iso, day: i + 1, dispo, state };
+});
+
+const cells: (Day | null)[] = [...Array(offset).fill(null), ...days];
+while (cells.length % 7) cells.push(null);
+const weeks = Array.from({ length: cells.length / 7 }, (_, w) => cells.slice(w * 7, w * 7 + 7));
+
+const monthName = new Intl.DateTimeFormat('fr-FR', { month: 'long', timeZone: 'UTC' }).format(
+  new Date(Date.UTC(year, month - 1, 1)),
+);
+const weekdays = [
+  ['lun.', 'lundi'],
+  ['mar.', 'mardi'],
+  ['mer.', 'mercredi'],
+  ['jeu.', 'jeudi'],
+  ['ven.', 'vendredi'],
+  ['sam.', 'samedi'],
+  ['dim.', 'dimanche'],
+];
+
+const stateText: Record<DayState, string> = {
+  libre: 'Libre',
+  partiel: 'Partiel',
+  complet: 'Complet',
+};
+const stateIcon = { libre: 'check', partiel: 'alert', complet: 'error' } as const;
+
+// Regroupe les jours consécutifs de même disponibilité pour le tableau
+const periods: { from: number; to: number; dispo: number; state: DayState }[] = [];
+for (const d of days) {
+  const last = periods.at(-1);
+  if (last && last.dispo === d.dispo) last.to = d.day;
+  else periods.push({ from: d.day, to: d.day, dispo: d.dispo, state: d.state });
+}
+const caption = `${title} — ${monthName} ${year}`;
+---
+
+<div class="calendar-wrap stack">
+  <table class="calendar">
+    <caption>{caption}</caption>
+    <thead>
+      <tr>
+        {weekdays.map(([short, long]) => (
+          <th scope="col">
+            <abbr title={long}>{short}</abbr>
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {weeks.map((week) => (
+        <tr>
+          {week.map((d) =>
+            d ? (
+              <td data-state={d.state}>
+                <span class="calendar__day">{d.day}</span>
+                <span class="calendar__state">
+                  <Icon name={stateIcon[d.state]} />
+                  <span>
+                    {d.dispo}/{total}
+                    <span class="calendar__label"> {stateText[d.state]}</span>
+                  </span>
+                </span>
+              </td>
+            ) : (
+              <td data-outside />
+            ),
+          )}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <ul class="calendar-legend" aria-label="Légende">
+    <li class="cluster">
+      <Icon name="check" /> Libre : tout le parc est disponible
+    </li>
+    <li class="cluster">
+      <Icon name="alert" /> Partiel : une partie est réservée
+    </li>
+    <li class="cluster">
+      <Icon name="error" /> Complet : rien n'est disponible
+    </li>
+  </ul>
+
+  <details class="accordion">
+    <summary>
+      <span>Voir les disponibilités sous forme de tableau</span>
+      <Icon name="chevron-down" />
+    </summary>
+    <div class="accordion__body table-wrap">
+      <table class="table">
+        <caption>{caption}, par période</caption>
+        <thead>
+          <tr>
+            <th scope="col">Période</th>
+            <th scope="col">Disponibles</th>
+            <th scope="col">État</th>
+          </tr>
+        </thead>
+        <tbody>
+          {periods.map((p) => (
+            <tr>
+              <th scope="row">
+                {p.from === p.to
+                  ? `Le ${p.from} ${monthName}`
+                  : `Du ${p.from} au ${p.to} ${monthName}`}
+              </th>
+              <td>
+                {p.dispo} sur {total}
+              </td>
+              <td>{stateText[p.state]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>

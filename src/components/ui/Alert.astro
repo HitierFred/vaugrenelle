@@ -1,0 +1,43 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from './types';
+
+type Variant = 'info' | 'success' | 'warning' | 'error';
+
+interface Props {
+  variant?: Variant;
+  title: string;
+  // live : annonce par les lecteurs d'écran (message apparu après une action).
+  // Erreur → role="alert", autres → role="status". Désactiver pour un message statique.
+  live?: boolean;
+  headingLevel?: 2 | 3 | 4;
+}
+
+const { variant = 'info', title, live = true, headingLevel = 2 } = Astro.props;
+
+const icons: Record<Variant, IconName> = {
+  info: 'info',
+  success: 'check',
+  warning: 'alert',
+  error: 'error',
+};
+const prefixes: Record<Variant, string> = {
+  info: 'Information',
+  success: 'Succès',
+  warning: 'Attention',
+  error: 'Erreur',
+};
+const role = live ? (variant === 'error' ? 'alert' : 'status') : undefined;
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
+---
+
+<div class:list={['alert', `alert--${variant}`]} role={role}>
+  <Icon name={icons[variant]} />
+  <div class="stack stack-s">
+    <Heading class="alert__title">
+      <span class="visually-hidden">{prefixes[variant]} : </span>
+      {title}
+    </Heading>
+    <slot />
+  </div>
+</div>

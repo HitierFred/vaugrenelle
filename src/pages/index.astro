@@ -1,49 +1,13 @@
 ---
-// Page d'accueil provisoire (phase 0). Remplacée en phase 3.
-const base = import.meta.env.BASE_URL;
+// Page d'accueil provisoire. Remplacée en phase 3.
+import PageLayout from '../layouts/PageLayout.astro';
 ---
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Démonstrateur du portail de la Ville fictive de Vaugrenelle : site en construction."
-    />
-    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
-    <title>Accueil — Vaugrenelle, la ville comme scène (démonstration)</title>
-    <style>
-      /* Styles provisoires : le design system arrive en phase 1 */
-      body {
-        margin: 0;
-        font-family: system-ui, sans-serif;
-        line-height: 1.6;
-        color: #1b1f3b;
-        background: #faf7f2;
-      }
-      .demo-banner {
-        margin: 0;
-        padding: 0.5rem 1rem;
-        background: #1b1f3b;
-        color: #faf7f2;
-        text-align: center;
-      }
-      main {
-        max-width: 68ch;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-      }
-    </style>
-  </head>
-  <body>
-    <p class="demo-banner" data-testid="demo-banner">
-      Site de démonstration — collectivité fictive. Aucune donnée réelle n'est collectée.
-    </p>
-    <main>
-      <h1>Vaugrenelle, la ville comme scène</h1>
-      <p>Le démonstrateur du portail de la Ville de Vaugrenelle est en construction.</p>
-    </main>
-  </body>
-</html>
+<PageLayout
+  title="Accueil"
+  heading="Vaugrenelle, la ville comme scène"
+  lead="Le démonstrateur du portail de la Ville de Vaugrenelle est en construction."
+  description="Démonstrateur du portail de la Ville fictive de Vaugrenelle : agenda culturel, Guichet Unique et Régie partagée."
+>
+  <p>Les rubriques arrivent au fil des phases de développement.</p>
+</PageLayout>

@@ -1,0 +1,42 @@
+@layer utilities {
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  .stack > * + * {
+    margin-block-start: var(--stack-space, var(--sp-4));
+  }
+  .stack-l {
+    --stack-space: var(--sp-8);
+  }
+  .stack-s {
+    --stack-space: var(--sp-2);
+  }
+
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cluster-space, var(--sp-3));
+    align-items: center;
+  }
+
+  .muted {
+    color: var(--c-muted);
+  }
+
+  .text-small {
+    font-size: var(--fs-300);
+  }
+
+  .no-measure {
+    max-width: none;
+  }
+}

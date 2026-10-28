@@ -1,0 +1,54 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  current: number;
+  total: number;
+  hrefFor: (page: number) => string;
+  label?: string;
+}
+
+const { current, total, hrefFor, label = 'Pagination' } = Astro.props;
+
+// Pages affichées : première, dernière, courante ± 1, avec ellipses
+const pages: (number | '…')[] = [];
+for (let p = 1; p <= total; p++) {
+  if (p === 1 || p === total || Math.abs(p - current) <= 1) pages.push(p);
+  else if (pages.at(-1) !== '…') pages.push('…');
+}
+---
+
+<nav class="pagination" aria-label={label}>
+  <ul>
+    {current > 1 && (
+      <li>
+        <a href={hrefFor(current - 1)} rel="prev">
+          <Icon name="chevron-left" />
+          Précédente
+        </a>
+      </li>
+    )}
+    {pages.map((p) =>
+      p === '…' ? (
+        <li>
+          <span aria-hidden="true">…</span>
+        </li>
+      ) : (
+        <li>
+          <a href={hrefFor(p)} aria-current={p === current ? 'page' : undefined}>
+            <span class="visually-hidden">Page </span>
+            {p}
+          </a>
+        </li>
+      ),
+    )}
+    {current < total && (
+      <li>
+        <a href={hrefFor(current + 1)} rel="next">
+          Suivante
+          <Icon name="chevron-right" />
+        </a>
+      </li>
+    )}
+  </ul>
+</nav>

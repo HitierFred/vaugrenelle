@@ -60,3 +60,58 @@ Tous ces paquets sont sous licence MIT ou Apache-2.0 et ne servent qu'au dévelo
 ### Page d'accueil provisoire
 
 `src/pages/index.astro` contient une page minimale avec le bandeau démo écrit en dur et des styles inline. Elle sera remplacée par les layouts en phase 1, puis par l'accueil en phase 3.
+
+---
+
+## 2026-10-28 — Phase 1 : design system
+
+### Police
+
+Atkinson Hyperlegible 5.3.0 (licence OFL 1.1, licence jointe dans `public/fonts/OFL.txt`). Les deux fichiers woff2 du sous-ensemble latin (400 et 700, 17 Ko chacun) ont été copiés depuis le paquet `@fontsource/atkinson-hyperlegible`, récupéré une fois avec `npm pack`. **Aucune dépendance n'est ajoutée.** Le sous-ensemble latin couvre le français (accents, œ, €, guillemets, espaces fines).
+
+Les `@font-face` sont injectées dans le `<head>` par `BaseLayout`, parce que leur chemin dépend de la base du site. Seule la graisse 400 est préchargée. `font-display: swap` laisse la pile système s'afficher en attendant.
+
+### Couches CSS
+
+`@layer reset, tokens, base, layout, components, utilities;` est déclaré en tête de `tokens.css`. Les styles de composants vivent dans `components.css` (fichier global, mis en cache) et non dans des `<style>` par composant. Exception : la page de vitrine garde ses styles propres.
+
+Piège rencontré : un sélecteur de la couche `layout` ne peut pas masquer un `.btn`, car la couche `components` est prioritaire. Le bouton de menu est donc masqué via son enveloppe `<vg-nav-toggle>`.
+
+### Ajouts aux tokens du brief
+
+- `--c-success-bg`, `--c-warning-bg`, `--c-danger-bg`, `--c-info-bg` : fonds teintés des badges et alertes. Contraste du texte d'état sur ces fonds : de 5,6 à 6,4:1.
+- `--c-zone` : couleur de zone. Elle vaut l'accent par défaut et est redéfinie par `.theme-filature`, `.theme-theatre` et `.theme-festival` (prop `theme` de `BaseLayout`).
+- `--target-min` (44 px), `--border-w`, `--shadow-card`.
+- Deux couleurs hors tokens : `#ffd7c2` (orange clair sur fond encre, 12:1) pour le bandeau et le pied de page, et `#9a3412` pour le survol du bouton primaire (texte blanc à 7,3:1).
+
+Tous les contrastes des tokens du brief ont été vérifiés par calcul : texte ≥ 4,5:1 sur papier et sur surface, bordure de champ à 3,4:1.
+
+### Accessibilité des composants
+
+- **Bandeau démo** : `<section aria-label>`, une région nommée. axe signalait sinon du contenu hors repère.
+- **Champs** : libellé, puis aide, puis erreur, puis champ (ordre de lecture). L'aide et l'erreur sont reliées par `aria-describedby`, l'erreur est préfixée « Erreur : » pour les lecteurs d'écran et le champ porte `aria-invalid`.
+- **Résumé d'erreurs** : `tabindex="-1"`, il est destiné à recevoir le focus à la soumission (phase 4). Il n'a pas de `role="alert"`, pour éviter une double annonce avec le focus.
+- **Alertes** : `role="status"`, ou `role="alert"` pour une erreur, quand l'alerte apparaît après une action. Prop `live={false}` pour un message statique.
+- **Onglets** : Web Component `<vg-tabs>`, motif APG avec activation automatique (flèches, Début, Fin). Sans JavaScript, les panneaux restent empilés avec leur titre.
+- **Menu mobile** : `<vg-nav-toggle>`, avec `aria-expanded` et fermeture par Échap. Sans JavaScript, la navigation reste visible : la classe `js` est posée sur `<html>` par un script inline.
+- **Stepper** : `aria-current="step"`, état textuel masqué visuellement (« terminée », « en cours », « à venir ») et rappel « Étape n sur N ».
+- **Calendrier** : vrai `<table>` avec icône, chiffre et libellé dans chaque case, plus une alternative en tableau par période dans un `<details>`.
+- **Cartes** : toute la carte est cliquable via un pseudo-élément sur le lien du titre. Un seul lien par carte, donc un seul arrêt de tabulation.
+
+### Indexation
+
+Les pages indexables portent `data-pagefind-body` sur `<main>`. Avec `noindex`, la page reçoit `<meta name="robots" content="noindex, nofollow">` et n'est pas indexée par Pagefind (c'est le cas de `/demo/composants/`).
+
+### Utilitaires TypeScript
+
+- `src/lib/paths.ts` : `url()` préfixe la base et `isInSection()` sert à `aria-current` dans la navigation.
+- `src/lib/format.ts` : dates et prix en français, fuseau Europe/Paris.
+- `src/components/ui/types.ts` : types partagés. Exporter un type union multi-lignes depuis le frontmatter d'un `.astro` fait échouer le build Vite.
+
+### Avertissements de build connus
+
+`astro build` émet 6 avertissements `[glob-loader] No files found` : Astro crée automatiquement des collections pour les dossiers vides de `src/content/`. Ils disparaîtront en phase 2 avec `src/content.config.ts`. Créer ce fichier maintenant reviendrait à anticiper la phase 2.
+
+### Liens vers des pages futures
+
+L'en-tête et le pied de page pointent vers les routes prévues au § 5 (`/sortir/agenda/`, `/agir/`, `/regie/`…). Ces liens mènent à une 404 jusqu'à la phase concernée.

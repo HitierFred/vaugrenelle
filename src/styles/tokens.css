@@ -1,0 +1,81 @@
+/* Ordre des couches : déclaré une seule fois, avant toute règle */
+@layer reset, tokens, base, layout, components, utilities;
+
+@layer tokens {
+  :root {
+    /* Couleurs de base */
+    --c-ink: #1b1f3b; /* texte principal, nuit de scène */
+    --c-paper: #faf7f2; /* fond, papier affiche */
+    --c-surface: #ffffff; /* cartes, champs */
+    --c-muted: #5b5f77; /* texte secondaire (contraste ≥ 4.5:1 sur paper) */
+    --c-line: #d9d4ca; /* bordures décoratives */
+    --c-line-strong: #8a8578; /* bordures de champs (contraste ≥ 3:1) */
+
+    /* Accents */
+    --c-accent: #c2410c; /* orange signalétique : liens d'action, focus, CTA */
+    --c-accent-ink: #ffffff; /* texte sur accent */
+    --c-teal: #0f766e; /* La Filature */
+    --c-plum: #7e22ce; /* Théâtre Jean-Vilar */
+    --c-festival: #b91c1c; /* Les Échappées */
+
+    /* États */
+    --c-success: #166534;
+    --c-warning: #92400e;
+    --c-danger: #b91c1c;
+    --c-info: #1d4ed8;
+
+    /* Typographie */
+    --font-sans: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --fs-300: clamp(0.875rem, 0.85rem + 0.1vw, 0.95rem);
+    --fs-400: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+    --fs-500: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+    --fs-600: clamp(1.6rem, 1.4rem + 1vw, 2.25rem);
+    --fs-700: clamp(2.2rem, 1.8rem + 2vw, 3.5rem);
+    --lh-tight: 1.15;
+    --lh-body: 1.6;
+
+    /* Espacements (échelle 4 px) */
+    --sp-1: 0.25rem;
+    --sp-2: 0.5rem;
+    --sp-3: 0.75rem;
+    --sp-4: 1rem;
+    --sp-6: 1.5rem;
+    --sp-8: 2rem;
+    --sp-12: 3rem;
+    --sp-16: 4rem;
+
+    /* Formes */
+    --radius-s: 4px;
+    --radius-m: 8px;
+    --focus-ring: 3px solid var(--c-accent);
+    --focus-offset: 2px;
+    --measure: 68ch;
+    --container: 72rem;
+
+    /* --- Ajouts phase 1 (voir docs/DECISIONS.md) --- */
+
+    /* Fonds teintés des états : contraste du texte d'état ≥ 4.5:1 */
+    --c-success-bg: #ecf5ef;
+    --c-warning-bg: #fbf1e6;
+    --c-danger-bg: #fbeceb;
+    --c-info-bg: #ebf0fc;
+
+    /* Couleur de zone : remplacée par les sous-chartes */
+    --c-zone: var(--c-accent);
+
+    --target-min: 44px; /* cible tactile minimale */
+    --border-w: 2px;
+    --shadow-card: 0 1px 0 var(--c-line), 0 4px 12px rgb(27 31 59 / 0.06);
+  }
+
+  /* Sous-chartes (zones culturelles) */
+  .theme-filature {
+    --c-zone: var(--c-teal);
+  }
+  .theme-theatre {
+    --c-zone: var(--c-plum);
+  }
+  .theme-festival {
+    --c-zone: var(--c-festival);
+  }
+}

@@ -1,0 +1,235 @@
+@layer layout {
+  .container {
+    width: min(100% - 2 * var(--sp-4), var(--container));
+    margin-inline: auto;
+  }
+
+  /* Lien d'évitement : premier élément focalisable */
+  .skip-link {
+    position: absolute;
+    inset-block-start: var(--sp-2);
+    inset-inline-start: var(--sp-2);
+    z-index: 100;
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font-weight: 700;
+    border: var(--border-w) solid var(--c-ink);
+    border-radius: var(--radius-s);
+    transform: translateY(-200%);
+
+    &:focus {
+      transform: none;
+    }
+  }
+
+  /* Bandeau de démonstration */
+  .demo-banner {
+    background: var(--c-ink);
+    color: var(--c-paper);
+    font-size: var(--fs-300);
+    text-align: center;
+
+    & p {
+      max-width: none;
+      padding: var(--sp-2) var(--sp-4);
+    }
+
+    & strong {
+      color: #ffd7c2; /* orange clair, 11:1 sur ink */
+    }
+  }
+
+  /* En-tête du site */
+  .site-header {
+    background: var(--c-paper);
+    border-block-end: 4px solid var(--c-zone);
+  }
+
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-2) var(--sp-6);
+    padding-block: var(--sp-3);
+  }
+
+  .site-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    min-height: var(--target-min);
+    text-decoration: none;
+    color: var(--c-ink);
+
+    & svg {
+      flex: none;
+    }
+  }
+
+  .site-brand__name {
+    display: grid;
+    line-height: 1.1;
+    font-size: var(--fs-500);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+
+    & small {
+      font-size: var(--fs-300);
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--c-muted);
+    }
+  }
+
+  /* Bouton de menu : masqué via son enveloppe (la couche components gère .btn) */
+  vg-nav-toggle {
+    display: none;
+  }
+
+  .site-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-1) var(--sp-2);
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-nav a {
+    display: flex;
+    align-items: center;
+    min-height: var(--target-min);
+    padding-inline: var(--sp-3);
+    font-weight: 700;
+    text-decoration: none;
+    border-block-end: 3px solid transparent;
+
+    &:hover {
+      border-block-end-color: var(--c-line-strong);
+    }
+
+    &[aria-current='page'],
+    &[aria-current='true'] {
+      border-block-end-color: var(--c-accent);
+    }
+  }
+
+  .site-nav__account {
+    color: var(--c-muted);
+  }
+
+  /* Menu replié sur petit écran, seulement si JavaScript est actif */
+  @media (width < 56rem) {
+    .js vg-nav-toggle {
+      display: block;
+    }
+    .js .site-nav:not(.is-open) {
+      display: none;
+    }
+    .js .site-nav {
+      flex-basis: 100%;
+
+      & ul {
+        flex-direction: column;
+      }
+    }
+  }
+
+  /* Contenu principal */
+  main {
+    display: block;
+    padding-block: var(--sp-8) var(--sp-16);
+  }
+
+  .page-header {
+    display: grid;
+    gap: var(--sp-4);
+    margin-block-end: var(--sp-8);
+  }
+
+  .page-header__lead {
+    font-size: var(--fs-500);
+    color: var(--c-muted);
+  }
+
+  /* Démarches : mise en page plus calme, colonne + encart latéral */
+  .demarche-grid {
+    display: grid;
+    gap: var(--sp-8);
+
+    @media (width >= 60rem) {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      align-items: start;
+    }
+  }
+
+  .demarche-aside {
+    position: sticky;
+    top: var(--sp-4);
+  }
+
+  /* Pied de page */
+  .site-footer {
+    background: var(--c-ink);
+    color: var(--c-paper);
+    padding-block: var(--sp-12) var(--sp-8);
+    font-size: var(--fs-300);
+
+    & a {
+      color: var(--c-paper);
+
+      &:hover {
+        text-decoration-color: #ffd7c2;
+      }
+    }
+
+    & :focus-visible {
+      outline-color: #ffd7c2;
+    }
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--sp-8);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  }
+
+  .site-footer h2 {
+    font-size: var(--fs-400);
+    margin-block-end: var(--sp-3);
+  }
+
+  .site-footer ul {
+    padding: 0;
+    list-style: none;
+
+    & a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--target-min);
+    }
+  }
+
+  .site-footer__legal {
+    margin-block-start: var(--sp-8);
+    padding-block-start: var(--sp-6);
+    border-block-start: 1px solid rgb(250 247 242 / 0.3);
+    max-width: none;
+  }
+
+  /* Grilles génériques */
+  .grid-cards {
+    display: grid;
+    gap: var(--sp-6);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+    padding: 0;
+    list-style: none;
+
+    & > li {
+      max-width: none;
+    }
+  }
+}

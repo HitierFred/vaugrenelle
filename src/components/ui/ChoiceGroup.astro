@@ -1,0 +1,62 @@
+---
+// Groupe de cases à cocher ou de boutons radio dans un <fieldset>
+import FieldMessages from './FieldMessages.astro';
+import { describedBy } from './field-ids';
+
+interface Choice {
+  value: string;
+  label: string;
+  hint?: string;
+  checked?: boolean;
+}
+
+interface Props {
+  id: string;
+  name?: string;
+  legend: string;
+  type: 'checkbox' | 'radio';
+  choices: Choice[];
+  hint?: string;
+  error?: string;
+  required?: boolean;
+}
+
+const { id, name = id, legend, type, choices, hint, error, required = false } = Astro.props;
+---
+
+<fieldset
+  class="fieldset"
+  id={id}
+  aria-invalid={error ? 'true' : undefined}
+  aria-describedby={describedBy(id, hint, error)}
+>
+  <legend class="fieldset__legend">
+    {legend}
+    {required && <span class="field__required">(obligatoire)</span>}
+  </legend>
+  <FieldMessages id={id} hint={hint} error={error} />
+  {choices.map((choice, i) => {
+    const choiceId = `${id}-${i}`;
+    return (
+      <div class="choice">
+        <input
+          type={type}
+          id={choiceId}
+          name={name}
+          value={choice.value}
+          checked={choice.checked}
+          required={type === 'radio' && required}
+          aria-describedby={choice.hint ? `${choiceId}-hint` : undefined}
+        />
+        <label for={choiceId}>
+          {choice.label}
+          {choice.hint && (
+            <span class="choice__hint" id={`${choiceId}-hint`}>
+              {choice.hint}
+            </span>
+          )}
+        </label>
+      </div>
+    );
+  })}
+</fieldset>

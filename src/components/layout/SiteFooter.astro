@@ -1,0 +1,50 @@
+---
+import { url } from '../../lib/paths';
+
+const groups = [
+  {
+    title: 'Le site',
+    links: [
+      { label: 'Accessibilité : non conforme (démonstration)', href: '/accessibilite/' },
+      { label: 'Écoconception', href: '/ecoconception/' },
+      { label: 'Algorithmes publics', href: '/algorithmes-publics/' },
+      { label: 'Plan du site', href: '/plan-du-site/' },
+    ],
+  },
+  {
+    title: 'Informations',
+    links: [
+      { label: 'Mentions légales (fictives)', href: '/mentions-legales/' },
+      { label: 'À propos du projet', href: '/a-propos-du-projet/' },
+      { label: 'Coulisses de la démonstration', href: '/demo/coulisses/' },
+    ],
+  },
+];
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div>
+        <h2>Ville de Vaugrenelle</h2>
+        <p>Collectivité fictive créée pour un démonstrateur de portail public.</p>
+      </div>
+      {groups.map((group) => (
+        <div>
+          <h2>{group.title}</h2>
+          <ul>
+            {group.links.map((link) => (
+              <li>
+                <a href={url(link.href)}>{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="site-footer__legal">
+      Démonstrateur réalisé à des fins de portfolio. Les noms de personnes, de compagnies,
+      d'associations et de lieux sont fictifs. Aucune donnée saisie ne quitte votre navigateur.
+    </p>
+  </div>
+</footer>

@@ -1,0 +1,17 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  headingLevel?: 2 | 3 | 4; // titre visible seulement sans JavaScript
+}
+
+const { id, label, headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
+---
+
+<section class="tabs__panel" id={id} data-tab-label={label}>
+  <Heading class="tabs__panel-title">{label}</Heading>
+  <div class="stack">
+    <slot />
+  </div>
+</section>

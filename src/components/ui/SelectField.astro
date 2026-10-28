@@ -1,0 +1,54 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import FieldMessages from './FieldMessages.astro';
+import { describedBy } from './field-ids';
+
+type Props = {
+  id: string;
+  name?: string;
+  label: string;
+  options: { value: string; label: string }[];
+  placeholder?: string; // option vide initiale
+  value?: string;
+  hint?: string;
+  error?: string;
+  required?: boolean;
+} & Omit<HTMLAttributes<'select'>, 'id' | 'name' | 'required'>;
+
+const {
+  id,
+  name = id,
+  label,
+  options,
+  placeholder,
+  value,
+  hint,
+  error,
+  required = false,
+  ...rest
+} = Astro.props;
+---
+
+<div class="field">
+  <label class="field__label" for={id}>
+    {label}
+    {required && <span class="field__required">(obligatoire)</span>}
+  </label>
+  <FieldMessages id={id} hint={hint} error={error} />
+  <select
+    class="select"
+    id={id}
+    name={name}
+    required={required}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={describedBy(id, hint, error)}
+    {...rest}
+  >
+    {placeholder && <option value="">{placeholder}</option>}
+    {options.map((opt) => (
+      <option value={opt.value} selected={opt.value === value}>
+        {opt.label}
+      </option>
+    ))}
+  </select>
+</div>

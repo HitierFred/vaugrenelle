@@ -1,0 +1,135 @@
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  * {
+    margin: 0;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+  img {
+    height: auto;
+  }
+  input,
+  button,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  li,
+  dd {
+    overflow-wrap: break-word;
+  }
+}
+
+@layer base {
+  /* Les @font-face sont injectées par BaseLayout (chemin dépendant de la base) */
+
+  html {
+    color-scheme: light;
+    scroll-padding-top: var(--sp-4);
+  }
+
+  body {
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    font-size: var(--fs-400);
+    line-height: var(--lh-body);
+    color: var(--c-ink);
+    background: var(--c-paper);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: var(--lh-tight);
+    font-weight: 700;
+    text-wrap: balance;
+  }
+  h1 {
+    font-size: var(--fs-700);
+    letter-spacing: -0.01em;
+  }
+  h2 {
+    font-size: var(--fs-600);
+  }
+  h3 {
+    font-size: var(--fs-500);
+  }
+  h4 {
+    font-size: var(--fs-400);
+  }
+
+  p,
+  li {
+    max-width: var(--measure);
+  }
+
+  a {
+    color: var(--c-ink);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+
+    &:hover {
+      text-decoration-thickness: 3px;
+      text-decoration-color: var(--c-accent);
+    }
+  }
+
+  :focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  /* Le <main> reçoit le focus du lien d'évitement sans contour parasite */
+  main:focus {
+    outline: none;
+  }
+
+  strong,
+  b {
+    font-weight: 700;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--c-line);
+  }
+
+  code {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.9em;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

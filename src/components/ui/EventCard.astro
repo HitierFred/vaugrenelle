@@ -1,0 +1,84 @@
+---
+// Carte événement. Les props sont simples : le schéma de données arrive en phase 2.
+import Icon from './Icon.astro';
+import StatusBadge from './StatusBadge.astro';
+import type { Accessibilite } from './types';
+import { formatDate, formatDayMonth, formatTime } from '../../lib/format';
+
+interface Props {
+  titre: string;
+  href: string;
+  debut: Date;
+  lieu: string;
+  discipline: string;
+  compagnie?: string;
+  gratuit?: boolean;
+  accessibilite?: Accessibilite[];
+  zoneColor?: string; // couleur du lieu (sous-charte)
+  headingLevel?: 2 | 3 | 4;
+}
+
+const {
+  titre,
+  href,
+  debut,
+  lieu,
+  discipline,
+  compagnie,
+  gratuit = false,
+  accessibilite = [],
+  zoneColor,
+  headingLevel = 3,
+} = Astro.props;
+
+const accLabels: Record<Accessibilite, string> = {
+  pmr: 'Accessible en fauteuil',
+  lsf: 'Traduit en LSF',
+  audiodescription: 'Audiodécrit',
+  'boucle-magnetique': 'Boucle magnétique',
+  relax: 'Séance relax',
+};
+
+const d = formatDayMonth(debut);
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
+---
+
+<article class="card card--event" style={zoneColor ? `--c-card-accent: ${zoneColor}` : undefined}>
+  <p class="card__poster" aria-hidden="true">
+    <span>{d.weekday}</span>
+    <span class="card__day">{d.day}</span>
+    <span>{d.month}</span>
+  </p>
+  <p class="card__discipline">{discipline}</p>
+  <Heading class="card__title">
+    <a class="card__link" href={href}>
+      {titre}
+    </a>
+  </Heading>
+  {compagnie && <p class="muted">{compagnie}</p>}
+  <ul class="card__meta">
+    <li>
+      <Icon name="calendar" />
+      <time datetime={debut.toISOString()}>
+        {formatDate(debut)}, {formatTime(debut)}
+      </time>
+    </li>
+    <li>
+      <Icon name="pin" />
+      <span>{lieu}</span>
+    </li>
+    {accessibilite.length > 0 && (
+      <li>
+        <Icon name="access" />
+        <span>{accessibilite.map((a) => accLabels[a]).join(' · ')}</span>
+      </li>
+    )}
+  </ul>
+  <div class="card__footer cluster">
+    {gratuit ? (
+      <StatusBadge status="success" label="Gratuit" icon="ticket" />
+    ) : (
+      <StatusBadge status="neutral" label="Payant" icon="ticket" />
+    )}
+  </div>
+</article>

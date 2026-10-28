@@ -1,0 +1,60 @@
+---
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/layout.css';
+import '../styles/components.css';
+import '../styles/utilities.css';
+import DemoBanner from '../components/layout/DemoBanner.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import { url } from '../lib/paths';
+
+export type Theme = 'default' | 'filature' | 'theatre' | 'festival';
+
+export interface Props {
+  title: string; // titre propre à la page, unique
+  description: string;
+  noindex?: boolean; // exclut la page des moteurs et de Pagefind
+  theme?: Theme;
+}
+
+const { title, description, noindex = false, theme = 'default' } = Astro.props;
+
+const fullTitle = `${title} — Vaugrenelle (démonstration)`;
+const font400 = url('/fonts/atkinson-hyperlegible-latin-400-normal.woff2');
+const font700 = url('/fonts/atkinson-hyperlegible-latin-700-normal.woff2');
+
+// @font-face injectées ici pour suivre la base du site
+const fontFaces = `@layer base {
+@font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:400;font-display:swap;src:url('${font400}') format('woff2')}
+@font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:700;font-display:swap;src:url('${font700}') format('woff2')}
+}`;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <link rel="preload" href={font400} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={fontFaces} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body class:list={[theme !== 'default' && `theme-${theme}`]}>
+    <a class="skip-link" href="#contenu">
+      Aller au contenu
+    </a>
+    <DemoBanner />
+    <SiteHeader />
+    <main id="contenu" tabindex="-1" {...(noindex ? {} : { 'data-pagefind-body': '' })}>
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

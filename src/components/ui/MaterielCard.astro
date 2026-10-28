@@ -1,0 +1,71 @@
+---
+// Carte matériel de la Régie partagée
+import Icon from './Icon.astro';
+import StatusBadge from './StatusBadge.astro';
+import type { Disponibilite, Status } from './types';
+
+interface Props {
+  designation: string;
+  href: string;
+  famille: string;
+  marqueModele: string;
+  quantite: number;
+  disponibles?: number; // sur la période choisie
+  disponibilite?: Disponibilite;
+  motif?: string; // ex. vérification réglementaire dépassée
+  puissanceW?: number;
+  headingLevel?: 2 | 3 | 4;
+}
+
+const {
+  designation,
+  href,
+  famille,
+  marqueModele,
+  quantite,
+  disponibles,
+  disponibilite = 'disponible',
+  motif,
+  puissanceW,
+  headingLevel = 3,
+} = Astro.props;
+
+const states: Record<Disponibilite, { status: Status; label: string }> = {
+  disponible: { status: 'success', label: 'Disponible' },
+  partiel: { status: 'warning', label: 'Disponibilité partielle' },
+  indisponible: { status: 'danger', label: 'Indisponible' },
+  'hors-service': { status: 'danger', label: 'Hors service' },
+};
+const state = states[disponibilite];
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
+---
+
+<article class="card card--materiel">
+  <p class="card__discipline">{famille}</p>
+  <Heading class="card__title">
+    <a class="card__link" href={href}>
+      {designation}
+    </a>
+  </Heading>
+  <p class="card__ref">{marqueModele}</p>
+  <ul class="card__meta">
+    <li>
+      <Icon name="box" />
+      <span>
+        {disponibles !== undefined
+          ? `${disponibles} sur ${quantite} disponibles sur la période`
+          : `${quantite} en parc`}
+      </span>
+    </li>
+    {puissanceW !== undefined && (
+      <li>
+        <Icon name="bolt" />
+        <span>{puissanceW.toLocaleString('fr-FR')} W</span>
+      </li>
+    )}
+  </ul>
+  <div class="card__footer stack stack-s">
+    <StatusBadge status={state.status} label={state.label} />
+    {motif && <p class="text-small">{motif}</p>}
+  </div>
+</article>

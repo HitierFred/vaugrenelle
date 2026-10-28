@@ -1,0 +1,80 @@
+---
+// Onglets accessibles (motif APG « Tabs », activation automatique).
+// Sans JavaScript : les panneaux restent empilés, chacun avec son titre.
+interface Props {
+  label: string; // nom accessible de la liste d'onglets
+}
+
+const { label } = Astro.props;
+---
+
+<vg-tabs data-label={label}>
+  <slot />
+</vg-tabs>
+
+<script>
+  class VgTabs extends HTMLElement {
+    private tabs: HTMLButtonElement[] = [];
+    private panels: HTMLElement[] = [];
+
+    connectedCallback() {
+      this.panels = Array.from(this.querySelectorAll<HTMLElement>(':scope > .tabs__panel'));
+      if (!this.panels.length) return;
+
+      const list = document.createElement('div');
+      list.className = 'tabs__list';
+      list.setAttribute('role', 'tablist');
+      list.setAttribute('aria-label', this.dataset.label ?? '');
+
+      this.tabs = this.panels.map((panel, i) => {
+        const tab = document.createElement('button');
+        tab.type = 'button';
+        tab.className = 'tabs__tab';
+        tab.id = `${panel.id}-onglet`;
+        tab.textContent = panel.dataset.tabLabel ?? `Onglet ${i + 1}`;
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-controls', panel.id);
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', tab.id);
+        panel.tabIndex = 0;
+        tab.addEventListener('click', () => this.select(i));
+        tab.addEventListener('keydown', (e) => this.onKey(e, i));
+        list.append(tab);
+        return tab;
+      });
+
+      this.prepend(list);
+      // Onglet initial : celui visé par l'ancre de l'URL, sinon le premier
+      const fromHash = this.panels.findIndex((p) => `#${p.id}` === location.hash);
+      this.select(Math.max(0, fromHash), false);
+    }
+
+    private select(index: number, focus = true) {
+      this.tabs.forEach((tab, i) => {
+        const selected = i === index;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        this.panels[i].hidden = !selected;
+      });
+      if (focus) this.tabs[index].focus();
+    }
+
+    private onKey(e: KeyboardEvent, i: number) {
+      const last = this.tabs.length - 1;
+      const target =
+        e.key === 'ArrowRight'
+          ? (i + 1) % this.tabs.length
+          : e.key === 'ArrowLeft'
+            ? (i - 1 + this.tabs.length) % this.tabs.length
+            : e.key === 'Home'
+              ? 0
+              : e.key === 'End'
+                ? last
+                : null;
+      if (target === null) return;
+      e.preventDefault();
+      this.select(target);
+    }
+  }
+  customElements.define('vg-tabs', VgTabs);
+</script>

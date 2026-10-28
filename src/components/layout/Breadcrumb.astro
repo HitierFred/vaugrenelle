@@ -1,0 +1,31 @@
+---
+import { url } from '../../lib/paths';
+
+export interface Crumb {
+  label: string;
+  href?: string; // absent pour la page courante
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+const all: Crumb[] = [{ label: 'Accueil', href: '/' }, ...items];
+---
+
+<nav class="breadcrumb" aria-label="Fil d'Ariane">
+  <ol>
+    {all.map((item, i) =>
+      i === all.length - 1 || !item.href ? (
+        <li>
+          <span aria-current="page">{item.label}</span>
+        </li>
+      ) : (
+        <li>
+          <a href={url(item.href)}>{item.label}</a>
+        </li>
+      ),
+    )}
+  </ol>
+</nav>

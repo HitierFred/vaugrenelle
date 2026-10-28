@@ -1,0 +1,22 @@
+---
+// Mise en page des démarches : ton plus calme, colonne principale et encart latéral
+// (ex. « Ce dossier comprend : … » en phase 4)
+import PageLayout from './PageLayout.astro';
+import type { ComponentProps } from 'astro/types';
+
+type Props = ComponentProps<typeof PageLayout>;
+---
+
+<PageLayout {...Astro.props}>
+  <slot name="header" slot="header" />
+  <div class="demarche-grid">
+    <div class="stack stack-l">
+      <slot />
+    </div>
+    {Astro.slots.has('aside') && (
+      <aside class="demarche-aside">
+        <slot name="aside" />
+      </aside>
+    )}
+  </div>
+</PageLayout>

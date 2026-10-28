@@ -1,0 +1,389 @@
+---
+// Vitrine du design system (phase 1). Page non indexée.
+import Accordion from '../../../components/ui/Accordion.astro';
+import Alert from '../../../components/ui/Alert.astro';
+import AvailabilityCalendar from '../../../components/ui/AvailabilityCalendar.astro';
+import Button from '../../../components/ui/Button.astro';
+import ChoiceGroup from '../../../components/ui/ChoiceGroup.astro';
+import ErrorSummary from '../../../components/ui/ErrorSummary.astro';
+import EventCard from '../../../components/ui/EventCard.astro';
+import FileField from '../../../components/ui/FileField.astro';
+import Icon from '../../../components/ui/Icon.astro';
+import MaterielCard from '../../../components/ui/MaterielCard.astro';
+import Pagination from '../../../components/ui/Pagination.astro';
+import SelectField from '../../../components/ui/SelectField.astro';
+import StatusBadge from '../../../components/ui/StatusBadge.astro';
+import Stepper from '../../../components/ui/Stepper.astro';
+import TextField from '../../../components/ui/TextField.astro';
+import TabPanel from '../../../components/islands/TabPanel.astro';
+import Tabs from '../../../components/islands/Tabs.astro';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import { url } from '../../../lib/paths';
+
+const sections = [
+  ['couleurs', 'Couleurs et typographie'],
+  ['boutons', 'Boutons'],
+  ['champs', 'Champs de formulaire'],
+  ['cartes', 'Cartes'],
+  ['badges', 'Badges de statut'],
+  ['alertes', 'Alertes'],
+  ['navigation', "Fil d'Ariane et pagination"],
+  ['onglets', 'Onglets'],
+  ['accordeon', 'Accordéon'],
+  ['stepper', 'Formulaire multi-étapes'],
+  ['calendrier', 'Calendrier de disponibilité'],
+  ['sous-chartes', 'Sous-chartes des lieux'],
+];
+
+const swatches = [
+  ['--c-ink', 'Encre (texte)'],
+  ['--c-paper', 'Papier (fond)'],
+  ['--c-muted', 'Texte secondaire'],
+  ['--c-line-strong', 'Bordure de champ'],
+  ['--c-accent', 'Accent signalétique'],
+  ['--c-teal', 'La Filature'],
+  ['--c-plum', 'Théâtre Jean-Vilar'],
+  ['--c-festival', 'Les Échappées'],
+  ['--c-success', 'Succès'],
+  ['--c-warning', 'Avertissement'],
+  ['--c-danger', 'Erreur'],
+  ['--c-info', 'Information'],
+];
+
+// Données d'exemple (les vraies données arrivent en phase 2)
+const exemple = new Date('2026-11-14T20:30:00+01:00');
+const dispo: Record<string, number> = {
+  '2026-11-06': 2,
+  '2026-11-07': 0,
+  '2026-11-08': 0,
+  '2026-11-09': 2,
+  '2026-11-20': 3,
+  '2026-11-21': 3,
+  '2026-11-22': 3,
+};
+---
+
+<PageLayout
+  title="Composants du design system"
+  heading="Composants du design system"
+  lead="Bibliothèque des composants du démonstrateur. Cette page de travail n'est pas indexée."
+  description="Vitrine des composants accessibles du démonstrateur Vaugrenelle : boutons, champs, cartes, alertes, onglets, calendrier."
+  noindex
+  breadcrumb={[{ label: 'Démonstration' }, { label: 'Composants' }]}
+>
+  <nav aria-label="Sommaire de la page" class="stack stack-s" slot="header">
+    <h2 class="visually-hidden">Sommaire</h2>
+    <ul class="cluster no-measure" style="list-style: none; padding: 0">
+      {sections.map(([id, label]) => (
+        <li>
+          <a href={`#${id}`}>{label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="stack" style="--stack-space: var(--sp-16)">
+    <section aria-labelledby="couleurs" class="stack">
+      <h2 id="couleurs">Couleurs et typographie</h2>
+      <ul class="demo-swatches">
+        {swatches.map(([token, label]) => (
+          <li>
+            <span class="demo-swatch" style={`background: var(${token})`} />
+            <span>
+              <strong>{label}</strong>
+              <br />
+              <code>{token}</code>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p style="font-size: var(--fs-700); font-weight: 700; line-height: var(--lh-tight)">
+        Titre d'affiche
+      </p>
+      <p style="font-size: var(--fs-600); font-weight: 700">Titre de section</p>
+      <p style="font-size: var(--fs-500)">Chapeau : une phrase courte qui introduit la page.</p>
+      <p>
+        Texte courant en Atkinson Hyperlegible. Cette police distingue nettement les caractères
+        proches comme « Il1 » et « O0 ». Elle facilite la lecture pour les personnes malvoyantes.
+      </p>
+      <p class="text-small muted">Texte secondaire en petite taille.</p>
+    </section>
+
+    <section aria-labelledby="boutons" class="stack">
+      <h2 id="boutons">Boutons</h2>
+      <div class="cluster">
+        <Button>Déposer mon dossier</Button>
+        <Button variant="secondary">Enregistrer le brouillon</Button>
+        <Button variant="link">Annuler</Button>
+        <Button href={url('/regie/catalogue/')} variant="secondary">
+          <Icon name="box" /> Voir le catalogue
+        </Button>
+        <Button disabled>Bouton désactivé</Button>
+      </div>
+    </section>
+
+    <section aria-labelledby="champs" class="stack">
+      <h2 id="champs">Champs de formulaire</h2>
+      <ErrorSummary
+        errors={[
+          { fieldId: 'demo-titre-erreur', message: "Indiquez le titre de l'événement" },
+          { fieldId: 'demo-besoins', message: 'Choisissez au moins un besoin' },
+        ]}
+      />
+      <form class="stack stack-l" onsubmit="return false" aria-label="Exemple de formulaire">
+        <TextField
+          id="demo-titre"
+          label="Titre de l'événement"
+          hint="Le titre apparaîtra dans l'agenda municipal."
+          required
+        />
+        <TextField
+          id="demo-titre-erreur"
+          label="Titre de l'événement (état en erreur)"
+          error="Indiquez le titre de l'événement"
+          required
+        />
+        <TextField id="demo-date" type="date" label="Date de début" required />
+        <SelectField
+          id="demo-lieu"
+          label="Lieu"
+          placeholder="Choisissez un lieu"
+          options={[
+            { value: 'place-de-la-halle', label: 'Place de la Halle' },
+            { value: 'quai-des-teinturiers', label: 'Quai des Teinturiers' },
+            { value: 'parc-brossard', label: 'Parc Brossard' },
+          ]}
+        />
+        <ChoiceGroup
+          id="demo-besoins"
+          type="checkbox"
+          legend="De quoi avez-vous besoin ?"
+          hint="Chaque besoin ajoute une démarche à votre dossier."
+          error="Choisissez au moins un besoin"
+          choices={[
+            { value: 'son', label: 'Sonorisation', hint: 'Déclaration de diffusion sonore' },
+            { value: 'buvette', label: 'Buvette', hint: 'Autorisation de débit temporaire' },
+            { value: 'voie', label: 'Fermeture de voie', hint: 'Arrêté de circulation' },
+          ]}
+        />
+        <ChoiceGroup
+          id="demo-profil"
+          type="radio"
+          legend="Vous êtes"
+          required
+          choices={[
+            { value: 'association', label: 'Une association', checked: true },
+            { value: 'compagnie', label: 'Une compagnie' },
+            { value: 'commune', label: "Une commune de l'agglomération" },
+          ]}
+        />
+        <FileField id="demo-piece" label="Attestation d'assurance" accept=".pdf,.jpg,.png" />
+      </form>
+    </section>
+
+    <section aria-labelledby="cartes" class="stack">
+      <h2 id="cartes">Cartes</h2>
+      <ul class="grid-cards">
+        <li>
+          <EventCard
+            titre="Les Funambules du quai"
+            href={url('/sortir/agenda/')}
+            debut={exemple}
+            lieu="Quai des Teinturiers"
+            discipline="Cirque"
+            compagnie="Compagnie Fil d'Ariane (fictive)"
+            gratuit
+            accessibilite={['pmr', 'lsf']}
+          />
+        </li>
+        <li>
+          <EventCard
+            titre="Nuit blanche à la Filature"
+            href={url('/sortir/agenda/')}
+            debut={new Date('2026-11-21T21:00:00+01:00')}
+            lieu="La Filature — chapiteau"
+            discipline="Musique"
+            compagnie="Collectif Bobine (fictif)"
+            zoneColor="var(--c-teal)"
+          />
+        </li>
+        <li>
+          <MaterielCard
+            designation="Enceinte amplifiée 12 pouces"
+            href={url('/regie/catalogue/')}
+            famille="Son"
+            marqueModele="Sonora PX-12 (modèle fictif)"
+            quantite={8}
+            disponibles={3}
+            disponibilite="partiel"
+            puissanceW={1200}
+          />
+        </li>
+        <li>
+          <MaterielCard
+            designation="Praticable 2 × 1 m"
+            href={url('/regie/catalogue/')}
+            famille="Praticable"
+            marqueModele="Scenopro P21 (modèle fictif)"
+            quantite={24}
+            disponibilite="hors-service"
+            motif="Vérification réglementaire dépassée depuis le 2 octobre 2026."
+          />
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="badges" class="stack">
+      <h2 id="badges">Badges de statut</h2>
+      <p>
+        Chaque badge associe un libellé et une icône. La couleur n'est jamais seule porteuse de
+        sens.
+      </p>
+      <div class="cluster">
+        <StatusBadge status="success" label="Pré-validé" />
+        <StatusBadge status="warning" label="À vérifier" />
+        <StatusBadge status="danger" label="Pièce expirée" />
+        <StatusBadge status="info" label="En instruction" icon="clock" />
+        <StatusBadge status="neutral" label="Brouillon" />
+      </div>
+    </section>
+
+    <section aria-labelledby="alertes" class="stack">
+      <h2 id="alertes">Alertes</h2>
+      <Alert variant="info" title="Festival Les Échappées" live={false} headingLevel={3}>
+        <p>Du 12 au 14 juin, certaines rues du centre-ville sont piétonnes.</p>
+      </Alert>
+      <Alert variant="success" title="Votre brouillon est enregistré" live={false} headingLevel={3}>
+        <p>Il reste sur cet appareil. Vous pouvez reprendre votre demande plus tard.</p>
+      </Alert>
+      <Alert variant="warning" title="Délai court" live={false} headingLevel={3}>
+        <p>Votre événement a lieu dans moins de 30 jours. Le dossier risque d'être refusé.</p>
+      </Alert>
+      <Alert variant="error" title="Attestation d'assurance expirée" live={false} headingLevel={3}>
+        <p>Ajoutez une attestation valide à la date de l'événement.</p>
+      </Alert>
+      <p class="text-small muted">
+        Ces exemples sont statiques. Dans les parcours, une alerte qui apparaît après une action
+        porte <code>role="status"</code>, ou <code>role="alert"</code> pour une erreur.
+      </p>
+    </section>
+
+    <section aria-labelledby="navigation" class="stack">
+      <h2 id="navigation">Fil d'Ariane et pagination</h2>
+      <p>Le fil d'Ariane de cette page est affiché sous l'en-tête. Exemple de pagination :</p>
+      <Pagination
+        current={3}
+        total={8}
+        hrefFor={(p) => url(`/demo/composants/?page=${p}`)}
+        label="Pagination de l'exemple"
+      />
+    </section>
+
+    <section aria-labelledby="onglets" class="stack">
+      <h2 id="onglets">Onglets</h2>
+      <p>Utilisez les flèches gauche et droite pour changer d'onglet.</p>
+      <Tabs label="Informations sur le spectacle">
+        <TabPanel id="onglet-infos" label="Infos pratiques">
+          <p>Durée : 1 h 10. Tout public à partir de 6 ans. Repli en salle en cas de pluie.</p>
+        </TabPanel>
+        <TabPanel id="onglet-acces" label="Accessibilité">
+          <p>Places réservées aux fauteuils roulants. Représentation traduite en LSF le samedi.</p>
+        </TabPanel>
+        <TabPanel id="onglet-venir" label="Venir">
+          <p>Ligne de bus 3, arrêt « Teinturiers ». Parking vélo à 50 mètres.</p>
+        </TabPanel>
+      </Tabs>
+    </section>
+
+    <section aria-labelledby="accordeon" class="stack">
+      <h2 id="accordeon">Accordéon</h2>
+      <div>
+        <Accordion summary="Quelles pièces dois-je fournir ?" name="faq">
+          <p>
+            Les statuts de l'association, une attestation d'assurance et un plan d'implantation.
+          </p>
+        </Accordion>
+        <Accordion summary="Combien de temps prend l'instruction ?" name="faq">
+          <p>Comptez 30 jours. Déposez votre dossier au moins un mois avant l'événement.</p>
+        </Accordion>
+      </div>
+    </section>
+
+    <section aria-labelledby="stepper" class="stack">
+      <h2 id="stepper">Formulaire multi-étapes</h2>
+      <Stepper
+        steps={['Organisateur', 'Événement', 'Besoins', 'Pièces', 'Récapitulatif']}
+        current={3}
+      />
+    </section>
+
+    <section aria-labelledby="calendrier" class="stack">
+      <h2 id="calendrier">Calendrier de disponibilité</h2>
+      <AvailabilityCalendar
+        year={2026}
+        month={11}
+        total={4}
+        availability={dispo}
+        title="Projecteurs LED 200 W"
+      />
+    </section>
+
+    <section aria-labelledby="sous-chartes" class="stack">
+      <h2 id="sous-chartes">Sous-chartes des lieux</h2>
+      <p>
+        Les zones culturelles changent la couleur de zone (<code>--c-zone</code>) : bordure de
+        l'en-tête, onglet actif, bande des cartes.
+      </p>
+      <div class="demo-themes">
+        <div class="demo-theme">
+          <span>Commun</span>
+        </div>
+        <div class="demo-theme theme-filature">
+          <span>La Filature</span>
+        </div>
+        <div class="demo-theme theme-theatre">
+          <span>Théâtre Jean-Vilar</span>
+        </div>
+        <div class="demo-theme theme-festival">
+          <span>Les Échappées</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</PageLayout>
+
+<style>
+  .demo-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+    gap: var(--sp-4);
+    padding: 0;
+    list-style: none;
+
+    & li {
+      display: flex;
+      gap: var(--sp-3);
+      align-items: center;
+      font-size: var(--fs-300);
+    }
+  }
+  .demo-swatch {
+    flex: none;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-s);
+  }
+  .demo-themes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: var(--sp-4);
+  }
+  .demo-theme {
+    padding: var(--sp-6) var(--sp-4);
+    background: var(--c-surface);
+    border-block-start: 8px solid var(--c-zone);
+    border-radius: var(--radius-s);
+    font-weight: 700;
+  }
+</style>

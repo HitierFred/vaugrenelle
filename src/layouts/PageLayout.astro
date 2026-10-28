@@ -1,0 +1,24 @@
+---
+import Breadcrumb, { type Crumb } from '../components/layout/Breadcrumb.astro';
+import BaseLayout, { type Props as BaseProps } from './BaseLayout.astro';
+
+interface Props extends BaseProps {
+  heading?: string; // h1 affiché, par défaut le titre de la page
+  lead?: string;
+  breadcrumb?: Crumb[];
+}
+
+const { heading, lead, breadcrumb, ...base } = Astro.props;
+---
+
+<BaseLayout {...base}>
+  <div class="container">
+    {breadcrumb && <Breadcrumb items={breadcrumb} />}
+    <header class="page-header">
+      <h1>{heading ?? base.title}</h1>
+      {lead && <p class="page-header__lead">{lead}</p>}
+      <slot name="header" />
+    </header>
+    <slot />
+  </div>
+</BaseLayout>

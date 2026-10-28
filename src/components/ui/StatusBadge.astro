@@ -1,0 +1,26 @@
+---
+// Badge d'état : toujours un libellé et une icône, jamais la couleur seule
+import Icon from './Icon.astro';
+import type { IconName, Status } from './types';
+
+interface Props {
+  status: Status;
+  label: string;
+  icon?: IconName;
+}
+
+const defaultIcons: Record<Status, IconName> = {
+  success: 'check',
+  warning: 'alert',
+  danger: 'error',
+  info: 'info',
+  neutral: 'minus',
+};
+
+const { status, label, icon = defaultIcons[status] } = Astro.props;
+---
+
+<span class:list={['badge', `badge--${status}`]}>
+  <Icon name={icon} />
+  {label}
+</span>

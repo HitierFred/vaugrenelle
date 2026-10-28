@@ -1,0 +1,26 @@
+---
+// Résumé d'erreurs : focalisé à la soumission (tabindex -1), liens vers les champs
+interface Props {
+  errors: { fieldId: string; message: string }[];
+  id?: string;
+}
+
+const { errors, id = 'resume-erreurs' } = Astro.props;
+---
+
+{errors.length > 0 && (
+  <div class="error-summary" id={id} tabindex="-1" aria-labelledby={`${id}-titre`}>
+    <h2 id={`${id}-titre`}>
+      {errors.length === 1
+        ? 'Le formulaire contient 1 erreur'
+        : `Le formulaire contient ${errors.length} erreurs`}
+    </h2>
+    <ul>
+      {errors.map((e) => (
+        <li>
+          <a href={`#${e.fieldId}`}>{e.message}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
