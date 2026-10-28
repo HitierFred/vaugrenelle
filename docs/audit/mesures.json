@@ -1,59 +1,194 @@
 {
   "date": "2026-10-28",
-  "source": "http://localhost:4321/vaugrenelle/",
+  "source": "https://hitierfred.github.io/vaugrenelle/",
   "pages": [
+    {
+      "page": "Accueil",
+      "chemin": "./",
+      "requetes": 6,
+      "ko": 117.5,
+      "dom": 241,
+      "ecoindex": 86,
+      "note": "A"
+    },
+    {
+      "page": "Agenda",
+      "chemin": "sortir/agenda/",
+      "requetes": 6,
+      "ko": 117.8,
+      "dom": 435,
+      "ecoindex": 78,
+      "note": "B"
+    },
+    {
+      "page": "Fiche événement payant",
+      "chemin": "sortir/agenda/hauts-vols/",
+      "requetes": 5,
+      "ko": 64,
+      "dom": 147,
+      "ecoindex": 90,
+      "note": "A"
+    },
+    {
+      "page": "Fiche événement du festival",
+      "chemin": "sortir/agenda/ouverture-des-echappees/",
+      "requetes": 5,
+      "ko": 63.7,
+      "dom": 138,
+      "ecoindex": 90,
+      "note": "A"
+    },
+    {
+      "page": "Festival",
+      "chemin": "sortir/festival/",
+      "requetes": 6,
+      "ko": 87.5,
+      "dom": 362,
+      "ecoindex": 81,
+      "note": "A"
+    },
+    {
+      "page": "Catalogue des démarches",
+      "chemin": "agir/",
+      "requetes": 6,
+      "ko": 200.7,
+      "dom": 241,
+      "ecoindex": 86,
+      "note": "A"
+    },
     {
       "page": "Organiser un événement",
       "chemin": "agir/organiser-un-evenement/",
-      "requetes": 7,
-      "ko": 60.1,
-      "dom": 308,
-      "ecoindex": 84,
+      "requetes": 8,
+      "ko": 78.7,
+      "dom": 311,
+      "ecoindex": 83,
       "note": "A"
     },
     {
       "page": "Régie partagée",
       "chemin": "regie/",
-      "requetes": 4,
-      "ko": 44.9,
-      "dom": 175,
-      "ecoindex": 89,
+      "requetes": 6,
+      "ko": 103.5,
+      "dom": 184,
+      "ecoindex": 88,
       "note": "A"
     },
     {
       "page": "Catalogue du matériel",
       "chemin": "regie/catalogue/",
-      "requetes": 8,
-      "ko": 53.3,
-      "dom": 488,
+      "requetes": 9,
+      "ko": 72.2,
+      "dom": 491,
       "ecoindex": 76,
       "note": "B"
     },
     {
       "page": "Fiche matériel",
       "chemin": "regie/catalogue/enceinte-amplifiee-12/",
-      "requetes": 8,
-      "ko": 52.9,
-      "dom": 552,
+      "requetes": 9,
+      "ko": 71.9,
+      "dom": 555,
       "ecoindex": 73,
       "note": "B"
     },
     {
       "page": "Réserver du matériel",
       "chemin": "regie/reserver/",
-      "requetes": 9,
-      "ko": 61.4,
-      "dom": 462,
-      "ecoindex": 77,
+      "requetes": 10,
+      "ko": 80,
+      "dom": 465,
+      "ecoindex": 76,
       "note": "B"
     },
     {
       "page": "Coulisses",
       "chemin": "demo/coulisses/",
-      "requetes": 7,
-      "ko": 52.6,
-      "dom": 191,
+      "requetes": 8,
+      "ko": 71.3,
+      "dom": 194,
       "ecoindex": 88,
+      "note": "A"
+    },
+    {
+      "page": "Mon compte",
+      "chemin": "mon-compte/",
+      "requetes": 7,
+      "ko": 66.7,
+      "dom": 110,
+      "ecoindex": 90,
+      "note": "A"
+    },
+    {
+      "page": "À propos du projet",
+      "chemin": "a-propos-du-projet/",
+      "requetes": 5,
+      "ko": 66,
+      "dom": 236,
+      "ecoindex": 87,
+      "note": "A"
+    },
+    {
+      "page": "Accessibilité",
+      "chemin": "accessibilite/",
+      "requetes": 5,
+      "ko": 64.1,
+      "dom": 121,
+      "ecoindex": 90,
+      "note": "A"
+    },
+    {
+      "page": "Écoconception",
+      "chemin": "ecoconception/",
+      "requetes": 5,
+      "ko": 63.7,
+      "dom": 130,
+      "ecoindex": 90,
+      "note": "A"
+    },
+    {
+      "page": "Algorithmes publics",
+      "chemin": "algorithmes-publics/",
+      "requetes": 5,
+      "ko": 64.7,
+      "dom": 171,
+      "ecoindex": 89,
+      "note": "A"
+    },
+    {
+      "page": "Mentions légales",
+      "chemin": "mentions-legales/",
+      "requetes": 5,
+      "ko": 63.7,
+      "dom": 116,
+      "ecoindex": 91,
+      "note": "A"
+    },
+    {
+      "page": "Plan du site",
+      "chemin": "plan-du-site/",
+      "requetes": 5,
+      "ko": 64.6,
+      "dom": 291,
+      "ecoindex": 85,
+      "note": "A"
+    },
+    {
+      "page": "Composants du design system",
+      "chemin": "demo/composants/",
+      "requetes": 6,
+      "ko": 68.9,
+      "dom": 620,
+      "ecoindex": 71,
+      "note": "B"
+    },
+    {
+      "page": "Contrôle des données fictives",
+      "chemin": "demo/donnees/",
+      "requetes": 5,
+      "ko": 63.8,
+      "dom": 261,
+      "ecoindex": 86,
       "note": "A"
     }
   ]

@@ -1,12 +1,12 @@
 {
   "url": "https://hitierfred.github.io/vaugrenelle/regie/catalogue/",
-  "date": "2026-10-28T19:19:01.921Z",
+  "date": "2026-10-28T19:50:06.921Z",
   "page": "catalogue",
   "performance": 100,
   "accessibilite": 100,
   "bonnesPratiques": 100,
   "seo": 100,
-  "lcp": "0.8 s",
-  "tbt": "0 ms",
-  "cls": "0.034"
+  "lcp": "0.9 s",
+  "tbt": "10 ms",
+  "cls": "0.002"
 }

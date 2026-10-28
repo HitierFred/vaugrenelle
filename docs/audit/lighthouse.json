@@ -9,8 +9,8 @@
       "accessibilite": 100,
       "bonnesPratiques": 100,
       "seo": 100,
-      "lcp": "1.0 s",
-      "tbt": "0 ms",
+      "lcp": "1.3 s",
+      "tbt": "50 ms",
       "cls": "0.002"
     },
     {
@@ -19,7 +19,7 @@
       "accessibilite": 100,
       "bonnesPratiques": 100,
       "seo": 100,
-      "lcp": "0.8 s",
+      "lcp": "1.4 s",
       "tbt": "0 ms",
       "cls": "0.002"
     },
@@ -39,7 +39,7 @@
       "accessibilite": 100,
       "bonnesPratiques": 100,
       "seo": 100,
-      "lcp": "1.0 s",
+      "lcp": "1.2 s",
       "tbt": "0 ms",
       "cls": "0.002"
     },
@@ -49,7 +49,7 @@
       "accessibilite": 100,
       "bonnesPratiques": 100,
       "seo": 100,
-      "lcp": "0.8 s",
+      "lcp": "1.5 s",
       "tbt": "0 ms",
       "cls": "0.002"
     },
@@ -69,7 +69,7 @@
       "accessibilite": 100,
       "bonnesPratiques": 100,
       "seo": 100,
-      "lcp": "0.8 s",
+      "lcp": "1.2 s",
       "tbt": "0 ms",
       "cls": "0.002"
     },
@@ -79,9 +79,9 @@
       "accessibilite": 100,
       "bonnesPratiques": 100,
       "seo": 100,
-      "lcp": "0.8 s",
-      "tbt": "0 ms",
-      "cls": "0.034"
+      "lcp": "0.9 s",
+      "tbt": "10 ms",
+      "cls": "0.002"
     },
     {
       "page": "fiche-materiel",
@@ -89,9 +89,9 @@
       "accessibilite": 100,
       "bonnesPratiques": 100,
       "seo": 100,
-      "lcp": "0.8 s",
+      "lcp": "0.9 s",
       "tbt": "0 ms",
-      "cls": "0.006"
+      "cls": "0.005"
     },
     {
       "page": "reserver",
@@ -101,7 +101,7 @@
       "seo": 100,
       "lcp": "0.9 s",
       "tbt": "0 ms",
-      "cls": "0.004"
+      "cls": "0.003"
     },
     {
       "page": "coulisses",
@@ -111,7 +111,7 @@
       "seo": 100,
       "lcp": "0.8 s",
       "tbt": "0 ms",
-      "cls": "0.019"
+      "cls": "0.018"
     },
     {
       "page": "a-propos",

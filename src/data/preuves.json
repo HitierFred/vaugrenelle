@@ -32,14 +32,14 @@
     {
       "indicateur": "EcoIndex des pages principales",
       "valeur": "A ou B",
-      "detail": "14 pages en A, 7 en B, sur 21 pages mesurées (objectif : A ou B)",
+      "detail": "16 pages en A, 5 en B, sur 21 pages mesurées (objectif : A ou B)",
       "date": "2026-10-28",
       "source": "Formule ouverte EcoIndex (GreenIT), site déployé"
     },
     {
       "indicateur": "Poids médian transféré",
-      "valeur": "46 Ko",
-      "detail": "Maximum 60,8 Ko, 9 requêtes au plus (objectifs : moins de 500 Ko, 1 Mo et 25 requêtes)",
+      "valeur": "69 Ko",
+      "detail": "Maximum 200,7 Ko avec une photo, 10 requêtes au plus (objectifs : moins de 500 Ko, 1 Mo et 25 requêtes)",
       "date": "2026-10-28",
       "source": "Playwright, octets transférés compressés, site déployé"
     }
