@@ -50,10 +50,22 @@ for (const [name, path] of PAGES) {
     cls: report.audits['cumulative-layout-shift'].displayValue,
   });
   // Le rapport complet est volumineux : on ne garde que la synthèse
-  writeFileSync(out, JSON.stringify({ url: BASE + path, date: report.fetchTime, ...results.at(-1) }, null, 2) + '\n');
+  writeFileSync(
+    out,
+    JSON.stringify({ url: BASE + path, date: report.fetchTime, ...results.at(-1) }, null, 2) + '\n',
+  );
 }
 writeFileSync(
   'docs/audit/lighthouse.json',
-  JSON.stringify({ date: new Date().toISOString().slice(0, 10), base: BASE, outil: 'Lighthouse 13.6.0, mobile', pages: results }, null, 2) + '\n',
+  JSON.stringify(
+    {
+      date: new Date().toISOString().slice(0, 10),
+      base: BASE,
+      outil: 'Lighthouse 13.6.0, mobile',
+      pages: results,
+    },
+    null,
+    2,
+  ) + '\n',
 );
 console.table(results);
