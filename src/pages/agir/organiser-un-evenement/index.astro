@@ -1,0 +1,337 @@
+---
+// Parcours vitrine du Guichet Unique (brief § 7.1).
+// Le balisage est rendu au build ; la logique est dans components/islands/guichet/.
+import { getCollection } from 'astro:content';
+import Alert from '../../../components/ui/Alert.astro';
+import ChoiceGroup from '../../../components/ui/ChoiceGroup.astro';
+import FileField from '../../../components/ui/FileField.astro';
+import SelectField from '../../../components/ui/SelectField.astro';
+import Stepper from '../../../components/ui/Stepper.astro';
+import TextField from '../../../components/ui/TextField.astro';
+import DemarcheLayout from '../../../layouts/DemarcheLayout.astro';
+import { STRUCTURES } from '../../../lib/annuaire';
+import { getEvenements } from '../../../lib/content';
+import { isoDate } from '../../../lib/format';
+
+const lieux = await getCollection('lieux');
+const packs = await getCollection('packs');
+const evenements = await getEvenements();
+
+const ETAPES = ['Organisateur', 'Événement', 'Besoins', 'Pièces', 'Récapitulatif'];
+
+// Données transmises au script : agenda existant (minimisé) et lieux
+const pageData = {
+  etapes: ETAPES,
+  lieux: lieux.map((l) => ({
+    id: l.id,
+    nom: l.data.nom,
+    espacePublic: l.data.type === 'espace-public',
+  })),
+  packs: packs.map((p) => ({ id: p.id, nom: p.data.nom })),
+  agenda: evenements.map((e) => ({
+    titre: e.data.titre,
+    lieu: e.data.lieu.id,
+    debut: isoDate(e.data.debut),
+    fin: isoDate(e.data.fin),
+  })),
+};
+---
+
+<DemarcheLayout
+  title="Organiser un événement"
+  lead="Un seul dossier pour toutes les autorisations : espace public, buvette, sonorisation, circulation et matériel. Comptez 15 minutes."
+  description="Guichet Unique de Vaugrenelle : déposez en un seul dossier toutes les demandes d'autorisation pour organiser un événement (démonstration)."
+  breadcrumb={[{ label: 'Agir & organiser', href: '/agir/' }, { label: 'Organiser un événement' }]}
+>
+  <vg-guichet>
+    <script type="application/json" data-guichet-data set:html={JSON.stringify(pageData)} />
+    <div data-nojs>
+      <Alert variant="warning" title="JavaScript est nécessaire" live={false}>
+        <p>
+          Ce formulaire de démonstration fonctionne entièrement dans votre navigateur. Activez
+          JavaScript pour le parcourir.
+        </p>
+      </Alert>
+    </div>
+
+    <p class="storage-notice text-small muted" data-storage-notice hidden>
+      Stockage local indisponible : votre brouillon ne sera pas conservé après la fermeture de la
+      page.
+    </p>
+
+    <div class="restored" data-restored hidden>
+      <p role="status" data-restored-text></p>
+      <button class="btn btn--link" type="button" data-restart>
+        Recommencer un nouveau dossier
+      </button>
+    </div>
+
+    <form
+      class="guichet stack stack-l"
+      novalidate
+      data-form
+      hidden
+      aria-label="Organiser un événement"
+    >
+      <div
+        class="error-summary"
+        tabindex="-1"
+        data-error-summary
+        hidden
+        aria-labelledby="erreurs-titre"
+      >
+        <h2 id="erreurs-titre"></h2>
+        <ul></ul>
+      </div>
+
+      <Stepper steps={ETAPES} current={1} />
+
+      <!-- Étape 1 -->
+      <section class="guichet__step stack stack-l" data-step="1" aria-labelledby="etape-1">
+        <h2 id="etape-1" tabindex="-1">
+          Organisateur
+        </h2>
+        <div class="stack" data-before-login>
+          <p>
+            Connectez-vous pour retrouver vos structures. Dans cette démonstration, la connexion est
+            simulée : aucun identifiant n'est demandé.
+          </p>
+          <p>
+            <button class="btn btn--primary" type="button" id="connexion" data-login>
+              Connexion simulée (démonstration)
+            </button>
+          </p>
+        </div>
+        <div class="stack stack-l" data-after-login hidden>
+          <p class="connected" data-connected></p>
+          <SelectField
+            id="org-structure"
+            name="structure"
+            label="Structure organisatrice"
+            hint="Vos informations sont pré-remplies depuis l'annuaire des associations."
+            placeholder="Choisissez une structure"
+            options={STRUCTURES.map((s) => ({ value: s.id, label: s.nom }))}
+            required
+          />
+          <div class="stack stack-l" data-structure-details hidden>
+            <TextField id="org-nom" name="org_nom" label="Nom de la structure" required />
+            <TextField id="org-rna" name="org_rna" label="Numéro RNA" hint="Commence par W." />
+            <TextField
+              id="org-representant"
+              name="org_representant"
+              label="Personne responsable"
+              required
+              autocomplete="name"
+            />
+            <TextField
+              id="org-email"
+              name="org_email"
+              type="email"
+              label="Adresse électronique"
+              required
+              autocomplete="email"
+            />
+            <TextField
+              id="org-telephone"
+              name="org_telephone"
+              type="tel"
+              label="Téléphone"
+              autocomplete="tel"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Étape 2 -->
+      <section class="guichet__step stack stack-l" data-step="2" aria-labelledby="etape-2" hidden>
+        <h2 id="etape-2" tabindex="-1">
+          Événement
+        </h2>
+        <TextField
+          id="evt-titre"
+          name="titre"
+          label="Titre de l'événement"
+          hint="Il apparaîtra dans l'agenda municipal si votre dossier est accepté."
+          required
+        />
+        <SelectField
+          id="evt-nature"
+          name="nature"
+          label="Nature de l'événement"
+          placeholder="Choisissez"
+          options={[
+            { value: 'fete', label: 'Fête de quartier' },
+            { value: 'concert', label: 'Concert' },
+            { value: 'spectacle', label: 'Spectacle de rue' },
+            { value: 'vide-grenier', label: 'Vide-grenier ou marché' },
+            { value: 'sport', label: 'Manifestation sportive' },
+            { value: 'autre', label: 'Autre' },
+          ]}
+          required
+        />
+        <TextField
+          id="evt-debut"
+          name="debut"
+          type="date"
+          label="Date de début"
+          hint="Au moins 30 jours après aujourd'hui."
+          required
+        />
+        <TextField
+          id="evt-fin"
+          name="fin"
+          type="date"
+          label="Date de fin"
+          hint="Laissez vide si l'événement dure une journée."
+        />
+        <SelectField
+          id="evt-lieu"
+          name="lieu"
+          label="Lieu"
+          placeholder="Choisissez un lieu"
+          options={lieux.map((l) => ({ value: l.id, label: l.data.nom }))}
+          required
+        />
+        <div class="conflict" data-conflict aria-live="polite"></div>
+        <TextField
+          id="evt-jauge"
+          name="jauge"
+          type="number"
+          label="Nombre de personnes attendues"
+          hint="Une estimation suffit."
+          required
+          min="1"
+          inputmode="numeric"
+        />
+      </section>
+
+      <!-- Étape 3 -->
+      <section class="guichet__step stack stack-l" data-step="3" aria-labelledby="etape-3" hidden>
+        <h2 id="etape-3" tabindex="-1">
+          Besoins
+        </h2>
+        <p>
+          Chaque besoin ajoute ou retire une démarche de votre dossier. L'encart « Ce dossier
+          comprend » se met à jour.
+        </p>
+        <ChoiceGroup
+          id="besoins"
+          type="checkbox"
+          legend="De quoi aurez-vous besoin ?"
+          choices={[
+            { value: 'son', label: 'Une sonorisation', hint: 'Musique amplifiée, micro' },
+            { value: 'buvette', label: 'Une buvette', hint: 'Vente de boissons' },
+            {
+              value: 'voie',
+              label: "La fermeture d'une rue",
+              hint: 'Circulation ou stationnement interdits',
+            },
+            { value: 'structures', label: 'Des structures', hint: 'Scène, tente, gradin' },
+            {
+              value: 'materiel',
+              label: 'Du matériel municipal',
+              hint: 'Prêté par la Régie partagée',
+            },
+          ]}
+        />
+        <div data-packs hidden>
+          <ChoiceGroup
+            id="packs"
+            type="checkbox"
+            legend="Quels packs de matériel souhaitez-vous ?"
+            hint="La Régie confirmera la disponibilité après l'instruction du dossier."
+            choices={packs.map((p) => ({ value: p.id, label: p.data.nom, hint: p.data.usage }))}
+          />
+        </div>
+      </section>
+
+      <!-- Étape 4 -->
+      <section class="guichet__step stack stack-l" data-step="4" aria-labelledby="etape-4" hidden>
+        <h2 id="etape-4" tabindex="-1">
+          Pièces justificatives
+        </h2>
+        <Alert
+          variant="info"
+          title="Vos fichiers restent sur votre appareil"
+          live={false}
+          headingLevel={3}
+        >
+          <p>
+            L'analyse est simulée à partir du nom du fichier. Pour tester une pièce expirée, nommez
+            votre fichier <code>assurance-expiree.pdf</code>.
+          </p>
+        </Alert>
+        {(['statuts', 'assurance', 'plan'] as const).map((slot) => (
+          <div class="piece stack" data-piece={slot}>
+            <FileField
+              id={`piece-${slot}`}
+              name={`piece-${slot}`}
+              label={
+                slot === 'statuts'
+                  ? "Statuts de l'association"
+                  : slot === 'assurance'
+                    ? "Attestation d'assurance responsabilité civile"
+                    : "Plan d'implantation"
+              }
+              accept=".pdf,.jpg,.jpeg,.png"
+              required
+            />
+            <div class="piece__result" data-result aria-live="polite" />
+          </div>
+        ))}
+      </section>
+
+      <!-- Étape 5 -->
+      <section class="guichet__step stack stack-l" data-step="5" aria-labelledby="etape-5" hidden>
+        <h2 id="etape-5" tabindex="-1">
+          Récapitulatif
+        </h2>
+        <div data-recap></div>
+        <section class="stack" aria-labelledby="controles-titre">
+          <h3 id="controles-titre">Contrôles automatiques</h3>
+          <ul class="checks" data-controles></ul>
+        </section>
+        <div class="choice">
+          <input type="checkbox" id="attestation" name="attestation" value="1" />
+          <label for="attestation">
+            J'atteste que les informations de ce dossier sont exactes.
+          </label>
+        </div>
+      </section>
+
+      <div class="guichet__nav cluster">
+        <button class="btn btn--secondary" type="button" data-prev hidden>
+          Étape précédente
+        </button>
+        <button class="btn btn--primary" type="submit" data-next>
+          Continuer
+        </button>
+      </div>
+    </form>
+
+    <section
+      class="confirmation stack stack-l"
+      data-confirmation
+      hidden
+      aria-labelledby="confirmation-titre"
+    ></section>
+  </vg-guichet>
+
+  <div slot="aside" class="dossier-box stack" data-dossier-box>
+    <h2 id="dossier-titre">Ce dossier comprend</h2>
+    <ul
+      class="dossier-box__list"
+      data-sous-demarches
+      aria-live="polite"
+      aria-labelledby="dossier-titre"
+    >
+      <li>Déclaration de manifestation</li>
+    </ul>
+    <p class="text-small muted">Un seul dépôt pour toutes ces démarches.</p>
+  </div>
+</DemarcheLayout>
+
+<script>
+  import { defineGuichet } from '../../../components/islands/guichet/guichet';
+  defineGuichet();
+</script>

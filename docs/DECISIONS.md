@@ -235,3 +235,79 @@ Le build a été validé avec 8 dates de référence (changements d'heure, passa
 ### Libellés partagés
 
 `src/lib/labels.ts` regroupe les libellés des disciplines et de l'accessibilité (court et long), le thème par lieu et la couleur des cartes. Le type `Theme` est déplacé dans `src/layouts/theme.ts`.
+
+---
+
+## 2026-10-28 — Phase 4 : Guichet Unique
+
+### Architecture
+
+- **Logique métier en modules TypeScript purs**, sans dépendance au DOM :
+  - `lib/store.ts` : persistance ;
+  - `lib/events-bus.ts` : bus CloudEvents ;
+  - `lib/extraction.ts` : extraction simulée ;
+  - `lib/rules.ts` : sous-démarches, pièces requises et contrôles ;
+  - `lib/annuaire.ts` : structures fictives ;
+  - `lib/dates-client.ts` : dates au format AAAA-MM-JJ côté navigateur.
+- **Interface** : la page `agir/organiser-un-evenement/` rend tout le balisage au build, avec les composants du design system. Le Web Component `<vg-guichet>` (`components/islands/guichet/guichet.ts`) gère les étapes, la validation, le brouillon, l'extraction et le dépôt.
+- **Données transmises au script** : un bloc `<script type="application/json">` contient les lieux, les packs et l'agenda existant, réduit au titre, au lieu et aux dates.
+- **Bus d'événements avancé d'une phase** : `lib/events-bus.ts` est créé dès la phase 4, car le dépôt doit publier sur le bus (brief § 7.1). Son affichage reste prévu pour la phase 6 (`/demo/coulisses/`).
+
+### Sans JavaScript
+
+Le parcours ne fonctionne qu'avec JavaScript : tout est simulé dans le navigateur, sans serveur. Sans JavaScript, une alerte l'explique et le formulaire reste masqué. Le brief n'exige la lisibilité sans JavaScript que pour les pages de contenu.
+
+### Formulaire en 5 étapes
+
+- **Une étape à la fois.** Le stepper est mis à jour (`aria-current="step"`, état textuel masqué), ainsi que le titre de la page (« Étape 2 sur 5 : Événement — … »). Le focus passe sur le titre `h2` de l'étape.
+- **Validation à chaque « Continuer ».**
+  - Les erreurs sont reliées à leur champ par `aria-describedby`, avec `aria-invalid` sur le champ.
+  - Un **résumé d'erreurs** reçoit le focus. Ses liens mènent au champ concerné, en changeant d'étape si besoin (cas d'une erreur détectée au récapitulatif).
+- **Étape 1, connexion simulée** : un clic, compte « Alex Moreau (compte fictif) ». Le choix d'une structure pré-remplit les champs depuis l'annuaire (RNA en W000…, préfixe qui ne correspond à aucun département ; adresses en `.example`).
+- **Étape 2, conflit de lieu (EXF-GU-04)** : il est **détecté dès la saisie**, avec 3 dates libres proches (au moins 30 jours plus tard) et les lieux libres du même type. Le conflit bloque le passage à l'étape suivante.
+- **Étape 3, sous-démarches** : l'encart « Ce dossier comprend » (`aria-live="polite"`) se met à jour en direct. L'occupation du domaine public s'ajoute automatiquement pour un lieu de l'espace public. Les packs de matériel ne sont demandés que si « Du matériel municipal » est coché.
+- **Étape 4, pièces requises** : statuts et assurance dans tous les cas, plus un plan d'implantation pour l'espace public, les structures ou une fermeture de voie.
+- **Étape 5, contrôles de `lib/rules.ts`** : complétude, validité des pièces, conflit de lieu, délai de 30 jours. Une **erreur bloque le dépôt**. Une pièce « à vérifier » ou « vérification manuelle » donne seulement un avertissement : l'agent la contrôlera (CDC § 7.1, « automatiser l'instruction, jamais la décision »).
+- **Délai minimum** : il est contrôlé au récapitulatif. Le lien du résumé ramène à la date de l'étape 2.
+
+### Extraction simulée
+
+- **Type de pièce** : déduit du nom normalisé (sans accents, en minuscules).
+- **Score de confiance** : hachage FNV-1a du nom, ramené entre 0,55 et 0,99, et plafonné à 0,60 pour une pièce non reconnue. Le même nom donne toujours le même résultat.
+- **Seuils du CDC** : ≥ 0,90 pré-validé, de 0,70 à 0,89 à vérifier, < 0,70 vérification manuelle (aucune valeur pré-remplie).
+- **Scénario de démonstration** : un nom contenant « expire » donne une assurance périmée de 15 jours. Cela bloque l'étape 4, publie `piece.non_conforme`, et affiche un message de régularisation qui nomme la pièce, la période et l'action à faire.
+- **Animation d'analyse** : 1,4 s, avec un indicateur rotatif supprimé en mouvement réduit. Le délai d'attente est conservé, mais le texte « Analyse en cours » reste affiché.
+- **Remplacement d'un fichier pendant son analyse** : un jeton annule l'analyse précédente, qui ne peut plus écraser la nouvelle.
+- **Pièce inattendue** : si le fichier ressemble à un autre type de pièce, un avertissement le signale.
+
+### Brouillon
+
+Il est sauvegardé à chaque saisie dans `vg:guichet:brouillon` : étape, connexion, valeurs et résultats d'extraction. Les fichiers eux-mêmes ne sont jamais stockés. À la reprise, un message en `role="status"` l'annonce et propose de recommencer. Le brouillon est supprimé au dépôt.
+
+### Dépôt
+
+- **Dossier fictif** : numéro `GU-AAAA-nnnnnn`, statut « En instruction », chronologie prévisionnelle (dépôt, contrôles, avis des services à J+3, décision à J+6 par un agent, publication dans l'agenda, événement). Il est enregistré dans `vg:dossiers` pour « Mon compte » (phase 6).
+- **Événements publiés** :
+  - à l'extraction, `piece.extraite` et, le cas échéant, `piece.non_conforme` ;
+  - au dépôt, `dossier.depose`, un `avis.requis` par service consulté et `materiel.prereservation_demandee` si des packs sont demandés.
+- **Contenu des événements** : identifiants et statuts uniquement (minimisation, CDC § 7.6).
+
+### Catalogue des démarches
+
+`/agir/` propose une recherche instantanée côté client, insensible aux accents et à la casse, reflétée dans l'URL (`?q=`). Elle couvre le titre, le résumé et la catégorie. Sans JavaScript, le champ reste masqué et la liste complète est affichée.
+
+Pagefind reste réservé à une recherche transversale. Pour 10 démarches, un filtre local est plus rapide et plus léger.
+
+Les démarches absentes du démonstrateur portent un badge « Hors démonstration » ou « Sur rendez-vous en mairie ».
+
+### Tests
+
+`tests/parcours-guichet.spec.ts` couvre :
+
+- le parcours nominal jusqu'au dépôt, avec vérification du bus et du stockage ;
+- la pièce expirée, puis sa régularisation ;
+- le conflit de date et de lieu, avec les alternatives proposées et le lien du résumé ;
+- le délai trop court ;
+- la restauration du brouillon ;
+- la recherche dans le catalogue ;
+- un audit axe à 5 états du parcours : erreurs, packs, pièce expirée, récapitulatif, confirmation.

@@ -1,0 +1,76 @@
+---
+// Recherche instantanée dans une liste (titre et résumé).
+// Sans JavaScript, le champ reste masqué et la liste complète est affichée.
+interface Props {
+  label: string;
+  hint?: string;
+}
+const { label, hint } = Astro.props;
+---
+
+<vg-list-search>
+  <div class="field search-field" hidden data-search>
+    <label class="field__label" for="recherche">
+      {label}
+    </label>
+    {hint && (
+      <p class="field__hint" id="recherche-hint">
+        {hint}
+      </p>
+    )}
+    <input
+      class="input"
+      id="recherche"
+      type="search"
+      autocomplete="off"
+      aria-describedby={hint ? 'recherche-hint' : undefined}
+    />
+  </div>
+  <p class="filters__count" role="status" data-count></p>
+  <slot />
+</vg-list-search>
+
+<script>
+  const normalize = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+  class ListSearch extends HTMLElement {
+    connectedCallback() {
+      const box = this.querySelector<HTMLElement>('[data-search]');
+      const input = box?.querySelector('input');
+      const count = this.querySelector<HTMLElement>('[data-count]');
+      if (!box || !input || !count) return;
+      box.hidden = false;
+
+      const q = new URLSearchParams(location.search).get('q');
+      if (q) input.value = q;
+
+      const apply = () => {
+        const terms = normalize(input.value).split(/\s+/).filter(Boolean);
+        let visible = 0;
+        this.querySelectorAll<HTMLElement>('[data-item]').forEach((el) => {
+          const text = normalize(el.dataset.text ?? el.textContent ?? '');
+          const ok = terms.every((t) => text.includes(t));
+          el.hidden = !ok;
+          if (ok) visible++;
+        });
+        this.querySelectorAll<HTMLElement>('[data-group]').forEach((g) => {
+          g.hidden = !g.querySelector('[data-item]:not([hidden])');
+        });
+        const empty = this.querySelector<HTMLElement>('[data-empty]');
+        if (empty) empty.hidden = visible > 0;
+        count.textContent = terms.length
+          ? visible === 0
+            ? 'Aucune démarche ne correspond à votre recherche.'
+            : `${visible} démarche${visible > 1 ? 's' : ''} correspond${visible > 1 ? 'ent' : ''} à votre recherche.`
+          : '';
+        const url = new URL(location.href);
+        if (terms.length) url.searchParams.set('q', input.value.trim());
+        else url.searchParams.delete('q');
+        history.replaceState(null, '', url);
+      };
+      input.addEventListener('input', apply);
+      if (q) apply();
+    }
+  }
+  customElements.define('vg-list-search', ListSearch);
+</script>

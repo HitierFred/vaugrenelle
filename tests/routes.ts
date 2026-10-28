@@ -6,6 +6,8 @@ export const ROUTES: { path: string; name: string }[] = [
   { path: 'sortir/agenda/hauts-vols/', name: 'Fiche événement payant' },
   { path: 'sortir/agenda/ouverture-des-echappees/', name: 'Fiche événement du festival' },
   { path: 'sortir/festival/', name: 'Festival' },
+  { path: 'agir/', name: 'Catalogue des démarches' },
+  { path: 'agir/organiser-un-evenement/', name: 'Organiser un événement' },
   { path: 'demo/composants/', name: 'Composants du design system' },
   { path: 'demo/donnees/', name: 'Contrôle des données fictives' },
 ];

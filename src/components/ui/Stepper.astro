@@ -22,13 +22,13 @@ const stateLabel = { done: 'terminée', current: 'en cours', todo: 'à venir' } 
           </span>
           <span>
             {step}
-            <span class="visually-hidden"> ({stateLabel[state]})</span>
+            <span class="visually-hidden stepper__state"> ({stateLabel[state]})</span>
           </span>
         </li>
       );
     })}
   </ol>
 </nav>
-<p class="stepper__status">
+<p class="stepper__status" data-stepper-status>
   Étape {current} sur {steps.length} : {steps[current - 1]}
 </p>

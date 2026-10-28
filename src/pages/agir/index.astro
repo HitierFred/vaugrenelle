@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import ListSearch from '../../components/islands/ListSearch.astro';
+import Icon from '../../components/ui/Icon.astro';
+import StatusBadge from '../../components/ui/StatusBadge.astro';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { url } from '../../lib/paths';
+
+const demarches = await getCollection('demarches');
+
+const CATEGORIES: Record<string, string> = {
+  evenements: 'Événements',
+  'domaine-public': 'Espace public',
+  associations: 'Associations',
+  culture: 'Culture',
+  'cadre-de-vie': 'Cadre de vie',
+};
+// Démarches disponibles dans ce démonstrateur
+const ROUTES: Record<string, string> = {
+  'organiser-un-evenement': '/agir/organiser-un-evenement/',
+  'pret-de-materiel': '/regie/reserver/',
+};
+
+const groups = Object.entries(CATEGORIES)
+  .map(([id, label]) => ({ id, label, items: demarches.filter((d) => d.data.categorie === id) }))
+  .filter((g) => g.items.length);
+---
+
+<PageLayout
+  title="Toutes les démarches"
+  heading="Agir & organiser"
+  lead="Toutes les démarches de la Ville. Le Guichet Unique réunit en un seul dossier les autorisations nécessaires pour organiser un événement."
+  description="Catalogue des démarches en ligne de Vaugrenelle : organiser un événement, occuper l'espace public, demander une subvention, emprunter du matériel."
+  breadcrumb={[{ label: 'Agir & organiser' }]}
+>
+  <ListSearch label="Rechercher une démarche" hint="Par exemple : buvette, terrasse, subvention.">
+    {groups.map((g) => (
+      <section class="agenda-month" data-group aria-labelledby={`cat-${g.id}`}>
+        <h2 id={`cat-${g.id}`}>{g.label}</h2>
+        <ul class="grid-cards">
+          {g.items.map((d) => (
+            <li data-item data-text={`${d.data.titre} ${d.data.resume} ${g.label}`}>
+              <article class="card">
+                <h3 class="card__title">
+                  {ROUTES[d.id] ? (
+                    <a class="card__link" href={url(ROUTES[d.id])}>
+                      {d.data.titre}
+                    </a>
+                  ) : (
+                    d.data.titre
+                  )}
+                </h3>
+                <p>{d.data.resume}</p>
+                <div class="demarche-card__meta">
+                  <p class="cluster" style="--cluster-space: var(--sp-2)">
+                    <Icon name="clock" />
+                    <span>{d.data.delai_indicatif}</span>
+                  </p>
+                  {d.data.pieces.length > 0 && (
+                    <p>
+                      <strong>Pièces :</strong> {d.data.pieces.join(', ')}.
+                    </p>
+                  )}
+                </div>
+                <div class="card__footer cluster" style="--cluster-space: var(--sp-2)">
+                  {ROUTES[d.id] ? (
+                    <StatusBadge status="success" label="Disponible en ligne" />
+                  ) : d.data.en_ligne ? (
+                    <StatusBadge status="neutral" label="Hors démonstration" />
+                  ) : (
+                    <StatusBadge status="info" label="Sur rendez-vous en mairie" icon="user" />
+                  )}
+                </div>
+              </article>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+    <p class="empty-state" data-empty hidden>
+      Aucune démarche ne correspond. Essayez un autre mot, ou contactez la mairie au 01 00 00 00 00
+      (numéro fictif).
+    </p>
+  </ListSearch>
+</PageLayout>
