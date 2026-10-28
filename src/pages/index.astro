@@ -1,13 +1,154 @@
 ---
-// Page d'accueil provisoire. Remplacée en phase 3.
-import PageLayout from '../layouts/PageLayout.astro';
+import Alert from '../components/ui/Alert.astro';
+import EventCard from '../components/ui/EventCard.astro';
+import Icon from '../components/ui/Icon.astro';
+import PosterArt from '../components/ui/PosterArt.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getActualites, getEvenements } from '../lib/content';
+import { formatDate } from '../lib/format';
+import { DISCIPLINES, eventUrlPath, zoneColorFor } from '../lib/labels';
+import { url } from '../lib/paths';
+import { FESTIVAL, fromReference } from '../lib/reference-date';
+import { getEntry } from 'astro:content';
+
+const evenements = await getEvenements();
+const semaine = evenements.filter((e) => e.data.debut < fromReference(7));
+const actualites = (await getActualites()).slice(0, 3);
+const festivalEvents = evenements.filter((e) => e.data.festival);
+const festivalLieux = new Set(festivalEvents.map((e) => e.data.lieu.id)).size;
+const dernierJour = new Date(FESTIVAL.fin.getTime() - 86_400_000);
+
+const lieux = new Map(
+  await Promise.all(
+    semaine.map(
+      async (e) => [e.data.lieu.id, (await getEntry(e.data.lieu))?.data.nom ?? ''] as const,
+    ),
+  ),
+);
+
+const quickLinks = [
+  {
+    href: '/agir/',
+    label: 'Faire une démarche',
+    hint: "Organiser un événement, occuper l'espace public…",
+    icon: 'file',
+  },
+  {
+    href: '/sortir/agenda/',
+    label: 'Agenda et billetterie',
+    hint: 'Spectacles, concerts, festival',
+    icon: 'ticket',
+  },
+  {
+    href: '/regie/reserver/',
+    label: 'Réserver du matériel',
+    hint: 'Son, lumière, scènes, structures',
+    icon: 'box',
+  },
+] as const;
 ---
 
-<PageLayout
+<BaseLayout
   title="Accueil"
-  heading="Vaugrenelle, la ville comme scène"
-  lead="Le démonstrateur du portail de la Ville de Vaugrenelle est en construction."
-  description="Démonstrateur du portail de la Ville fictive de Vaugrenelle : agenda culturel, Guichet Unique et Régie partagée."
+  description="Portail de la Ville fictive de Vaugrenelle : agenda culturel, festival Les Échappées, démarches en ligne et réservation du matériel municipal."
 >
-  <p>Les rubriques arrivent au fil des phases de développement.</p>
-</PageLayout>
+  <div class="container stack stack-l">
+    <Alert variant="info" title="Festival Les Échappées" live={false}>
+      <p>
+        Du {formatDate(FESTIVAL.debut)} au {formatDate(dernierJour)}, des rues du centre-ville sont
+        piétonnes. <a href={url('/sortir/festival/')}>Voir le programme et les accès</a>
+      </p>
+    </Alert>
+
+    <section class="hero" aria-labelledby="titre-accueil">
+      <div class="stack">
+        <h1 id="titre-accueil">Vaugrenelle, la ville comme scène</h1>
+        <p class="hero__lead">
+          Sortir, organiser un événement, emprunter du matériel : tous les services de la Ville au
+          même endroit.
+        </p>
+        <h2 class="visually-hidden">Accès rapides</h2>
+        <ul class="quick-links">
+          {quickLinks.map((link) => (
+            <li>
+              <a href={url(link.href)}>
+                <Icon name={link.icon} />
+                <span>
+                  {link.label}
+                  <span class="quick-links__hint">{link.hint}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <PosterArt />
+    </section>
+
+    <section aria-labelledby="a-la-une" class="stack">
+      <h2 id="a-la-une">À la une</h2>
+      <article class="feature theme-festival">
+        <PosterArt variant="festival" />
+        <div class="feature__body">
+          <p class="feature__kicker">Festival des arts de la rue</p>
+          <h3>Les Échappées</h3>
+          <p>
+            Quatre jours de cirque, de théâtre de rue, de danse et de musique, du{' '}
+            {formatDate(FESTIVAL.debut)} au {formatDate(dernierJour)}. {festivalEvents.length}{' '}
+            spectacles dans {festivalLieux} lieux, presque tous gratuits.
+          </p>
+          <a class="btn btn--on-dark" href={url('/sortir/festival/')}>
+            Découvrir le programme
+          </a>
+        </div>
+      </article>
+      <ul class="grid-cards">
+        {actualites.map((a) => (
+          <li>
+            <article class="news">
+              <time datetime={a.data.date.toISOString()}>{formatDate(a.data.date)}</time>
+              <h3>{a.data.titre}</h3>
+              <p>{a.data.resume}</p>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="sept-jours" class="stack">
+      <div class="section-head">
+        <h2 id="sept-jours">Les 7 prochains jours</h2>
+        <a href={url('/sortir/agenda/')}>Tout l'agenda</a>
+      </div>
+      {semaine.length ? (
+        <ul class="grid-cards">
+          {semaine.map((e) => (
+            <li data-fin={e.data.fin.toISOString()}>
+              <EventCard
+                titre={e.data.titre}
+                href={url(eventUrlPath(e.id))}
+                debut={e.data.debut}
+                lieu={lieux.get(e.data.lieu.id) ?? ''}
+                discipline={DISCIPLINES[e.data.discipline]}
+                compagnie={e.data.compagnie}
+                gratuit={e.data.gratuit}
+                accessibilite={e.data.accessibilite}
+                zoneColor={zoneColorFor(e.data.lieu.id, e.data.festival)}
+              />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="empty-state">Aucun spectacle cette semaine. Consultez l'agenda complet.</p>
+      )}
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  // Masque les événements déjà terminés (la page est générée au build)
+  const now = Date.now();
+  document.querySelectorAll<HTMLElement>('[data-fin]').forEach((el) => {
+    if (Date.parse(el.dataset.fin ?? '') < now) el.hidden = true;
+  });
+</script>

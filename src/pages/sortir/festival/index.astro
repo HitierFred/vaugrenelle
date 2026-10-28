@@ -1,0 +1,190 @@
+---
+import { getCollection } from 'astro:content';
+import TabPanel from '../../../components/islands/TabPanel.astro';
+import Tabs from '../../../components/islands/Tabs.astro';
+import Accordion from '../../../components/ui/Accordion.astro';
+import FestivalMap from '../../../components/ui/FestivalMap.astro';
+import PosterArt from '../../../components/ui/PosterArt.astro';
+import StatusBadge from '../../../components/ui/StatusBadge.astro';
+import Breadcrumb from '../../../components/layout/Breadcrumb.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getEvenements } from '../../../lib/content';
+import { formatDate, formatTime, isoDate } from '../../../lib/format';
+import { ACCESSIBILITE, DISCIPLINES, eventUrlPath } from '../../../lib/labels';
+import { url } from '../../../lib/paths';
+import { FESTIVAL, FESTIVAL_DUREE_JOURS, festivalDay } from '../../../lib/reference-date';
+
+const evenements = (await getEvenements()).filter((e) => e.data.festival);
+const lieux = await getCollection('lieux');
+
+// Sites : lieux qui accueillent au moins un spectacle, numérotés d'ouest en est
+const siteIds = new Set(evenements.map((e) => e.data.lieu.id));
+const sites = lieux
+  .filter((l) => siteIds.has(l.id))
+  .sort((a, b) => a.data.coords.x - b.data.coords.x)
+  .map((l, i) => ({ numero: i + 1, lieu: l }));
+const numeroDe = new Map(sites.map((s) => [s.lieu.id, s.numero]));
+const nomDe = new Map(lieux.map((l) => [l.id, l.data.nom]));
+
+const jourFmt = new Intl.DateTimeFormat('fr-FR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  timeZone: 'Europe/Paris',
+});
+const jours = Array.from({ length: FESTIVAL_DUREE_JOURS }, (_, i) => {
+  const date = festivalDay(i + 1);
+  const iso = isoDate(date);
+  return {
+    id: `jour-${i + 1}`,
+    label: jourFmt.format(date).replace(/^./, (c) => c.toUpperCase()),
+    items: evenements.filter((e) => isoDate(e.data.debut) === iso),
+  };
+});
+const dernierJour = new Date(FESTIVAL.fin.getTime() - 86_400_000);
+---
+
+<BaseLayout
+  title="Festival Les Échappées"
+  description={`Les Échappées, festival des arts de la rue de Vaugrenelle, du ${formatDate(FESTIVAL.debut)} au ${formatDate(dernierJour)} : programme, plan des sites et infos pratiques.`}
+  theme="festival"
+>
+  <div class="container">
+    <Breadcrumb items={[{ label: 'Sortir & découvrir' }, { label: 'Les Échappées' }]} />
+
+    <section class="festival-hero" aria-labelledby="titre-festival">
+      <div class="festival-hero__body">
+        <h1 id="titre-festival">Les Échappées</h1>
+        <p class="festival-dates">
+          Du {formatDate(FESTIVAL.debut)}
+          <br />
+          au {formatDate(dernierJour)}
+        </p>
+        <p>
+          Le festival des arts de la rue de Vaugrenelle : {evenements.length} spectacles dans{' '}
+          {sites.length} lieux, presque tous gratuits.
+        </p>
+      </div>
+      <PosterArt variant="festival" />
+    </section>
+
+    <div class="stack" style="--stack-space: var(--sp-16)">
+      <section aria-labelledby="programme" class="stack">
+        <div class="section-head">
+          <h2 id="programme">Programme</h2>
+          <a href={url('/sortir/agenda/?periode=festival')}>Filtrer le programme dans l'agenda</a>
+        </div>
+        <Tabs label="Programme par jour">
+          {jours.map((jour) => (
+            <TabPanel id={jour.id} label={jour.label}>
+              <ol class="programme">
+                {jour.items.map((e) => (
+                  <li>
+                    <time class="programme__time" datetime={e.data.debut.toISOString()}>
+                      {formatTime(e.data.debut)}
+                    </time>
+                    <div class="stack stack-s">
+                      <h4 class="programme__title">
+                        <a href={url(eventUrlPath(e.id))}>{e.data.titre}</a>
+                      </h4>
+                      <p class="text-small">
+                        {DISCIPLINES[e.data.discipline]} · Site {numeroDe.get(e.data.lieu.id)} :{' '}
+                        {nomDe.get(e.data.lieu.id)}
+                      </p>
+                      <p class="cluster" style="--cluster-space: var(--sp-2)">
+                        {e.data.gratuit ? (
+                          <StatusBadge status="success" label="Gratuit" icon="ticket" />
+                        ) : (
+                          <StatusBadge status="neutral" label="Payant" icon="ticket" />
+                        )}
+                        {e.data.accessibilite.map((a) => (
+                          <StatusBadge status="info" label={ACCESSIBILITE[a].court} icon="access" />
+                        ))}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </TabPanel>
+          ))}
+        </Tabs>
+      </section>
+
+      <section aria-labelledby="sites" class="stack">
+        <h2 id="sites">Les sites du festival</h2>
+        <div class="layout-2">
+          <FestivalMap
+            listId="liste-sites"
+            sites={sites.map((s) => ({
+              numero: s.numero,
+              nom: s.lieu.data.nom.replace('La Filature — ', 'Filature, '),
+              x: s.lieu.data.coords.x,
+              y: s.lieu.data.coords.y,
+            }))}
+          />
+          <div class="stack">
+            <h3 id="liste-sites" tabindex="-1">
+              Liste des sites
+            </h3>
+            <ol class="sites-list">
+              {sites.map((s) => (
+                <li>
+                  <span class="site-num" aria-hidden="true">
+                    {s.numero}
+                  </span>
+                  <div class="stack stack-s">
+                    <h4>
+                      <span class="visually-hidden">Site {s.numero} : </span>
+                      {s.lieu.data.nom}
+                    </h4>
+                    <p class="text-small">{s.lieu.data.adresse}</p>
+                    <p class="text-small">{s.lieu.data.accessibilite}</p>
+                    <p class="text-small">
+                      <a href={url(`/sortir/agenda/?periode=festival&lieu=${s.lieu.id}`)}>
+                        Spectacles sur ce site
+                        <span class="visually-hidden"> ({s.lieu.data.nom})</span>
+                      </a>
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="infos" class="stack">
+        <h2 id="infos">Infos pratiques</h2>
+        <div>
+          <Accordion summary="Venir au festival">
+            <p>
+              Le centre-ville est piéton pendant les quatre jours. Les bus 1 et 3 desservent la gare
+              et le quai des Teinturiers jusqu'à 1 heure du matin.
+            </p>
+            <p>Des parkings vélos gardés sont installés place de la Halle et au parc Brossard.</p>
+          </Accordion>
+          <Accordion summary="Accessibilité">
+            <p>
+              Chaque site dispose d'une zone réservée aux personnes à mobilité réduite. Les
+              spectacles traduits en langue des signes et les séances relax sont signalés dans le
+              programme.
+            </p>
+            <p>Des casques anti-bruit sont prêtés au point d'accueil, place de la Halle.</p>
+          </Accordion>
+          <Accordion summary="Sécurité">
+            <p>
+              Les sacs peuvent être contrôlés à l'entrée des sites. Les bouteilles en verre sont
+              interdites. Un poste de secours est installé sur chaque site.
+            </p>
+          </Accordion>
+          <Accordion summary="Se restaurer">
+            <p>
+              Les buvettes sont tenues par les associations de Vaugrenelle. Les gobelets sont
+              réutilisables et consignés 1 euro.
+            </p>
+          </Accordion>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

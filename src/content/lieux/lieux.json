@@ -17,7 +17,7 @@
     "nom": "La Filature — halle A",
     "type": "salle",
     "adresse": "12 rue des Fileuses, 00100 Vaugrenelle",
-    "coords": { "x": 690, "y": 260 },
+    "coords": { "x": 680, "y": 300 },
     "jauge": 600,
     "accessibilite": "Plain-pied. Configuration modulable : places pour fauteuils roulants au premier rang. Toilettes adaptées.",
     "alimentations": [{ "puissance_kva": 90, "prises": "2 × P17 63 A tétra, 6 × 16 A mono" }],

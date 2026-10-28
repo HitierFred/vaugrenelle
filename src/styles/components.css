@@ -140,6 +140,7 @@
 
   .fieldset {
     display: grid;
+    align-content: start;
     gap: var(--sp-2);
     padding: 0;
     border: 0;
@@ -319,7 +320,7 @@
     font-size: var(--fs-300);
     font-weight: 700;
     line-height: 1.3;
-    white-space: nowrap;
+    max-width: 100%;
 
     & .icon {
       width: 1.1em;
@@ -708,5 +709,375 @@
   }
   .calendar-wrap {
     container-type: inline-size;
+  }
+}
+
+@layer components {
+  /* ---------- Affiche (accueil, festival) ---------- */
+  .poster-art {
+    width: 100%;
+    height: 100%;
+    min-height: 12rem;
+    border-radius: var(--radius-m);
+  }
+
+  .hero {
+    display: grid;
+    gap: var(--sp-8);
+    align-items: center;
+    margin-block-end: var(--sp-12);
+
+    @media (width >= 56rem) {
+      grid-template-columns: 3fr 2fr;
+    }
+  }
+
+  .hero__lead {
+    font-size: var(--fs-500);
+    color: var(--c-muted);
+  }
+
+  /* ---------- Accès rapides ---------- */
+  .quick-links {
+    display: grid;
+    gap: var(--sp-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    padding: 0;
+    list-style: none;
+
+    & li {
+      max-width: none;
+    }
+
+    & a {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      height: 100%;
+      min-height: 4.5rem;
+      padding: var(--sp-4);
+      background: var(--c-surface);
+      border: var(--border-w) solid var(--c-ink);
+      border-radius: var(--radius-s);
+      box-shadow: 4px 4px 0 var(--c-accent);
+      font-weight: 700;
+      text-decoration: none;
+
+      &:hover {
+        box-shadow: 2px 2px 0 var(--c-accent);
+        text-decoration: underline;
+      }
+
+      & .icon {
+        width: 2rem;
+        height: 2rem;
+        color: var(--c-accent);
+      }
+    }
+  }
+
+  .quick-links__hint {
+    display: block;
+    font-weight: 400;
+    font-size: var(--fs-300);
+    color: var(--c-muted);
+  }
+
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-2) var(--sp-6);
+    margin-block-end: var(--sp-6);
+  }
+
+  /* ---------- Article d'actualité ---------- */
+  .news {
+    display: grid;
+    gap: var(--sp-2);
+    padding-block-start: var(--sp-4);
+    border-block-start: 4px solid var(--c-ink);
+
+    & time {
+      font-size: var(--fs-300);
+      color: var(--c-muted);
+    }
+  }
+
+  /* ---------- Bloc mis en avant (festival) ---------- */
+  .feature {
+    display: grid;
+    overflow: hidden;
+    background: var(--c-ink);
+    color: var(--c-paper);
+    border-radius: var(--radius-m);
+
+    @media (width >= 48rem) {
+      grid-template-columns: 2fr 3fr;
+    }
+
+    & a {
+      color: var(--c-paper);
+    }
+
+    & :focus-visible {
+      outline-color: #ffd7c2;
+    }
+  }
+
+  .feature__body {
+    display: grid;
+    gap: var(--sp-4);
+    align-content: center;
+    padding: var(--sp-8);
+  }
+
+  .feature__kicker {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffd7c2;
+  }
+
+  .btn--on-dark {
+    background: var(--c-paper);
+    color: var(--c-ink) !important;
+    box-shadow: 4px 4px 0 var(--c-festival);
+    justify-self: start;
+
+    &:hover {
+      box-shadow: 2px 2px 0 var(--c-festival);
+    }
+  }
+
+  .empty-state {
+    padding: var(--sp-6);
+    background: var(--c-surface);
+    border: 1px dashed var(--c-line-strong);
+    border-radius: var(--radius-m);
+  }
+}
+
+@layer components {
+  /* ---------- Filtres ---------- */
+  .filters {
+    display: grid;
+    gap: var(--sp-6);
+    padding: var(--sp-6);
+    margin-block-end: var(--sp-4);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-m);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+  .filters__title {
+    font-size: var(--fs-500);
+  }
+  .filters__grid {
+    display: grid;
+    gap: var(--sp-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+  .filters__count {
+    font-weight: 700;
+    margin-block-end: var(--sp-6);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .agenda-month + .agenda-month {
+    margin-block-start: var(--sp-12);
+  }
+  .agenda-month h2 {
+    margin-block-end: var(--sp-6);
+    padding-block-end: var(--sp-2);
+    border-block-end: 4px solid var(--c-ink);
+    text-transform: capitalize;
+  }
+  [data-group][hidden],
+  [data-event][hidden],
+  [data-empty][hidden] {
+    display: none;
+  }
+}
+
+@layer components {
+  /* ---------- Fiche événement ---------- */
+  .event-layout {
+    display: grid;
+    gap: var(--sp-8);
+
+    @media (width >= 60rem) {
+      grid-template-columns: minmax(0, 1fr) 22rem;
+      align-items: start;
+    }
+  }
+  .event-facts {
+    display: grid;
+    gap: var(--sp-4);
+    padding: var(--sp-6);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-block-start: 6px solid var(--c-zone);
+    border-radius: var(--radius-m);
+
+    & dl {
+      display: grid;
+      gap: var(--sp-3);
+    }
+    & dt {
+      display: flex;
+      gap: var(--sp-2);
+      align-items: center;
+      font-weight: 700;
+    }
+    & dd {
+      margin: 0 0 0 calc(1.25em + var(--sp-2));
+    }
+  }
+  .event-kicker {
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+  .prose > * + * {
+    margin-block-start: var(--sp-4);
+  }
+  .access-list {
+    display: grid;
+    gap: var(--sp-2);
+    padding: 0;
+    list-style: none;
+
+    & li {
+      display: flex;
+      gap: var(--sp-2);
+      align-items: flex-start;
+    }
+    & .icon {
+      color: var(--c-success);
+      margin-block-start: 0.2em;
+    }
+  }
+  .booking-status:empty {
+    display: none;
+  }
+}
+@layer components {
+  .event-facts h2 {
+    font-size: var(--fs-500);
+  }
+}
+
+@layer components {
+  /* ---------- Festival ---------- */
+  .festival-map {
+    display: grid;
+    gap: var(--sp-2);
+
+    & svg {
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--c-line-strong);
+      border-radius: var(--radius-m);
+      background: #efe9dd;
+    }
+  }
+  .sites-list {
+    display: grid;
+    gap: var(--sp-4);
+    padding: 0;
+    list-style: none;
+    counter-reset: none;
+
+    & > li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--sp-4);
+      max-width: none;
+    }
+  }
+  .site-num {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--c-festival);
+    color: #ffffff;
+    font-weight: 700;
+  }
+  .programme {
+    display: grid;
+    gap: 0;
+    padding: 0;
+    list-style: none;
+
+    & > li {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--sp-1) var(--sp-4);
+
+      @media (width >= 30rem) {
+        grid-template-columns: 6.5rem minmax(0, 1fr);
+      }
+      padding-block: var(--sp-4);
+      border-block-end: 1px solid var(--c-line);
+      max-width: none;
+    }
+  }
+  .programme__time {
+    white-space: nowrap;
+    font-size: var(--fs-500);
+    font-weight: 700;
+    color: var(--c-festival);
+  }
+  .programme__title {
+    font-size: var(--fs-400);
+  }
+  .festival-hero {
+    display: grid;
+    gap: var(--sp-6);
+    overflow: hidden;
+    margin-block-end: var(--sp-12);
+    background: var(--c-ink);
+    color: var(--c-paper);
+    border-radius: var(--radius-m);
+
+    @media (width >= 48rem) {
+      grid-template-columns: 3fr 2fr;
+    }
+  }
+  .festival-hero__body {
+    display: grid;
+    gap: var(--sp-4);
+    align-content: center;
+    padding: var(--sp-8);
+
+    & p {
+      font-size: var(--fs-500);
+    }
+  }
+  .festival-dates {
+    font-size: var(--fs-600);
+    font-weight: 700;
+    color: #ffd7c2;
+    line-height: var(--lh-tight);
+  }
+  .layout-2 {
+    display: grid;
+    gap: var(--sp-8);
+
+    @media (width >= 60rem) {
+      grid-template-columns: 3fr 2fr;
+      align-items: start;
+    }
   }
 }

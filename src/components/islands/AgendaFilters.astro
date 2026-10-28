@@ -1,0 +1,205 @@
+---
+// Filtres de l'agenda. Sans JavaScript, le formulaire reste masqué
+// et la liste complète des événements est affichée.
+import { ACCESSIBILITE, DISCIPLINES } from '../../lib/labels';
+import type { Accessibilite } from '../ui/types';
+
+interface Props {
+  lieux: { id: string; nom: string }[];
+}
+
+const { lieux } = Astro.props;
+const periodes = [
+  ['', 'Toutes les dates'],
+  ['aujourdhui', "Aujourd'hui"],
+  ['week-end', 'Ce week-end'],
+  ['7-jours', 'Les 7 prochains jours'],
+  ['30-jours', 'Les 30 prochains jours'],
+  ['festival', 'Pendant le festival Les Échappées'],
+];
+---
+
+<vg-agenda-filters>
+  <form class="filters" hidden aria-labelledby="filtres-titre" data-filters>
+    <h2 id="filtres-titre" class="filters__title">
+      Filtrer les événements
+    </h2>
+    <div class="filters__grid">
+      <div class="field">
+        <label class="field__label" for="f-periode">
+          Date
+        </label>
+        <select class="select" id="f-periode" name="periode">
+          {periodes.map(([v, l]) => (
+            <option value={v}>{l}</option>
+          ))}
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="f-lieu">
+          Lieu
+        </label>
+        <select class="select" id="f-lieu" name="lieu">
+          <option value="">Tous les lieux</option>
+          {lieux.map((l) => (
+            <option value={l.id}>{l.nom}</option>
+          ))}
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="f-discipline">
+          Discipline
+        </label>
+        <select class="select" id="f-discipline" name="discipline">
+          <option value="">Toutes les disciplines</option>
+          {Object.entries(DISCIPLINES).map(([v, l]) => (
+            <option value={v}>{l}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+    <div class="filters__grid">
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Tarif</legend>
+        <div class="choice">
+          <input type="checkbox" id="f-gratuit" name="gratuit" value="1" />
+          <label for="f-gratuit">Gratuit uniquement</label>
+        </div>
+      </fieldset>
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Accessibilité</legend>
+        {(Object.keys(ACCESSIBILITE) as Accessibilite[]).map((a) => (
+          <div class="choice">
+            <input type="checkbox" id={`f-acces-${a}`} name="acces" value={a} />
+            <label for={`f-acces-${a}`}>{ACCESSIBILITE[a].court}</label>
+          </div>
+        ))}
+      </fieldset>
+    </div>
+    <div class="cluster">
+      <button class="btn btn--primary" type="submit">
+        Afficher les résultats
+      </button>
+      <button class="btn btn--secondary" type="reset">
+        Effacer les filtres
+      </button>
+    </div>
+  </form>
+  <p class="filters__count" role="status" data-count></p>
+  <slot />
+</vg-agenda-filters>
+
+<script>
+  // Le filtrage s'applique à chaque changement ; l'URL reflète les filtres
+  // (adresse partageable). Les événements terminés sont masqués.
+  const DAY = 86_400_000;
+
+  function startOfDay(d: Date) {
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }
+
+  function periodRange(periode: string, now: Date): [number, number] | null {
+    const today = startOfDay(now).getTime();
+    switch (periode) {
+      case 'aujourdhui':
+        return [today, today + DAY];
+      case 'week-end': {
+        const day = now.getDay(); // 0 dimanche, 6 samedi
+        const saturday = day === 0 ? today - DAY : today + ((6 - day + 7) % 7) * DAY;
+        return [Math.max(saturday, today), saturday + 2 * DAY];
+      }
+      case '7-jours':
+        return [today, today + 7 * DAY];
+      case '30-jours':
+        return [today, today + 30 * DAY];
+      default:
+        return null;
+    }
+  }
+
+  class AgendaFilters extends HTMLElement {
+    private form!: HTMLFormElement;
+    private count!: HTMLElement;
+
+    connectedCallback() {
+      const form = this.querySelector<HTMLFormElement>('[data-filters]');
+      const count = this.querySelector<HTMLElement>('[data-count]');
+      if (!form || !count) return;
+      this.form = form;
+      this.count = count;
+      form.hidden = false;
+
+      this.restore(new URLSearchParams(location.search));
+      this.apply(false);
+
+      form.addEventListener('change', () => this.apply(true));
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.apply(true);
+        this.count.focus();
+      });
+      form.addEventListener('reset', () => setTimeout(() => this.apply(true)));
+    }
+
+    private restore(params: URLSearchParams) {
+      for (const el of Array.from(this.form.elements)) {
+        if (el instanceof HTMLSelectElement) {
+          const v = params.get(el.name);
+          if (v && Array.from(el.options).some((o) => o.value === v)) el.value = v;
+        } else if (el instanceof HTMLInputElement && el.type === 'checkbox') {
+          el.checked = params.getAll(el.name).includes(el.value);
+        }
+      }
+    }
+
+    private apply(updateUrl: boolean) {
+      const data = new FormData(this.form);
+      const periode = String(data.get('periode') ?? '');
+      const lieu = String(data.get('lieu') ?? '');
+      const discipline = String(data.get('discipline') ?? '');
+      const gratuit = data.has('gratuit');
+      const acces = data.getAll('acces').map(String);
+      const now = new Date();
+      const range = periodRange(periode, now);
+
+      let visible = 0;
+      this.querySelectorAll<HTMLElement>('[data-event]').forEach((el) => {
+        const d = el.dataset;
+        const debut = Date.parse(d.debut ?? '');
+        const ok =
+          Date.parse(d.fin ?? '') >= now.getTime() &&
+          (!range || (debut >= range[0] && debut < range[1])) &&
+          (periode !== 'festival' || d.festival === 'true') &&
+          (!lieu || d.lieu === lieu) &&
+          (!discipline || d.discipline === discipline) &&
+          (!gratuit || d.gratuit === 'true') &&
+          acces.every((a) => (d.acces ?? '').split(' ').includes(a));
+        el.hidden = !ok;
+        if (ok) visible++;
+      });
+
+      // Masque les groupes (mois) vides
+      this.querySelectorAll<HTMLElement>('[data-group]').forEach((group) => {
+        group.hidden = !group.querySelector('[data-event]:not([hidden])');
+      });
+      const empty = this.querySelector<HTMLElement>('[data-empty]');
+      if (empty) empty.hidden = visible > 0;
+
+      this.count.tabIndex = -1;
+      this.count.textContent =
+        visible === 0
+          ? 'Aucun événement ne correspond à vos critères.'
+          : visible === 1
+            ? '1 événement correspond à vos critères.'
+            : `${visible} événements correspondent à vos critères.`;
+
+      if (updateUrl) {
+        const params = new URLSearchParams();
+        for (const [k, v] of data) if (v) params.append(k, String(v));
+        const qs = params.toString();
+        history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+      }
+    }
+  }
+  customElements.define('vg-agenda-filters', AgendaFilters);
+</script>

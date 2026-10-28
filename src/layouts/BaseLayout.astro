@@ -8,8 +8,7 @@ import DemoBanner from '../components/layout/DemoBanner.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import { url } from '../lib/paths';
-
-export type Theme = 'default' | 'filature' | 'theatre' | 'festival';
+import type { Theme } from './theme';
 
 export interface Props {
   title: string; // titre propre à la page, unique

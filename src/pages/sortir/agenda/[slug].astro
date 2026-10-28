@@ -1,0 +1,156 @@
+---
+import { getEntry, render } from 'astro:content';
+import SimulatedBooking from '../../../components/islands/SimulatedBooking.astro';
+import Icon from '../../../components/ui/Icon.astro';
+import StatusBadge from '../../../components/ui/StatusBadge.astro';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import { getEvenements, type Evenement } from '../../../lib/content';
+import { formatDate, formatPrice, formatTime } from '../../../lib/format';
+import { ACCESSIBILITE, DISCIPLINES, themeForLieu } from '../../../lib/labels';
+import { url } from '../../../lib/paths';
+
+export async function getStaticPaths() {
+  const evenements = await getEvenements();
+  return evenements.map((evenement) => ({ params: { slug: evenement.id }, props: { evenement } }));
+}
+
+interface Props {
+  evenement: Evenement;
+}
+
+const { evenement } = Astro.props;
+const e = evenement.data;
+const lieu = await getEntry(e.lieu);
+if (!lieu) throw new Error(`Lieu introuvable : ${e.lieu.id}`);
+const { Content } = await render(evenement);
+
+const duree =
+  e.duree_min >= 60
+    ? `${Math.floor(e.duree_min / 60)} h${e.duree_min % 60 ? ` ${String(e.duree_min % 60).padStart(2, '0')}` : ''}`
+    : `${e.duree_min} minutes`;
+const theme = e.festival ? 'festival' : themeForLieu(lieu.id);
+const breadcrumb = [
+  { label: 'Sortir & découvrir' },
+  { label: 'Agenda', href: '/sortir/agenda/' },
+  ...(e.festival ? [{ label: 'Les Échappées', href: '/sortir/festival/' }] : []),
+  { label: e.titre },
+];
+---
+
+<PageLayout
+  title={`${e.titre} (${formatDate(e.debut)})`}
+  heading={e.titre}
+  lead={e.resume}
+  description={`${e.resume} ${formatDate(e.debut)}, ${lieu.data.nom}.`}
+  theme={theme}
+  breadcrumb={breadcrumb}
+>
+  <p class="event-kicker" slot="header">
+    {DISCIPLINES[e.discipline]} · {e.compagnie}
+    {e.festival && ' · Festival Les Échappées'}
+  </p>
+
+  <div class="event-layout">
+    <div class="stack stack-l">
+      <section aria-labelledby="presentation" class="stack">
+        <h2 id="presentation">Présentation</h2>
+        <div class="prose">
+          <Content />
+        </div>
+      </section>
+
+      <section aria-labelledby="accessibilite" class="stack">
+        <h2 id="accessibilite">Accessibilité</h2>
+        {e.accessibilite.length > 0 ? (
+          <ul class="access-list">
+            {e.accessibilite.map((a) => (
+              <li>
+                <Icon name="check" />
+                <span>{ACCESSIBILITE[a].long}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Aucun aménagement particulier n'est annoncé pour cette représentation.</p>
+        )}
+        <p>
+          <strong>Le lieu :</strong> {lieu.data.accessibilite}
+        </p>
+      </section>
+    </div>
+
+    <aside class="event-facts" aria-labelledby="infos-pratiques">
+      <h2 id="infos-pratiques">Infos pratiques</h2>
+      <dl>
+        <div>
+          <dt>
+            <Icon name="calendar" /> Date
+          </dt>
+          <dd>
+            <time datetime={e.debut.toISOString()}>
+              {formatDate(e.debut)}, {formatTime(e.debut)}
+            </time>
+          </dd>
+        </div>
+        <div>
+          <dt>
+            <Icon name="clock" /> Durée
+          </dt>
+          <dd>{duree}</dd>
+        </div>
+        <div>
+          <dt>
+            <Icon name="pin" /> Lieu
+          </dt>
+          <dd>
+            {lieu.data.nom}
+            <br />
+            <span class="text-small muted">{lieu.data.adresse}</span>
+          </dd>
+        </div>
+        <div>
+          <dt>
+            <Icon name="ticket" /> Tarifs
+          </dt>
+          <dd>
+            {e.gratuit ? (
+              <StatusBadge status="success" label="Gratuit" icon="ticket" />
+            ) : (
+              <ul class="stack stack-s" style="list-style: none; padding: 0">
+                {e.tarifs?.map((t) => (
+                  <li>
+                    {t.libelle} : <strong>{formatPrice(t.prix)}</strong>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </dd>
+        </div>
+        {e.jauge && (
+          <div>
+            <dt>
+              <Icon name="user" /> Jauge
+            </dt>
+            <dd>{e.jauge.toLocaleString('fr-FR')} places</dd>
+          </div>
+        )}
+      </dl>
+      {e.gratuit ? (
+        <p>Entrée libre, sans réservation, dans la limite des places disponibles.</p>
+      ) : (
+        <SimulatedBooking titre={e.titre} />
+      )}
+    </aside>
+  </div>
+
+  <p class="cluster" style="margin-block-start: var(--sp-12)">
+    <Icon name="chevron-left" />
+    <a href={url('/sortir/agenda/')}>Retour à l'agenda</a>
+    {e.festival && (
+      <>
+        <span aria-hidden="true">·</span>
+        <a href={url('/sortir/festival/')}>Programme du festival</a>
+      </>
+    )}
+  </p>
+</PageLayout>

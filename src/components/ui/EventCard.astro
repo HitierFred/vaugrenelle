@@ -3,6 +3,7 @@
 import Icon from './Icon.astro';
 import StatusBadge from './StatusBadge.astro';
 import type { Accessibilite } from './types';
+import { ACCESSIBILITE } from '../../lib/labels';
 import { formatDate, formatDayMonth, formatTime } from '../../lib/format';
 
 interface Props {
@@ -30,14 +31,6 @@ const {
   zoneColor,
   headingLevel = 3,
 } = Astro.props;
-
-const accLabels: Record<Accessibilite, string> = {
-  pmr: 'Accessible en fauteuil',
-  lsf: 'Traduit en LSF',
-  audiodescription: 'Audiodécrit',
-  'boucle-magnetique': 'Boucle magnétique',
-  relax: 'Séance relax',
-};
 
 const d = formatDayMonth(debut);
 const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
@@ -70,7 +63,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
     {accessibilite.length > 0 && (
       <li>
         <Icon name="access" />
-        <span>{accessibilite.map((a) => accLabels[a]).join(' · ')}</span>
+        <span>{accessibilite.map((a) => ACCESSIBILITE[a].court).join(' · ')}</span>
       </li>
     )}
   </ul>

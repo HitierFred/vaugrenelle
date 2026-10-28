@@ -1,0 +1,37 @@
+---
+// Bouton « Réserver » simulé : aucune place n'est réservée, rien n'est envoyé.
+interface Props {
+  titre: string;
+}
+const { titre } = Astro.props;
+---
+
+<vg-simulated-booking>
+  <button class="btn btn--primary" type="button" hidden>
+    Réserver des places<span class="visually-hidden"> pour « {titre} »</span>
+  </button>
+  <div role="status" class="booking-status" data-status></div>
+</vg-simulated-booking>
+
+<script>
+  class SimulatedBooking extends HTMLElement {
+    connectedCallback() {
+      const button = this.querySelector('button');
+      const status = this.querySelector<HTMLElement>('[data-status]');
+      if (!button || !status) return;
+      button.hidden = false;
+      button.addEventListener('click', () => {
+        status.innerHTML = '';
+        const box = document.createElement('div');
+        box.className = 'alert alert--info';
+        box.innerHTML = `<div class="stack stack-s">
+          <p class="alert__title"><strong>Réservation simulée</strong></p>
+          <p>Aucune place n'a été réservée et aucune donnée n'a été envoyée.</p>
+          <p>Sur le vrai portail, la billetterie de la Ville (lot 4 du cahier des charges) s'ouvrirait ici, sans quitter le site.</p>
+        </div>`;
+        status.append(box);
+      });
+    }
+  }
+  customElements.define('vg-simulated-booking', SimulatedBooking);
+</script>

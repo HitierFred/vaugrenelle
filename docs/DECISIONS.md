@@ -189,3 +189,49 @@ Le build a été validé avec 8 dates de référence (changements d'heure, passa
 - **Hors service** : le praticable 2 × 1 m a une vérification dépassée de 26 jours, et il figure dans le pack « Scène 6 × 4 m ».
 - **Échéances proches** : tour de levage à J+9, palan électrique à J+21.
 - **Dépassement électrique** : l'esplanade de la Gare n'a que 12 kVA, et les packs son et lumière, plus le mur LED, dépassent largement cette puissance.
+
+---
+
+## 2026-10-28 — Phase 3 : accueil, agenda, fiches événement, festival
+
+### Agenda filtrable
+
+- **Sans JavaScript**, la liste complète est affichée, groupée par mois. Le formulaire de filtres porte l'attribut `hidden` et n'apparaît qu'avec JavaScript. Un formulaire qui ne filtre rien (site statique, aucun serveur) serait trompeur.
+- **Avec JavaScript**, l'élément `<vg-agenda-filters>` filtre les cartes à partir de leurs attributs `data-*` : début, fin, lieu, discipline, gratuité, festival, accessibilité.
+- **URL partageable** : les filtres sont sérialisés tels quels depuis le formulaire (`?periode=festival&lieu=parc-brossard&acces=lsf&acces=pmr`) et appliqués au chargement. `history.replaceState` évite d'empiler l'historique à chaque case cochée.
+- **Filtre de date** : périodes prédéfinies (aujourd'hui, ce week-end, 7 jours, 30 jours, pendant le festival), plus simples à utiliser qu'une paire de champs de date. Elles sont calculées sur l'horloge du visiteur.
+- **Filtre d'accessibilité** : un événement doit cumuler toutes les options cochées (ET logique).
+- **Nombre de résultats** : il est annoncé dans une région `role="status"`. À la soumission du formulaire, le focus passe sur ce compteur. Un message s'affiche quand aucun événement ne correspond.
+- **Événements terminés** : ils sont masqués côté client, sur l'agenda comme sur l'accueil. Les pages sont générées au build, alors que la reconstruction n'a lieu qu'une fois par semaine.
+
+### Fiche événement
+
+- **Sous-charte** : elle dépend du lieu (La Filature en teal, le Théâtre en plum) ou du festival, qui l'emporte.
+- **Réservation simulée** : le bouton « Réserver des places » n'existe que pour un événement payant. Il affiche dans une région `role="status"` qu'aucune place n'a été réservée et que la billetterie relève du lot 4. Il est masqué sans JavaScript.
+- **Événement gratuit** : la fiche indique « Entrée libre, sans réservation ».
+- **Bus d'événements** : il n'est pas encore utilisé. Il arrive en phase 6, et le brief ne demande pas d'y publier les réservations de billets.
+
+### Festival
+
+- **Programme** : il est présenté en onglets par jour (`<vg-tabs>`). Sans JavaScript, les quatre jours sont empilés avec leur titre.
+- **Carte SVG** : c'est un plan schématique dessiné à la main, sans fond cartographique tiers. Il porte `role="img"`, un `<title>` et une `<desc>` qui renvoient à la **liste numérotée équivalente** (nom, adresse, accessibilité, lien vers l'agenda filtré), conformément à l'exigence EXF-AGE-07.
+- **Numérotation des sites** : d'ouest en est, à partir des coordonnées.
+- **Étiquettes de la carte** : elles sont à droite des repères, ou au-dessus pour la partie est, afin d'éviter les chevauchements.
+- **Coordonnées de La Filature, halle A** : déplacées à (680, 300) pour séparer son repère de celui du chapiteau.
+
+### Accueil
+
+- **Ordre des blocs** : alerte festival (statique, `live={false}`), affiche avec accès rapides, « À la une » (festival puis 3 actualités), puis « Les 7 prochains jours ».
+- **Accès rapides** : placés dans l'en-tête de la page, où ils sont plus utiles qu'en fin de page.
+- **Lien « Agenda et billetterie »** : il mène à l'agenda, car la billetterie relève du lot 4.
+- **Visuels** : compositions SVG géométriques (`PosterArt`), sans aucune photo.
+
+### Mises en page
+
+- **Badges** : `white-space: nowrap` est retiré. À 320 px, « Accessible en fauteuil » faisait déborder la page.
+- **Programme du festival** : sur petit écran, l'horaire passe au-dessus du titre.
+- **Fil d'Ariane** : un élément intermédiaire sans lien (« Sortir & découvrir », qui n'a pas de page) s'affiche en texte simple, sans `aria-current`.
+
+### Libellés partagés
+
+`src/lib/labels.ts` regroupe les libellés des disciplines et de l'accessibilité (court et long), le thème par lieu et la couleur des cartes. Le type `Theme` est déplacé dans `src/layouts/theme.ts`.
