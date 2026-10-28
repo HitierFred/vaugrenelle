@@ -487,3 +487,11 @@ Les preuves de la page « À propos du projet » sont mises à jour (`src/data/p
 
 - La procédure manuelle au clavier et au lecteur d'écran (`docs/AUDIT.md`) reste à dérouler et à consigner.
 - Un audit RGAA complet n'a pas été réalisé : la déclaration d'accessibilité indique donc « non conforme », comme l'impose la règle.
+
+---
+
+## 2026-10-28 — Retrait du brief téléchargeable
+
+À la demande de l'auteur, le brief de développement n'est plus publié sur le site : la route `src/pages/documents/brief-developpement-vaugrenelle.md.ts` et le lien de la page « À propos du projet » sont supprimés. La démarche décrit toujours l'étape du brief, sans lien. Seul le cahier des charges reste téléchargeable.
+
+`CLAUDE.md` est **conservé dans le dépôt** : le site ne l'utilise plus, mais il sert de brief aux sessions de développement (phase 9). Le dépôt GitHub étant public, le fichier y reste visible ; pour le masquer complètement, il faudrait rendre le dépôt privé ou retirer le fichier de son historique.

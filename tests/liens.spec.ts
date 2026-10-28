@@ -56,14 +56,18 @@ test.describe('Pages de pied de page et page portfolio', () => {
     );
   });
 
-  test('les documents du projet sont téléchargeables', async ({ page, request }) => {
+  test("le cahier des charges est téléchargeable, le brief ne l'est pas", async ({
+    page,
+    request,
+  }) => {
     await page.goto('a-propos-du-projet/');
-    for (const name of [/Télécharger le cahier des charges/, /Télécharger le brief/]) {
-      const href = await page.getByRole('link', { name }).getAttribute('href');
-      const res = await request.get(href!);
-      expect(res.status()).toBe(200);
-      expect(await res.text()).toMatch(/^# /);
-    }
+    const href = await page
+      .getByRole('link', { name: /Télécharger le cahier des charges/ })
+      .getAttribute('href');
+    const res = await request.get(href!);
+    expect(res.status()).toBe(200);
+    expect(await res.text()).toMatch(/^# /);
+    await expect(page.getByRole('link', { name: /Télécharger le brief/ })).toHaveCount(0);
   });
 
   test('les algorithmes publics affichent les seuils réellement appliqués', async ({ page }) => {

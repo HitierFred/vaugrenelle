@@ -1,66 +1,12 @@
 {
   "date": "2026-10-28",
-  "source": "https://hitierfred.github.io/vaugrenelle/",
+  "source": "http://localhost:4321/vaugrenelle/",
   "pages": [
-    {
-      "page": "Accueil",
-      "chemin": "./",
-      "requetes": 4,
-      "ko": 45.5,
-      "dom": 222,
-      "ecoindex": 87,
-      "note": "A"
-    },
-    {
-      "page": "Agenda",
-      "chemin": "sortir/agenda/",
-      "requetes": 4,
-      "ko": 47.7,
-      "dom": 426,
-      "ecoindex": 79,
-      "note": "B"
-    },
-    {
-      "page": "Fiche événement payant",
-      "chemin": "sortir/agenda/hauts-vols/",
-      "requetes": 4,
-      "ko": 44.7,
-      "dom": 143,
-      "ecoindex": 90,
-      "note": "A"
-    },
-    {
-      "page": "Fiche événement du festival",
-      "chemin": "sortir/agenda/ouverture-des-echappees/",
-      "requetes": 4,
-      "ko": 44.4,
-      "dom": 134,
-      "ecoindex": 90,
-      "note": "A"
-    },
-    {
-      "page": "Festival",
-      "chemin": "sortir/festival/",
-      "requetes": 4,
-      "ko": 47.6,
-      "dom": 356,
-      "ecoindex": 82,
-      "note": "A"
-    },
-    {
-      "page": "Catalogue des démarches",
-      "chemin": "agir/",
-      "requetes": 4,
-      "ko": 46,
-      "dom": 232,
-      "ecoindex": 87,
-      "note": "A"
-    },
     {
       "page": "Organiser un événement",
       "chemin": "agir/organiser-un-evenement/",
       "requetes": 7,
-      "ko": 59.3,
+      "ko": 60.1,
       "dom": 308,
       "ecoindex": 84,
       "note": "A"
@@ -78,7 +24,7 @@
       "page": "Catalogue du matériel",
       "chemin": "regie/catalogue/",
       "requetes": 8,
-      "ko": 53,
+      "ko": 53.3,
       "dom": 488,
       "ecoindex": 76,
       "note": "B"
@@ -87,7 +33,7 @@
       "page": "Fiche matériel",
       "chemin": "regie/catalogue/enceinte-amplifiee-12/",
       "requetes": 8,
-      "ko": 52.7,
+      "ko": 52.9,
       "dom": 552,
       "ecoindex": 73,
       "note": "B"
@@ -96,7 +42,7 @@
       "page": "Réserver du matériel",
       "chemin": "regie/reserver/",
       "requetes": 9,
-      "ko": 60.8,
+      "ko": 61.4,
       "dom": 462,
       "ecoindex": 77,
       "note": "B"
@@ -105,90 +51,9 @@
       "page": "Coulisses",
       "chemin": "demo/coulisses/",
       "requetes": 7,
-      "ko": 52,
+      "ko": 52.6,
       "dom": 191,
       "ecoindex": 88,
-      "note": "A"
-    },
-    {
-      "page": "Mon compte",
-      "chemin": "mon-compte/",
-      "requetes": 6,
-      "ko": 47.5,
-      "dom": 107,
-      "ecoindex": 91,
-      "note": "A"
-    },
-    {
-      "page": "À propos du projet",
-      "chemin": "a-propos-du-projet/",
-      "requetes": 4,
-      "ko": 46.6,
-      "dom": 237,
-      "ecoindex": 87,
-      "note": "A"
-    },
-    {
-      "page": "Accessibilité",
-      "chemin": "accessibilite/",
-      "requetes": 4,
-      "ko": 44.9,
-      "dom": 118,
-      "ecoindex": 91,
-      "note": "A"
-    },
-    {
-      "page": "Écoconception",
-      "chemin": "ecoconception/",
-      "requetes": 4,
-      "ko": 44.4,
-      "dom": 127,
-      "ecoindex": 90,
-      "note": "A"
-    },
-    {
-      "page": "Algorithmes publics",
-      "chemin": "algorithmes-publics/",
-      "requetes": 4,
-      "ko": 45.5,
-      "dom": 168,
-      "ecoindex": 89,
-      "note": "A"
-    },
-    {
-      "page": "Mentions légales",
-      "chemin": "mentions-legales/",
-      "requetes": 4,
-      "ko": 44.3,
-      "dom": 111,
-      "ecoindex": 91,
-      "note": "A"
-    },
-    {
-      "page": "Plan du site",
-      "chemin": "plan-du-site/",
-      "requetes": 4,
-      "ko": 45.4,
-      "dom": 288,
-      "ecoindex": 85,
-      "note": "A"
-    },
-    {
-      "page": "Composants du design system",
-      "chemin": "demo/composants/",
-      "requetes": 5,
-      "ko": 49.7,
-      "dom": 617,
-      "ecoindex": 71,
-      "note": "B"
-    },
-    {
-      "page": "Contrôle des données fictives",
-      "chemin": "demo/donnees/",
-      "requetes": 4,
-      "ko": 44.5,
-      "dom": 258,
-      "ecoindex": 86,
       "note": "A"
     }
   ]
