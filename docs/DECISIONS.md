@@ -444,3 +444,46 @@ Le cahier des charges et le brief sont générés au build par deux routes stati
 ### Contrôle des liens
 
 `tests/liens.spec.ts` parcourt toutes les pages HTML construites et vérifie que chaque lien interne mène à une page existante et reste sous la base `/vaugrenelle/`. La seule exception déclarée est `/habiter/` (P2, phase 9), liée depuis l'en-tête.
+
+---
+
+## 2026-10-28 — Phase 8 : audits et corrections
+
+### Méthode
+
+- **Où mesurer** : sur le **site déployé**, qui sert les fichiers compressés comme en production. Les résultats sont dans `docs/AUDIT.md`, avec les données brutes dans `docs/audit/`.
+- **Poids, requêtes et EcoIndex** : `npm run audit:mesures` (`playwright.audit.config.ts`, hors de la suite de tests courante). L'EcoIndex est calculé avec la **formule ouverte de GreenIT** (quantiles de référence pour le DOM, les requêtes et le poids). C'est plus reproductible qu'un service en ligne, et cela n'ajoute aucune dépendance.
+- **Lighthouse** : `npm run audit:lighthouse` (`scripts/lighthouse.mjs`). **[Écart léger]** Lighthouse 13.6.0 est lancé avec `npx` sans être ajouté aux dépendances. Il utilise le Chromium installé pour Playwright (`CHROME_PATH`). C'est un outil d'audit ponctuel exigé par le brief (§ 8), pas une dépendance du projet. Seule la synthèse des rapports est conservée.
+- **Nouveaux tests permanents** (`tests/qualite.spec.ts`) :
+  - `lang`, `h1` unique et titre unique sur les 88 pages ;
+  - responsive à 320, 375, 768, 1 024 et 1 440 px ;
+  - zoom 200 % (mise en page à 640 px) ;
+  - focus visible sur 40 tabulations par page ;
+  - 9 pages de contenu lisibles sans JavaScript.
+
+  L'ancien test à 320 px, désormais redondant, est retiré.
+
+### Corrections
+
+- **EcoIndex** : l'agenda, le catalogue et la fiche matériel étaient en C, à cause de la taille de leur DOM.
+  - L'agenda passe en **liste compacte** (`EventRow`), plus adaptée à un programme. Les cartes restent sur l'accueil.
+  - Le catalogue passe en **lignes** (`MaterielRow`), avec les mêmes points d'accroche pour le filtre par période.
+  - Les calendriers sont allégés : case réduite à la date et au texte « n/N », état en texte masqué visuellement, cases vides fusionnées par `colspan`, une seule légende par fiche, légende sans icônes. L'état reste porté par du texte, jamais par la seule couleur.
+  - Les chevrons d'accordéon sont dessinés en CSS (`::after`), sans SVG dans le DOM.
+- **Décalage de mise en page** : les blocs qui n'existent qu'avec JavaScript (filtres, formulaires, coulisses, Mon compte) étaient masqués par l'attribut `hidden` puis affichés par le script. Le CLS montait jusqu'à 0,376.
+  - Leur visibilité est maintenant décidée **en CSS**, grâce à la classe `js` posée sur `<html>` dans le `<head>`, avant l'affichage : `data-js-only` (masqué sans JavaScript) et `data-nojs` (masqué avec JavaScript). Le CLS passe sous 0,04.
+- **SEO des coulisses** : la page était en `noindex`, ce que Lighthouse pénalise. C'est une page P1 du brief : elle devient indexable. `/demo/composants/` et `/demo/donnees/` restent non indexées, comme demandé.
+
+### Résultats (28 octobre 2026, site déployé)
+
+- **Lighthouse mobile** : 100 / 100 / 100 / 100 sur les 12 pages P1 mesurées.
+- **EcoIndex** : A ou B sur les 21 pages (14 en A, 7 en B).
+- **Poids** : médiane de 46 Ko, maximum de 61 Ko, au plus 9 requêtes par page.
+- **axe** : 0 violation sur 24 audits. **Tests** : 167 tests de parcours.
+
+Les preuves de la page « À propos du projet » sont mises à jour (`src/data/preuves.json`).
+
+### Reste à faire par l'auteur
+
+- La procédure manuelle au clavier et au lecteur d'écran (`docs/AUDIT.md`) reste à dérouler et à consigner.
+- Un audit RGAA complet n'a pas été réalisé : la déclaration d'accessibilité indique donc « non conforme », comme l'impose la règle.

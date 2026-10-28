@@ -10,8 +10,8 @@
     },
     {
       "indicateur": "Tests de parcours automatisés",
-      "valeur": "114",
-      "detail": "Navigation, filtres, Guichet Unique (dont pièce expirée et conflit de date), Régie (dont indisponibilité et dépassement électrique), coulisses, liens internes",
+      "valeur": "167",
+      "detail": "Navigation, filtres, Guichet Unique (dont pièce expirée et conflit de date), Régie (dont indisponibilité et dépassement électrique), coulisses, liens internes, responsive de 320 à 1 440 px, focus clavier, lisibilité sans JavaScript",
       "date": "2026-10-28",
       "source": "Playwright"
     },
@@ -24,24 +24,24 @@
     },
     {
       "indicateur": "Score Lighthouse (mobile)",
-      "valeur": null,
-      "detail": "Performance, accessibilité, bonnes pratiques, SEO",
-      "date": null,
-      "source": "Lighthouse"
+      "valeur": "100 / 100 / 100 / 100",
+      "detail": "Performance, accessibilité, bonnes pratiques et SEO, identiques sur les 12 pages principales mesurées",
+      "date": "2026-10-28",
+      "source": "Lighthouse 13.6.0, profil mobile, site déployé"
     },
     {
       "indicateur": "EcoIndex des pages principales",
-      "valeur": null,
-      "detail": "Objectif : A ou B",
-      "date": null,
-      "source": "EcoIndex"
+      "valeur": "A ou B",
+      "detail": "14 pages en A, 7 en B, sur 21 pages mesurées (objectif : A ou B)",
+      "date": "2026-10-28",
+      "source": "Formule ouverte EcoIndex (GreenIT), site déployé"
     },
     {
       "indicateur": "Poids médian transféré",
-      "valeur": null,
-      "detail": "Objectif : moins de 500 Ko, aucune page au-delà de 1 Mo",
-      "date": null,
-      "source": "Mesure du build"
+      "valeur": "46 Ko",
+      "detail": "Maximum 60,8 Ko, 9 requêtes au plus (objectifs : moins de 500 Ko, 1 Mo et 25 requêtes)",
+      "date": "2026-10-28",
+      "source": "Playwright, octets transférés compressés, site déployé"
     }
   ]
 }
