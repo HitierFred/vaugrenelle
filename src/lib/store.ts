@@ -6,6 +6,8 @@ export const KEYS = {
   brouillonGuichet: 'vg:guichet:brouillon',
   dossiers: 'vg:dossiers',
   bus: 'vg:bus',
+  panierRegie: 'vg:regie:panier',
+  reservations: 'vg:reservations',
 } as const;
 
 const memory = new Map<string, string>();

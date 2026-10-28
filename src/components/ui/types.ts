@@ -25,4 +25,5 @@ export type Status = 'success' | 'warning' | 'danger' | 'info' | 'neutral';
 
 export type Accessibilite = 'pmr' | 'lsf' | 'audiodescription' | 'boucle-magnetique' | 'relax';
 
-export type Disponibilite = 'disponible' | 'partiel' | 'indisponible' | 'hors-service';
+export type Disponibilite =
+  'reservable' | 'disponible' | 'partiel' | 'indisponible' | 'hors-service';

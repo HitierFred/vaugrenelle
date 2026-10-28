@@ -1,0 +1,178 @@
+---
+import AddToCart from '../../../components/islands/AddToCart.astro';
+import Alert from '../../../components/ui/Alert.astro';
+import AvailabilityCalendar from '../../../components/ui/AvailabilityCalendar.astro';
+import StatusBadge from '../../../components/ui/StatusBadge.astro';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import { getMateriel, getReservations, type Materiel } from '../../../lib/content';
+import { formatDate, formatPrice, isoDate } from '../../../lib/format';
+import { fromReference, REFERENCE_DATE } from '../../../lib/reference-date';
+import { FAMILLES, PROFILS, getRegieData } from '../../../lib/regie-data';
+import type { Profil } from '../../../lib/availability';
+
+export async function getStaticPaths() {
+  const materiel = await getMateriel();
+  return materiel.map((m) => ({ params: { slug: m.id }, props: { materiel: m } }));
+}
+
+interface Props {
+  materiel: Materiel;
+}
+
+const { materiel } = Astro.props;
+const m = materiel.data;
+const today = isoDate(REFERENCE_DATE);
+const v = m.verification;
+const echeance = v && isoDate(v.prochaine_echeance);
+const hs = !!echeance && echeance < today;
+const proche = !!echeance && !hs && echeance <= isoDate(fromReference(30));
+
+// Disponibilités jour par jour sur 3 mois (réservations connues au build)
+const reservations = (await getReservations()).filter((r) => r.data.materiel.id === materiel.id);
+const parMois: { year: number; month: number; availability: Record<string, number> }[] = [];
+for (let i = 0; i < 3; i++) {
+  const ref = fromReference(0);
+  const [y, mo] = isoDate(ref).split('-').map(Number);
+  const year = y + Math.floor((mo - 1 + i) / 12);
+  const month = ((mo - 1 + i) % 12) + 1;
+  parMois.push({ year, month, availability: {} });
+}
+for (let d = 0; d <= 92; d++) {
+  const day = fromReference(d, '12:00');
+  const iso = isoDate(day);
+  const used = reservations
+    .filter((r) => r.data.debut <= day && r.data.fin >= day)
+    .reduce((s, r) => s + r.data.quantite, 0);
+  const [y, mo] = iso.split('-').map(Number);
+  const target = parMois.find((p) => p.year === y && p.month === mo);
+  if (target && used) target.availability[iso] = Math.max(0, m.quantite - used);
+}
+const data = await getRegieData();
+---
+
+<PageLayout
+  title={`${m.designation} — Catalogue de la Régie`}
+  heading={m.designation}
+  lead={m.description}
+  description={`${m.designation} (${m.marque_modele}) : caractéristiques, tarifs et disponibilités à la Régie partagée de Vaugrenelle.`}
+  breadcrumb={[
+    { label: 'Régie partagée', href: '/regie/' },
+    { label: 'Catalogue', href: '/regie/catalogue/' },
+    { label: m.designation },
+  ]}
+>
+  <p class="event-kicker" slot="header">
+    {FAMILLES[m.famille]} · {m.marque_modele}
+  </p>
+  <div data-base={import.meta.env.BASE_URL.replace(/\/?$/, '/')} hidden></div>
+  <script type="application/json" data-regie-data set:html={JSON.stringify(data)} />
+  <div class="event-layout">
+    <div class="stack stack-l">
+      {hs && (
+        <Alert variant="error" title="Article hors service" live={false}>
+          <p>
+            {v!.type} : échéance dépassée depuis le {formatDate(v!.prochaine_echeance)}. L'article
+            ne peut pas être réservé tant qu'il n'a pas été vérifié.
+          </p>
+        </Alert>
+      )}
+      {proche && (
+        <Alert variant="warning" title="Vérification réglementaire proche" live={false}>
+          <p>
+            {v!.type} prévue le {formatDate(v!.prochaine_echeance)}. L'article sera indisponible
+            quelques jours.
+          </p>
+        </Alert>
+      )}
+
+      <section aria-labelledby="caracteristiques" class="stack">
+        <h2 id="caracteristiques">Caractéristiques</h2>
+        <div class="table-wrap">
+          <table class="table">
+            <caption class="visually-hidden">Caractéristiques techniques</caption>
+            <tbody>
+              {m.caracteristiques.map((c) => (
+                <tr>
+                  <th scope="row">{c.libelle}</th>
+                  <td>{c.valeur}</td>
+                </tr>
+              ))}
+              {m.puissance_w !== undefined && (
+                <tr>
+                  <th scope="row">Consommation électrique</th>
+                  <td>{m.puissance_w.toLocaleString('fr-FR')} W</td>
+                </tr>
+              )}
+              {m.poids_kg !== undefined && (
+                <tr>
+                  <th scope="row">Poids</th>
+                  <td>{m.poids_kg.toLocaleString('fr-FR')} kg</td>
+                </tr>
+              )}
+              <tr>
+                <th scope="row">Quantité en parc</th>
+                <td>{m.quantite}</td>
+              </tr>
+              {v && (
+                <tr>
+                  <th scope="row">{v.type}</th>
+                  <td>
+                    {hs ? 'Dépassée depuis le ' : 'Prochaine échéance : '}
+                    {formatDate(v.prochaine_echeance)}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section aria-labelledby="disponibilites" class="stack">
+        <h2 id="disponibilites">Disponibilités</h2>
+        <p class="text-small muted">
+          Calculées à partir des réservations connues le {formatDate(REFERENCE_DATE)}.
+        </p>
+        {hs ? (
+          <p>Article hors service : aucune disponibilité.</p>
+        ) : (
+          parMois.map((p) => (
+            <AvailabilityCalendar
+              year={p.year}
+              month={p.month}
+              total={m.quantite}
+              availability={p.availability}
+              from={today}
+              title={m.designation}
+            />
+          ))
+        )}
+      </section>
+    </div>
+
+    <aside class="event-facts" aria-labelledby="tarifs">
+      <h2 id="tarifs">Tarifs par jour</h2>
+      <dl>
+        {m.tarifs.map((t) => (
+          <div>
+            <dt>{PROFILS[t.profil as Profil]}</dt>
+            <dd>{t.jour === 0 ? 'Gratuit' : formatPrice(t.jour)}</dd>
+          </div>
+        ))}
+        <div>
+          <dt>Caution par article</dt>
+          <dd>{formatPrice(m.caution)}</dd>
+        </div>
+      </dl>
+      {m.prestation_technicien_requise && (
+        <StatusBadge status="info" label="Prêté avec un technicien" icon="user" />
+      )}
+      {hs ? (
+        <p>
+          <strong>Non réservable</strong> : vérification réglementaire dépassée.
+        </p>
+      ) : (
+        <AddToCart materiel={materiel.id} designation={m.designation} quantite={m.quantite} />
+      )}
+    </aside>
+  </div>
+</PageLayout>

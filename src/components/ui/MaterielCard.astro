@@ -31,6 +31,7 @@ const {
 } = Astro.props;
 
 const states: Record<Disponibilite, { status: Status; label: string }> = {
+  reservable: { status: 'neutral', label: 'Réservable' },
   disponible: { status: 'success', label: 'Disponible' },
   partiel: { status: 'warning', label: 'Disponibilité partielle' },
   indisponible: { status: 'danger', label: 'Indisponible' },
@@ -51,7 +52,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
   <ul class="card__meta">
     <li>
       <Icon name="box" />
-      <span>
+      <span data-dispo-text>
         {disponibles !== undefined
           ? `${disponibles} sur ${quantite} disponibles sur la période`
           : `${quantite} en parc`}
@@ -65,7 +66,13 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
     )}
   </ul>
   <div class="card__footer stack stack-s">
-    <StatusBadge status={state.status} label={state.label} />
-    {motif && <p class="text-small">{motif}</p>}
+    <span data-badge>
+      <StatusBadge status={state.status} label={state.label} />
+    </span>
+    {motif && (
+      <p class="text-small" data-motif>
+        {motif}
+      </p>
+    )}
   </div>
 </article>

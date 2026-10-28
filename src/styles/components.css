@@ -684,6 +684,10 @@
       rgb(185 28 28 / 0.08) 6px 8px
     );
   }
+  .calendar td[data-state='passe'] {
+    background: var(--c-paper);
+    color: var(--c-muted);
+  }
   .calendar td[data-outside] {
     background: transparent;
   }
@@ -902,6 +906,7 @@
   }
   [data-group][hidden],
   [data-event][hidden],
+  [data-materiel][hidden],
   [data-empty][hidden] {
     display: none;
   }
@@ -1315,5 +1320,137 @@
     font-size: var(--fs-300);
     font-weight: 700;
     color: var(--c-muted);
+  }
+}
+
+@layer components {
+  /* ---------- Réservation Régie ---------- */
+  .qty-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 6rem;
+    gap: var(--sp-1) var(--sp-4);
+    align-items: center;
+    padding-block: var(--sp-3);
+    border-block-end: 1px solid var(--c-line);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+  .qty-row__label {
+    font-weight: 700;
+  }
+  .qty-row__hint {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .qty-row__input {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .qty-row__alert {
+    grid-column: 1 / -1;
+
+    &:empty {
+      display: none;
+    }
+  }
+  .qty-row .field__error {
+    grid-column: 1 / -1;
+  }
+  .qty-row--off .qty-row__label {
+    color: var(--c-muted);
+  }
+  .materiel-group {
+    max-width: 44rem;
+  }
+  .power {
+    display: grid;
+    gap: var(--sp-2);
+
+    &:empty {
+      display: none;
+    }
+  }
+  .meter {
+    width: 100%;
+    height: 0.75rem;
+  }
+  .devis td,
+  .devis th[scope='row'] {
+    font-variant-numeric: tabular-nums;
+  }
+  .devis tfoot th,
+  .devis tfoot td {
+    font-weight: 700;
+    border-block-start: var(--border-w) solid var(--c-ink);
+  }
+  .num {
+    text-align: end !important;
+    white-space: nowrap;
+  }
+  .panier-list {
+    display: grid;
+    gap: var(--sp-1);
+    padding-inline-start: var(--sp-6);
+    font-size: var(--fs-300);
+  }
+
+  /* ---------- Convention de prêt (imprimable) ---------- */
+  .convention {
+    display: grid;
+    gap: var(--sp-6);
+    padding: var(--sp-8);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-m);
+
+    & h2 {
+      font-size: var(--fs-600);
+    }
+    & h3 {
+      font-size: var(--fs-500);
+    }
+    & ol {
+      display: grid;
+      gap: var(--sp-2);
+      padding-inline-start: var(--sp-6);
+    }
+  }
+  .signatures {
+    display: grid;
+    gap: var(--sp-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+
+    & div {
+      min-height: 6rem;
+      padding: var(--sp-3);
+      border: 1px dashed var(--c-line-strong);
+    }
+  }
+}
+
+@media print {
+  .site-header,
+  .site-footer,
+  .breadcrumb,
+  .page-header,
+  .demarche-aside,
+  .skip-link,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff;
+  }
+  main {
+    padding: 0;
+  }
+  .convention {
+    border: 0;
+    padding: 0;
+  }
+  .demarche-grid {
+    display: block;
   }
 }

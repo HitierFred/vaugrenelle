@@ -1,0 +1,238 @@
+---
+// Parcours vitrine de la Régie partagée (brief § 7.2).
+// Le balisage est rendu au build ; la logique est dans components/islands/regie/.
+import Alert from '../../../components/ui/Alert.astro';
+import ChoiceGroup from '../../../components/ui/ChoiceGroup.astro';
+import SelectField from '../../../components/ui/SelectField.astro';
+import Stepper from '../../../components/ui/Stepper.astro';
+import TextField from '../../../components/ui/TextField.astro';
+import DemarcheLayout from '../../../layouts/DemarcheLayout.astro';
+import { PRESTATIONS, type Profil } from '../../../lib/availability';
+import { formatPrice } from '../../../lib/format';
+import { FAMILLES, PROFILS, getRegieData } from '../../../lib/regie-data';
+
+const data = await getRegieData();
+const ETAPES = ['Période et lieu', 'Matériel', 'Prestation et demandeur', 'Récapitulatif'];
+const groups = Object.entries(FAMILLES).map(([id, label]) => ({
+  id,
+  label,
+  items: data.materiel.filter((m) => m.famille === id),
+}));
+---
+
+<DemarcheLayout
+  title="Réserver du matériel"
+  lead="Choisissez une période et un lieu : le catalogue n'affiche que ce qui est vraiment disponible."
+  description="Réservation du matériel de la Régie partagée de Vaugrenelle : disponibilités, contrôle électrique, prestation, montant et convention de prêt (démonstration)."
+  breadcrumb={[{ label: 'Régie partagée', href: '/regie/' }, { label: 'Réserver' }]}
+>
+  <vg-regie-reservation>
+    <script type="application/json" data-regie-data set:html={JSON.stringify(data)} />
+    <script type="application/json" data-etapes set:html={JSON.stringify(ETAPES)} />
+    <div data-nojs>
+      <Alert variant="warning" title="JavaScript est nécessaire" live={false}>
+        <p>
+          La réservation de démonstration fonctionne dans votre navigateur. Activez JavaScript, ou
+          consultez le catalogue.
+        </p>
+      </Alert>
+    </div>
+
+    <form
+      class="guichet stack stack-l"
+      novalidate
+      data-form
+      hidden
+      aria-label="Réserver du matériel"
+    >
+      <div
+        class="error-summary"
+        tabindex="-1"
+        data-error-summary
+        hidden
+        aria-labelledby="erreurs-titre"
+      >
+        <h2 id="erreurs-titre"></h2>
+        <ul></ul>
+      </div>
+
+      <Stepper steps={ETAPES} current={1} />
+
+      <section class="guichet__step stack stack-l" data-step="1" aria-labelledby="etape-1">
+        <h2 id="etape-1" tabindex="-1">
+          Période et lieu
+        </h2>
+        <TextField id="r-du" name="du" type="date" label="Date de retrait" required />
+        <TextField
+          id="r-au"
+          name="au"
+          type="date"
+          label="Date de retour"
+          hint="Le même jour pour une location d'une journée."
+          required
+        />
+        <SelectField
+          id="r-lieu"
+          name="lieu"
+          label="Lieu d'utilisation"
+          hint="Sur un site équipé de l'espace public, la puissance électrique du matériel est vérifiée."
+          placeholder="Choisissez un lieu"
+          options={[
+            ...data.lieux.map((l) => ({
+              value: l.id,
+              label: l.espacePublic ? `${l.nom} (site équipé, ${l.puissance_w / 1000} kVA)` : l.nom,
+            })),
+            { value: 'autre', label: 'Autre lieu' },
+          ]}
+          required
+        />
+      </section>
+
+      <section class="guichet__step stack stack-l" data-step="2" aria-labelledby="etape-2" hidden>
+        <h2 id="etape-2" tabindex="-1">
+          Matériel
+        </h2>
+        <p data-periode-rappel></p>
+        <div class="power" data-power aria-live="polite"></div>
+
+        <fieldset class="fieldset materiel-group" id="packs">
+          <legend class="fieldset__legend">Packs prêts à l'emploi</legend>
+          {data.packs.map((p) => (
+            <div class="qty-row" data-pack-row={p.id}>
+              <label class="qty-row__label" for={`p-${p.id}`}>
+                {p.nom}
+              </label>
+              <p class="qty-row__hint field__hint" id={`p-${p.id}-hint`} data-hint />
+              <input
+                class="input qty-row__input"
+                type="number"
+                id={`p-${p.id}`}
+                name={`p-${p.id}`}
+                min="0"
+                value="0"
+                inputmode="numeric"
+                aria-describedby={`p-${p.id}-hint`}
+              />
+              <div class="qty-row__alert" data-alert aria-live="polite" />
+            </div>
+          ))}
+        </fieldset>
+
+        {groups.map((g) => (
+          <details class="accordion materiel-group" open={g.id === 'son'}>
+            <summary>
+              <span>
+                {g.label} ({g.items.length} références)
+              </span>
+            </summary>
+            <div class="accordion__body">
+              {g.items.map((m) => (
+                <div class="qty-row" data-item-row={m.id}>
+                  <label class="qty-row__label" for={`q-${m.id}`}>
+                    {m.designation}
+                  </label>
+                  <p class="qty-row__hint field__hint" id={`q-${m.id}-hint`} data-hint />
+                  <input
+                    class="input qty-row__input"
+                    type="number"
+                    id={`q-${m.id}`}
+                    name={`q-${m.id}`}
+                    min="0"
+                    max={m.quantite}
+                    value="0"
+                    inputmode="numeric"
+                    aria-describedby={`q-${m.id}-hint`}
+                  />
+                  <div class="qty-row__alert" data-alert aria-live="polite" />
+                </div>
+              ))}
+            </div>
+          </details>
+        ))}
+      </section>
+
+      <section class="guichet__step stack stack-l" data-step="3" aria-labelledby="etape-3" hidden>
+        <h2 id="etape-3" tabindex="-1">
+          Prestation et demandeur
+        </h2>
+        <ChoiceGroup
+          id="prestation"
+          type="radio"
+          legend="Prestation"
+          required
+          choices={Object.entries(PRESTATIONS).map(([id, p], i) => ({
+            value: id,
+            label: p.label,
+            hint:
+              p.prix === 0 ? 'Gratuit' : `${formatPrice(p.prix)}${p.parJour ? ' par jour' : ''}`,
+            checked: i === 0,
+          }))}
+        />
+        <ChoiceGroup
+          id="profil"
+          type="radio"
+          legend="Vous êtes"
+          hint="Le tarif dépend de votre profil."
+          required
+          choices={(Object.entries(PROFILS) as [Profil, string][]).map(([id, label]) => ({
+            value: id,
+            label,
+          }))}
+        />
+        <TextField
+          id="r-structure"
+          name="structure"
+          label="Nom de la structure ou du service"
+          required
+        />
+        <TextField
+          id="r-email"
+          name="email"
+          type="email"
+          label="Adresse électronique"
+          required
+          autocomplete="email"
+        />
+      </section>
+
+      <section class="guichet__step stack stack-l" data-step="4" aria-labelledby="etape-4" hidden>
+        <h2 id="etape-4" tabindex="-1">
+          Récapitulatif
+        </h2>
+        <div data-recap></div>
+        <div class="choice">
+          <input type="checkbox" id="r-attestation" name="attestation" value="1" />
+          <label for="r-attestation">J'accepte le règlement de prêt et la caution demandée.</label>
+        </div>
+      </section>
+
+      <div class="guichet__nav cluster">
+        <button class="btn btn--secondary" type="button" data-prev hidden>
+          Étape précédente
+        </button>
+        <button class="btn btn--primary" type="submit" data-next>
+          Continuer
+        </button>
+      </div>
+    </form>
+
+    <section
+      class="confirmation stack stack-l"
+      data-confirmation
+      hidden
+      aria-labelledby="confirmation-titre"
+    ></section>
+  </vg-regie-reservation>
+
+  <div slot="aside" class="dossier-box stack no-print">
+    <h2 id="panier-titre">Votre panier</h2>
+    <div data-panier aria-live="polite" aria-labelledby="panier-titre">
+      <p class="text-small muted">Aucun matériel pour l'instant.</p>
+    </div>
+  </div>
+</DemarcheLayout>
+
+<script>
+  import { defineRegieReservation } from '../../../components/islands/regie/reservation';
+  defineRegieReservation();
+</script>

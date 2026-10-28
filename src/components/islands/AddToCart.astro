@@ -1,0 +1,130 @@
+---
+// Ajout d'un article au panier de réservation (stockage local)
+interface Props {
+  materiel: string;
+  designation: string;
+  quantite: number;
+}
+const { materiel, designation, quantite } = Astro.props;
+---
+
+<vg-add-to-cart data-materiel={materiel} data-quantite={quantite}>
+  <form class="stack" hidden data-form aria-labelledby="panier-titre">
+    <h2 id="panier-titre">Ajouter au panier</h2>
+    <div class="field">
+      <label class="field__label" for="ac-du">
+        Du
+      </label>
+      <input class="input" type="date" id="ac-du" name="du" />
+    </div>
+    <div class="field">
+      <label class="field__label" for="ac-au">
+        Au
+      </label>
+      <input class="input" type="date" id="ac-au" name="au" />
+    </div>
+    <div class="field">
+      <label class="field__label" for="ac-quantite">
+        Quantité
+      </label>
+      <p class="field__hint" id="ac-quantite-hint" data-hint>
+        {quantite} en parc.
+      </p>
+      <input
+        class="input"
+        type="number"
+        id="ac-quantite"
+        name="quantite"
+        min="1"
+        max={quantite}
+        value="1"
+        inputmode="numeric"
+        aria-describedby="ac-quantite-hint"
+      />
+    </div>
+    <button class="btn btn--primary" type="submit">
+      Ajouter au panier<span class="visually-hidden"> : {designation}</span>
+    </button>
+    <div role="status" data-status></div>
+  </form>
+</vg-add-to-cart>
+
+<script>
+  import { disponible } from '../../lib/availability';
+  import { formatIso, isIsoDate, todayIso } from '../../lib/dates-client';
+  import { KEYS, read, write } from '../../lib/store';
+  import { escapeHtml, setFieldError } from './form-kit';
+  import { allReservations, readRegieData, type Panier } from './regie-client';
+
+  class AddToCart extends HTMLElement {
+    connectedCallback() {
+      const form = this.querySelector<HTMLFormElement>('[data-form]');
+      const data = readRegieData();
+      const m = data?.materiel.find((x) => x.id === this.dataset.materiel);
+      if (!form || !data || !m) return;
+      form.hidden = false;
+      const today = todayIso();
+      const panier = read<Panier>(KEYS.panierRegie, { articles: [] });
+      const du = form.elements.namedItem('du') as HTMLInputElement;
+      const au = form.elements.namedItem('au') as HTMLInputElement;
+      const qte = form.elements.namedItem('quantite') as HTMLInputElement;
+      const hint = this.querySelector('[data-hint]')!;
+      const status = this.querySelector<HTMLElement>('[data-status]')!;
+      if (panier.debut) du.value = panier.debut;
+      if (panier.fin) au.value = panier.fin;
+
+      const dispo = () => {
+        if (!isIsoDate(du.value)) return null;
+        const fin = isIsoDate(au.value) && au.value >= du.value ? au.value : du.value;
+        return disponible(m, du.value, fin, allReservations(data), today);
+      };
+      const refresh = () => {
+        const d = dispo();
+        hint.textContent =
+          d === null
+            ? `${m.quantite} en parc.`
+            : `${d} sur ${m.quantite} disponibles sur cette période.`;
+      };
+      form.addEventListener('change', refresh);
+      refresh();
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        status.innerHTML = '';
+        for (const id of ['ac-du', 'ac-au', 'ac-quantite']) setFieldError(id, null);
+        const q = Number(qte.value);
+        const d = dispo();
+        if (!isIsoDate(du.value))
+          return (setFieldError('ac-du', 'Indiquez la date de début'), du.focus());
+        if (du.value < today)
+          return (setFieldError('ac-du', 'La date de début est passée'), du.focus());
+        if (au.value && au.value < du.value)
+          return (
+            setFieldError('ac-au', 'La date de fin doit être après la date de début'),
+            au.focus()
+          );
+        if (!Number.isInteger(q) || q < 1)
+          return (setFieldError('ac-quantite', 'Indiquez une quantité d’au moins 1'), qte.focus());
+        if (d !== null && q > d)
+          return (
+            setFieldError(
+              'ac-quantite',
+              `Seulement ${d} disponible${d > 1 ? 's' : ''} sur cette période`,
+            ),
+            qte.focus()
+          );
+        const fin = au.value || du.value;
+        const current = read<Panier>(KEYS.panierRegie, { articles: [] });
+        const articles = current.articles.filter((a) => a.materiel !== m.id);
+        articles.push({ materiel: m.id, quantite: q });
+        write(KEYS.panierRegie, { debut: du.value, fin, articles });
+        const base =
+          (document.querySelector('[data-base]') as HTMLElement | null)?.dataset.base ?? '/';
+        status.innerHTML = `<div class="alert alert--success"><div class="stack stack-s">
+          <p><strong>${q} × ${escapeHtml(m.designation)}</strong> ajouté au panier, du ${escapeHtml(formatIso(du.value, false))} au ${escapeHtml(formatIso(fin, false))}.</p>
+          <p><a href="${base}regie/reserver/">Poursuivre la réservation</a></p></div></div>`;
+      });
+    }
+  }
+  customElements.define('vg-add-to-cart', AddToCart);
+</script>

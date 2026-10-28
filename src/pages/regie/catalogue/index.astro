@@ -1,0 +1,59 @@
+---
+import RegieCatalogue from '../../../components/islands/RegieCatalogue.astro';
+import MaterielCard from '../../../components/ui/MaterielCard.astro';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import { getMateriel } from '../../../lib/content';
+import { formatDate, isoDate } from '../../../lib/format';
+import { url } from '../../../lib/paths';
+import { REFERENCE_DATE } from '../../../lib/reference-date';
+import { FAMILLES, getRegieData } from '../../../lib/regie-data';
+
+const materiel = await getMateriel();
+const data = await getRegieData();
+const today = isoDate(REFERENCE_DATE);
+const groups = Object.entries(FAMILLES).map(([id, label]) => ({
+  id,
+  label,
+  items: materiel.filter((m) => m.data.famille === id),
+}));
+---
+
+<PageLayout
+  title="Catalogue du matériel"
+  lead="Son, lumière, vidéo, structures, énergie et praticables. Choisissez une période pour voir les disponibilités."
+  description="Catalogue du parc matériel de la Régie partagée de Vaugrenelle, avec disponibilités par période."
+  breadcrumb={[{ label: 'Régie partagée', href: '/regie/' }, { label: 'Catalogue' }]}
+>
+  <script type="application/json" data-regie-data set:html={JSON.stringify(data)} />
+  <RegieCatalogue>
+    {groups.map((g) => (
+      <section class="agenda-month" data-group aria-labelledby={`fam-${g.id}`}>
+        <h2 id={`fam-${g.id}`}>{g.label}</h2>
+        <ul class="grid-cards">
+          {g.items.map((m) => {
+            const v = m.data.verification;
+            const hs = !!v && isoDate(v.prochaine_echeance) < today;
+            return (
+              <li data-materiel={m.id}>
+                <MaterielCard
+                  designation={m.data.designation}
+                  href={url(`/regie/catalogue/${m.id}/`)}
+                  famille={g.label}
+                  marqueModele={m.data.marque_modele}
+                  quantite={m.data.quantite}
+                  disponibilite={hs ? 'hors-service' : 'reservable'}
+                  motif={
+                    hs
+                      ? `Vérification réglementaire dépassée depuis le ${formatDate(v!.prochaine_echeance)}.`
+                      : undefined
+                  }
+                  puissanceW={m.data.puissance_w}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))}
+  </RegieCatalogue>
+</PageLayout>

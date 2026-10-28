@@ -2,6 +2,17 @@
 // Formulaire en 5 étapes : validation par étape, résumé d'erreurs focalisé,
 // brouillon sauvegardé, extraction simulée des pièces, contrôles et dépôt.
 // Aucune donnée ne quitte le navigateur.
+import {
+  badge,
+  dedupeErrors,
+  escapeHtml,
+  icon,
+  prefersReducedMotion,
+  setFieldError,
+  showErrorSummary,
+  updateStepper,
+  type FieldError,
+} from '../form-kit';
 import { COMPTE_DEMO, STRUCTURES } from '../../../lib/annuaire';
 import { addDaysIso, formatIso, isIsoDate, todayIso } from '../../../lib/dates-client';
 import { SOURCES, publish } from '../../../lib/events-bus';
@@ -51,42 +62,14 @@ export interface Dossier {
   chronologie: { date: string; etape: string; detail: string }[];
 }
 
-interface FieldError {
-  id: string; // champ à focaliser
-  message: string;
-}
-
 const STEP_COUNT = 5;
 const ANALYSE_MS = 1400;
-
-const escapeHtml = (s: string) =>
-  s.replace(
-    /[&<>"']/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
-  );
-
-const prefersReducedMotion = () =>
-  typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const NIVEAU_BADGE: Record<Niveau, { cls: string; icon: string; label: string }> = {
   'pre-valide': { cls: 'success', icon: 'check', label: 'Pré-validé' },
   'a-verifier': { cls: 'warning', icon: 'alert', label: 'À vérifier par un agent' },
   manuel: { cls: 'info', icon: 'user', label: 'Vérification manuelle' },
 };
-
-// Tracés des icônes utilisées dans le contenu généré (mêmes tracés que Icon.astro)
-const ICONS: Record<string, string> = {
-  check: '<path d="M4 12.5l5 5L20 6.5"/>',
-  alert: '<path d="M12 3L2 20h20L12 3z"/><path d="M12 10v4M12 17.5v.5"/>',
-  error: '<circle cx="12" cy="12" r="9"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/>',
-  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
-  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
-  file: '<path d="M6 2h8l5 5v15H6V2z"/><path d="M14 2v5h5"/>',
-};
-const icon = (name: string) =>
-  `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[name] ?? ''}</svg>`;
-const badge = (cls: string, iconName: string, label: string) =>
-  `<span class="badge badge--${cls}">${icon(iconName)}${escapeHtml(label)}</span>`;
 
 class Guichet extends HTMLElement {
   private data!: PageData;
@@ -227,18 +210,8 @@ class Guichet extends HTMLElement {
     this.q('[data-next]').textContent =
       this.step === STEP_COUNT ? 'Déposer le dossier' : 'Continuer';
 
-    // Stepper
-    const labels = { done: 'terminée', current: 'en cours', todo: 'à venir' } as const;
-    this.form.querySelectorAll<HTMLElement>('.stepper li').forEach((li, i) => {
-      const state = i + 1 < this.step ? 'done' : i + 1 === this.step ? 'current' : 'todo';
-      li.dataset.state = state;
-      if (state === 'current') li.setAttribute('aria-current', 'step');
-      else li.removeAttribute('aria-current');
-      const hidden = li.querySelector('.stepper__state');
-      if (hidden) hidden.textContent = ` (${labels[state]})`;
-    });
+    updateStepper(this.form, this.step, this.data.etapes);
     const name = this.data.etapes[this.step - 1];
-    this.q('[data-stepper-status]').textContent = `Étape ${this.step} sur ${STEP_COUNT} : ${name}`;
     document.title = `Étape ${this.step} sur ${STEP_COUNT} : ${name} — ${this.baseTitle}`;
 
     if (this.step === 4) this.renderPieces();
@@ -339,55 +312,15 @@ class Guichet extends HTMLElement {
         errors.push({ id: 'attestation', message: "Cochez l'attestation sur l'honneur" });
     }
 
-    // Un seul message par champ
-    const seen = new Set<string>();
-    return errors.filter((e) => (seen.has(e.id) ? false : (seen.add(e.id), true)));
+    return dedupeErrors(errors);
   }
 
   private setFieldError(id: string, message: string | null) {
-    const field = document.getElementById(id);
-    if (!field) return;
-    const errId = `${id}-error`;
-    document.getElementById(errId)?.remove();
-    const describedBy = (field.getAttribute('aria-describedby') ?? '')
-      .split(' ')
-      .filter((x) => x && x !== errId);
-    if (message) {
-      const p = document.createElement('p');
-      p.className = 'field__error';
-      p.id = errId;
-      p.innerHTML = `${icon('error')}<span><span class="visually-hidden">Erreur : </span>${escapeHtml(message)}</span>`;
-      // Le message se place avant le champ, sous le libellé et l'aide
-      const anchor =
-        field.tagName === 'FIELDSET'
-          ? field.querySelector('legend')
-          : field.tagName === 'BUTTON'
-            ? null
-            : field;
-      if (field.tagName === 'FIELDSET') anchor?.after(p);
-      else if (anchor) anchor.before(p);
-      else field.parentElement?.before(p);
-      describedBy.push(errId);
-      field.setAttribute('aria-invalid', 'true');
-    } else {
-      field.removeAttribute('aria-invalid');
-    }
-    if (describedBy.length) field.setAttribute('aria-describedby', describedBy.join(' '));
-    else field.removeAttribute('aria-describedby');
+    setFieldError(id, message);
   }
 
   private showErrors(errors: FieldError[]) {
-    const summary = this.q('[data-error-summary]');
-    this.q('h2', summary).textContent =
-      errors.length === 1
-        ? 'Le formulaire contient 1 erreur'
-        : `Le formulaire contient ${errors.length} erreurs`;
-    this.q('ul', summary).innerHTML = errors
-      .map((e) => `<li><a href="#${e.id}">${escapeHtml(e.message)}</a></li>`)
-      .join('');
-    for (const e of errors) if (e.id !== 'etape-5') this.setFieldError(e.id, e.message);
-    summary.hidden = false;
-    summary.focus();
+    showErrorSummary(this.q('[data-error-summary]'), errors, ['etape-5']);
   }
 
   private clearSummary() {

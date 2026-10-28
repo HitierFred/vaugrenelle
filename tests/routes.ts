@@ -8,6 +8,10 @@ export const ROUTES: { path: string; name: string }[] = [
   { path: 'sortir/festival/', name: 'Festival' },
   { path: 'agir/', name: 'Catalogue des démarches' },
   { path: 'agir/organiser-un-evenement/', name: 'Organiser un événement' },
+  { path: 'regie/', name: 'Régie partagée' },
+  { path: 'regie/catalogue/', name: 'Catalogue du matériel' },
+  { path: 'regie/catalogue/enceinte-amplifiee-12/', name: 'Fiche matériel' },
+  { path: 'regie/reserver/', name: 'Réserver du matériel' },
   { path: 'demo/composants/', name: 'Composants du design system' },
   { path: 'demo/donnees/', name: 'Contrôle des données fictives' },
 ];

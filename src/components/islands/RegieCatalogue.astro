@@ -1,0 +1,143 @@
+---
+// Filtres du catalogue : famille et disponibilité sur une période.
+// Sans JavaScript, le catalogue complet reste affiché.
+import { FAMILLES } from '../../lib/regie-data';
+---
+
+<vg-regie-catalogue>
+  <form class="filters" hidden data-filters aria-labelledby="filtres-regie">
+    <h2 id="filtres-regie" class="filters__title">
+      Filtrer le catalogue
+    </h2>
+    <div class="filters__grid">
+      <div class="field">
+        <label class="field__label" for="f-famille">
+          Famille
+        </label>
+        <select class="select" id="f-famille" name="famille">
+          <option value="">Toutes les familles</option>
+          {Object.entries(FAMILLES).map(([v, l]) => (
+            <option value={v}>{l}</option>
+          ))}
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="f-du">
+          Du
+        </label>
+        <input class="input" type="date" id="f-du" name="du" />
+      </div>
+      <div class="field">
+        <label class="field__label" for="f-au">
+          Au
+        </label>
+        <input class="input" type="date" id="f-au" name="au" />
+      </div>
+    </div>
+    <div class="choice">
+      <input type="checkbox" id="f-dispo" name="dispo" value="1" />
+      <label for="f-dispo">Seulement le matériel disponible sur la période</label>
+    </div>
+    <div class="cluster">
+      <button class="btn btn--primary" type="submit">
+        Afficher les résultats
+      </button>
+      <button class="btn btn--secondary" type="reset">
+        Effacer les filtres
+      </button>
+    </div>
+  </form>
+  <p class="filters__count" role="status" data-count></p>
+  <slot />
+</vg-regie-catalogue>
+
+<script>
+  import { disponible, horsService } from '../../lib/availability';
+  import { formatIso, isIsoDate, todayIso } from '../../lib/dates-client';
+  import { badge } from './form-kit';
+  import { allReservations, readRegieData } from './regie-client';
+
+  class RegieCatalogue extends HTMLElement {
+    connectedCallback() {
+      const form = this.querySelector<HTMLFormElement>('[data-filters]');
+      const count = this.querySelector<HTMLElement>('[data-count]');
+      const data = readRegieData();
+      if (!form || !count || !data) return;
+      form.hidden = false;
+      const today = todayIso();
+      const reservations = allReservations(data);
+      const byId = new Map(data.materiel.map((m) => [m.id, m]));
+
+      const params = new URLSearchParams(location.search);
+      for (const name of ['famille', 'du', 'au']) {
+        const v = params.get(name);
+        const el = form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement | null;
+        if (v && el) el.value = v;
+      }
+      (form.elements.namedItem('dispo') as HTMLInputElement).checked = params.get('dispo') === '1';
+
+      const apply = (updateUrl: boolean) => {
+        const fd = new FormData(form);
+        const famille = String(fd.get('famille') ?? '');
+        let du = String(fd.get('du') ?? '');
+        let au = String(fd.get('au') ?? '');
+        if (isIsoDate(du) && !isIsoDate(au)) au = du;
+        if (isIsoDate(au) && au < du) [du, au] = [au, du];
+        const periode = isIsoDate(du) && isIsoDate(au);
+        const dispoOnly = fd.has('dispo');
+        let visible = 0;
+
+        this.querySelectorAll<HTMLElement>('[data-materiel]').forEach((li) => {
+          const m = byId.get(li.dataset.materiel ?? '');
+          if (!m) return;
+          const text = li.querySelector('[data-dispo-text]');
+          const badgeBox = li.querySelector('[data-badge]');
+          const hs = horsService(m, today);
+          let dispo = m.quantite;
+          if (periode && !hs) {
+            dispo = disponible(m, du, au, reservations, today);
+            if (text)
+              text.textContent = `${dispo} sur ${m.quantite} disponibles du ${formatIso(du, false)} au ${formatIso(au, false)}`;
+            if (badgeBox)
+              badgeBox.innerHTML =
+                dispo === m.quantite
+                  ? badge('success', 'check', 'Disponible')
+                  : dispo > 0
+                    ? badge('warning', 'alert', 'Disponibilité partielle')
+                    : badge('danger', 'error', 'Indisponible');
+          } else if (!hs) {
+            if (text) text.textContent = `${m.quantite} en parc`;
+            if (badgeBox) badgeBox.innerHTML = badge('neutral', 'minus', 'Réservable');
+          }
+          const ok =
+            (!famille || m.famille === famille) && (!dispoOnly || (!hs && (!periode || dispo > 0)));
+          li.hidden = !ok;
+          if (ok) visible++;
+        });
+        this.querySelectorAll<HTMLElement>('[data-group]').forEach((g) => {
+          g.hidden = !g.querySelector('[data-materiel]:not([hidden])');
+        });
+        count.tabIndex = -1;
+        count.textContent = `${visible} référence${visible > 1 ? 's' : ''} affichée${visible > 1 ? 's' : ''}${
+          periode ? `, disponibilités du ${formatIso(du, false)} au ${formatIso(au, false)}` : ''
+        }.`;
+        if (updateUrl) {
+          const p = new URLSearchParams();
+          for (const [k, v] of fd) if (v) p.append(k, String(v));
+          const qs = p.toString();
+          history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+        }
+      };
+
+      apply(false);
+      form.addEventListener('change', () => apply(true));
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        apply(true);
+        count.focus();
+      });
+      form.addEventListener('reset', () => setTimeout(() => apply(true)));
+    }
+  }
+  customElements.define('vg-regie-catalogue', RegieCatalogue);
+</script>

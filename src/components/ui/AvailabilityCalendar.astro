@@ -10,11 +10,12 @@ interface Props {
   // Disponibles par jour (AAAA-MM-JJ). Jour absent = tout est disponible.
   availability: Record<string, number>;
   title?: string;
+  from?: string; // AAAA-MM-JJ : les jours antérieurs sont affichés comme passés
 }
 
-const { year, month, total, availability, title = 'Disponibilités' } = Astro.props;
+const { year, month, total, availability, title = 'Disponibilités', from } = Astro.props;
 
-type DayState = 'libre' | 'partiel' | 'complet';
+type DayState = 'libre' | 'partiel' | 'complet' | 'passe';
 interface Day {
   iso: string;
   day: number;
@@ -30,7 +31,8 @@ const offset = (new Date(Date.UTC(year, month - 1, 1)).getUTCDay() + 6) % 7;
 const days: Day[] = Array.from({ length: daysInMonth }, (_, i) => {
   const iso = `${year}-${pad(month)}-${pad(i + 1)}`;
   const dispo = availability[iso] ?? total;
-  const state: DayState = dispo >= total ? 'libre' : dispo > 0 ? 'partiel' : 'complet';
+  const state: DayState =
+    from && iso < from ? 'passe' : dispo >= total ? 'libre' : dispo > 0 ? 'partiel' : 'complet';
   return { iso, day: i + 1, dispo, state };
 });
 
@@ -55,12 +57,13 @@ const stateText: Record<DayState, string> = {
   libre: 'Libre',
   partiel: 'Partiel',
   complet: 'Complet',
+  passe: 'Passé',
 };
-const stateIcon = { libre: 'check', partiel: 'alert', complet: 'error' } as const;
+const stateIcon = { libre: 'check', partiel: 'alert', complet: 'error', passe: 'minus' } as const;
 
 // Regroupe les jours consécutifs de même disponibilité pour le tableau
 const periods: { from: number; to: number; dispo: number; state: DayState }[] = [];
-for (const d of days) {
+for (const d of days.filter((x) => x.state !== 'passe')) {
   const last = periods.at(-1);
   if (last && last.dispo === d.dispo) last.to = d.day;
   else periods.push({ from: d.day, to: d.day, dispo: d.dispo, state: d.state });
@@ -89,10 +92,14 @@ const caption = `${title} — ${monthName} ${year}`;
                 <span class="calendar__day">{d.day}</span>
                 <span class="calendar__state">
                   <Icon name={stateIcon[d.state]} />
-                  <span>
-                    {d.dispo}/{total}
-                    <span class="calendar__label"> {stateText[d.state]}</span>
-                  </span>
+                  {d.state === 'passe' ? (
+                    <span class="calendar__label">{stateText[d.state]}</span>
+                  ) : (
+                    <span>
+                      {d.dispo}/{total}
+                      <span class="calendar__label"> {stateText[d.state]}</span>
+                    </span>
+                  )}
                 </span>
               </td>
             ) : (

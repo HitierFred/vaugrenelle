@@ -1,0 +1,114 @@
+---
+import Icon from '../../components/ui/Icon.astro';
+import PosterArt from '../../components/ui/PosterArt.astro';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { getMateriel } from '../../lib/content';
+import { formatPrice } from '../../lib/format';
+import { PROFILS, getRegieData } from '../../lib/regie-data';
+import { url } from '../../lib/paths';
+
+const data = await getRegieData();
+const materiel = await getMateriel();
+const nom = new Map(materiel.map((m) => [m.id, m.data.designation]));
+const totalArticles = data.materiel.reduce((s, m) => s + m.quantite, 0);
+
+const links = [
+  {
+    href: '/regie/catalogue/',
+    label: 'Consulter le catalogue',
+    hint: `${data.materiel.length} références, disponibilités par période`,
+    icon: 'box',
+  },
+  {
+    href: '/regie/reserver/',
+    label: 'Réserver du matériel',
+    hint: 'Période, panier, prestation, montant',
+    icon: 'calendar',
+  },
+] as const;
+---
+
+<PageLayout
+  title="Régie partagée"
+  lead="Le parc technique de la Ville, ouvert aux services, aux associations, aux compagnies et aux communes de l'agglomération."
+  description="Régie partagée de Vaugrenelle : catalogue du matériel son, lumière, vidéo, structures, énergie et praticables, packs prêts à l'emploi et réservation en ligne."
+  breadcrumb={[{ label: 'Régie partagée' }]}
+>
+  <div class="stack" style="--stack-space: var(--sp-12)">
+    <section class="hero" aria-label="Accès rapides">
+      <div class="stack">
+        <ul class="quick-links">
+          {links.map((l) => (
+            <li>
+              <a href={url(l.href)}>
+                <Icon name={l.icon} />
+                <span>
+                  {l.label}
+                  <span class="quick-links__hint">{l.hint}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p>
+          {totalArticles.toLocaleString('fr-FR')} articles disponibles au prêt. Un article dont la
+          vérification réglementaire est dépassée est automatiquement mis hors service.
+        </p>
+      </div>
+      <PosterArt />
+    </section>
+
+    <section aria-labelledby="packs" class="stack">
+      <h2 id="packs">Packs prêts à l'emploi</h2>
+      <ul class="grid-cards">
+        {data.packs.map((p) => (
+          <li>
+            <article class="card">
+              <h3 class="card__title">{p.nom}</h3>
+              <ul class="card__meta">
+                {p.composition.map((c) => (
+                  <li>
+                    {c.quantite} × {nom.get(c.materiel)}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="tarifs" class="stack">
+      <h2 id="tarifs">Qui peut emprunter ?</h2>
+      <p>
+        Le tarif dépend de votre profil. Les services municipaux empruntent gratuitement. Une
+        caution est demandée aux autres emprunteurs.
+      </p>
+      <div class="table-wrap">
+        <table class="table">
+          <caption>Exemple : enceinte amplifiée 12 pouces, par jour</caption>
+          <thead>
+            <tr>
+              <th scope="col">Profil</th>
+              <th scope="col">Tarif par jour</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(PROFILS).map(([id, label]) => (
+              <tr>
+                <th scope="row">{label}</th>
+                <td>
+                  {formatPrice(
+                    data.materiel.find((m) => m.id === 'enceinte-amplifiee-12')!.tarifs[
+                      id as keyof typeof PROFILS
+                    ],
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</PageLayout>

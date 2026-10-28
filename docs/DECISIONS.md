@@ -311,3 +311,63 @@ Les démarches absentes du démonstrateur portent un badge « Hors démonstratio
 - la restauration du brouillon ;
 - la recherche dans le catalogue ;
 - un audit axe à 5 états du parcours : erreurs, packs, pièce expirée, récapitulatif, confirmation.
+
+---
+
+## 2026-10-28 — Phase 5 : Régie partagée
+
+### Modules
+
+- `lib/availability.ts` (pur, sans DOM) regroupe les calculs de la Régie :
+  - **Disponibilités** : quantité en parc moins le **pic jour par jour** des réservations qui chevauchent la période. Ce calcul est plus juste qu'une simple somme : deux réservations successives ne se cumulent pas.
+  - **Packs** : nombre de packs complets disponibles, limité par le composant le plus rare.
+  - **Périodes alternatives** : les 3 périodes de même durée les plus proches où la quantité demandée est libre.
+  - **Puissance** : puissance totale appelée par le matériel, et puissance apportée par un groupe électrogène loué.
+  - **Devis** : selon la grille tarifaire par profil et la prestation choisie.
+- `lib/regie-data.ts` prépare au build les données transmises aux scripts : matériel, packs, réservations et lieux, avec la puissance des sites en watts.
+- `components/islands/regie-client.ts` lit ces données et y **ajoute les réservations confirmées dans la démonstration** (`vg:reservations`). Une réservation confirmée réduit donc les disponibilités du catalogue et du parcours.
+- `components/islands/form-kit.ts` factorise ce que le Guichet et la Régie partagent : échappement, icônes, badges, erreurs de champ, résumé d'erreurs, stepper. Le Guichet a été adapté, sans régression (ses 8 tests passent).
+
+### Règles
+
+- **Hors service** : un article dont la vérification réglementaire est dépassée (échéance antérieure à aujourd'hui) n'est pas réservable. Il en va de même pour un pack qui le contient (« Scène 6 × 4 m »). Le motif est affiché, conformément à l'exigence EXF-REG-22.
+- **Quantité indisponible** : une alerte en `aria-live` donne la quantité disponible et propose des périodes alternatives, ainsi qu'un bouton « Réserver les N disponibles ». Si la quantité demandée dépasse le parc entier, le message le dit. L'événement `materiel.indisponible` est publié une seule fois par demande.
+- **Contrôle de l'étape 2** : il porte sur les **quantités totales développées**, articles et packs réunis, et non ligne par ligne.
+- **Contrôle électrique** :
+  - Il ne s'applique qu'aux **sites équipés de l'espace public**. La capacité d'un site est la somme de ses alimentations (1 kVA compté pour 1 kW). Pour une salle, la vérification relève de la régie du lieu ; pour un « autre lieu », un message recommande une alimentation adaptée.
+  - Une jauge `<meter>` montre la puissance demandée face à la capacité.
+  - Un dépassement est **bloquant**, avec un message explicite. Ajouter un groupe électrogène de 20 kVA lève le blocage.
+- **Technicien obligatoire** : si une référence est prêtée avec un technicien, la prestation « technicien présent » est exigée.
+- **Montant** : prix par jour du profil × quantité × nombre de jours (bornes incluses), plus la prestation (forfait ou prix par jour pour le technicien). Le service municipal ne paie ni le prêt ni la prestation, et ne verse pas de caution (gratuité délibérée).
+- **Durée de prêt** : limitée à 31 jours.
+
+### Parcours en 4 étapes
+
+1. Période et lieu.
+2. Matériel, filtré sur la disponibilité réelle de la période.
+3. Prestation et demandeur.
+4. Récapitulatif avec devis.
+
+La confirmation crée une réservation `RP-AAAA-nnnnnn`, publie `reservation.confirmee` et affiche une **convention de prêt en HTML imprimable** : parties, articles, matériel et montant, caution, signatures. Une feuille `@media print` masque l'en-tête, le pied de page, l'encart et les boutons, mais conserve le bandeau de démonstration.
+
+### Panier
+
+Le panier (`vg:regie:panier`) est partagé entre la fiche matériel (« Ajouter au panier ») et le parcours, qui le reprend : période et quantités. Il est vidé à la confirmation. L'encart « Votre panier » est mis à jour en direct.
+
+### Catalogue et fiche
+
+- **Catalogue** : filtres par famille et par période, et option « disponible uniquement », reflétés dans l'URL. Sans JavaScript, le catalogue complet reste affiché. Sans période choisie, les cartes indiquent « Réservable » : un nouvel état de `MaterielCard`, qui évite d'afficher « Disponible » sans période de référence.
+- **Fiche** : caractéristiques, tarifs par profil, alertes de vérification (dépassée ou dans moins de 30 jours) et 3 calendriers mensuels calculés au build.
+- **Calendrier** : nouvel état « Passé » pour les jours antérieurs au build (prop `from`). Ces jours sont exclus du tableau équivalent.
+
+### Tests
+
+`tests/parcours-regie.spec.ts` couvre :
+
+- le parcours nominal, avec un devis vérifié à l'euro près (236 € et 1 100 € de caution), la convention, le bus et le stockage ;
+- l'**indisponibilité** : fenêtre où l'enceinte est entièrement réservée, alternatives, pack concerné, `materiel.indisponible` ;
+- le **dépassement électrique** sur l'esplanade de la Gare (13,6 kW pour 12 kW), levé par un groupe électrogène, puis l'exigence d'un technicien ;
+- l'article et le pack hors service ;
+- le catalogue filtré par famille et par période ;
+- la fiche avec ajout au panier repris dans la réservation ;
+- un audit axe à 4 états du parcours.
