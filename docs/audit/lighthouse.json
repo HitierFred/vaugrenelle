@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-28",
+  "base": "https://hitierfred.github.io/vaugrenelle/",
+  "outil": "Lighthouse 13.6.0, mobile",
+  "pages": [
+    {
+      "page": "accueil",
+      "performance": 100,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "1.0 s",
+      "tbt": "20 ms",
+      "cls": "0.002"
+    },
+    {
+      "page": "agenda",
+      "performance": 100,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "0.8 s",
+      "tbt": "0 ms",
+      "cls": "0.002"
+    },
+    {
+      "page": "fiche-evenement",
+      "performance": 100,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "0.8 s",
+      "tbt": "0 ms",
+      "cls": "0.002"
+    },
+    {
+      "page": "festival",
+      "performance": 100,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "0.9 s",
+      "tbt": "0 ms",
+      "cls": "0.002"
+    },
+    {
+      "page": "demarches",
+      "performance": 100,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "0.8 s",
+      "tbt": "0 ms",
+      "cls": "0.002"
+    },
+    {
+      "page": "guichet",
+      "performance": 100,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "0.9 s",
+      "tbt": "0 ms",
+      "cls": "0.002"
+    },
+    {
+      "page": "regie",
+      "performance": 100,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "0.8 s",
+      "tbt": "10 ms",
+      "cls": "0.002"
+    },
+    {
+      "page": "catalogue",
+      "performance": 82,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "0.8 s",
+      "tbt": "10 ms",
+      "cls": "0.376"
+    },
+    {
+      "page": "fiche-materiel",
+      "performance": 100,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "0.9 s",
+      "tbt": "10 ms",
+      "cls": "0.006"
+    },
+    {
+      "page": "reserver",
+      "performance": 99,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "0.9 s",
+      "tbt": "20 ms",
+      "cls": "0.072"
+    },
+    {
+      "page": "coulisses",
+      "performance": 83,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 60,
+      "lcp": "0.8 s",
+      "tbt": "0 ms",
+      "cls": "0.347"
+    },
+    {
+      "page": "a-propos",
+      "performance": 100,
+      "accessibilite": 100,
+      "bonnesPratiques": 100,
+      "seo": 100,
+      "lcp": "0.8 s",
+      "tbt": "0 ms",
+      "cls": "0.002"
+    }
+  ]
+}

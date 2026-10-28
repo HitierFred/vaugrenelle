@@ -9,7 +9,7 @@ const { materiel, designation, quantite } = Astro.props;
 ---
 
 <vg-add-to-cart data-materiel={materiel} data-quantite={quantite}>
-  <form class="stack" hidden data-form aria-labelledby="panier-titre">
+  <form class="stack" data-js-only data-form aria-labelledby="panier-titre">
     <h2 id="panier-titre">Ajouter au panier</h2>
     <div class="field">
       <label class="field__label" for="ac-du">

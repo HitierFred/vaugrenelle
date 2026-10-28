@@ -98,6 +98,13 @@
     outline-offset: var(--focus-offset);
   }
 
+  /* Blocs réservés à JavaScript : visibilité décidée avant l'affichage
+     (classe js posée sur <html> dans le <head>), sans décalage de mise en page */
+  html:not(.js) [data-js-only],
+  .js [data-nojs] {
+    display: none !important;
+  }
+
   /* Le <main> reçoit le focus du lien d'évitement sans contour parasite */
   main:focus {
     outline: none;
