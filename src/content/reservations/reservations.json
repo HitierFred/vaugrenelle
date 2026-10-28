@@ -1,0 +1,122 @@
+[
+  {
+    "id": "res-01",
+    "materiel": "enceinte-amplifiee-12",
+    "quantite": 5,
+    "jour_debut": 41,
+    "jour_fin": 52,
+    "demandeur_fictif": "Festival Les Échappées — régie générale"
+  },
+  {
+    "id": "res-02",
+    "materiel": "enceinte-amplifiee-12",
+    "quantite": 3,
+    "jour_debut": 44,
+    "jour_fin": 50,
+    "demandeur_fictif": "Comité des fêtes du quartier Saint-Roch (fictif)"
+  },
+  {
+    "id": "res-03",
+    "materiel": "caisson-basses-18",
+    "quantite": 2,
+    "jour_debut": 41,
+    "jour_fin": 52,
+    "demandeur_fictif": "Festival Les Échappées — régie générale"
+  },
+  {
+    "id": "res-04",
+    "materiel": "barriere-ville",
+    "quantite": 80,
+    "jour_debut": 40,
+    "jour_fin": 53,
+    "demandeur_fictif": "Festival Les Échappées — sécurité"
+  },
+  {
+    "id": "res-05",
+    "materiel": "tente-reception-5x10",
+    "quantite": 2,
+    "jour_debut": 40,
+    "jour_fin": 53,
+    "demandeur_fictif": "Festival Les Échappées — village du festival"
+  },
+  {
+    "id": "res-06",
+    "materiel": "groupe-electrogene-20",
+    "quantite": 1,
+    "jour_debut": 42,
+    "jour_fin": 51,
+    "demandeur_fictif": "Festival Les Échappées — parc Brossard"
+  },
+  {
+    "id": "res-07",
+    "materiel": "projecteur-led-200",
+    "quantite": 8,
+    "jour_debut": 5,
+    "jour_fin": 8,
+    "demandeur_fictif": "Théâtre Jean-Vilar — création en résidence"
+  },
+  {
+    "id": "res-08",
+    "materiel": "console-numerique-16",
+    "quantite": 1,
+    "jour_debut": 3,
+    "jour_fin": 4,
+    "demandeur_fictif": "Chorale Les Voix du Canal (fictive)"
+  },
+  {
+    "id": "res-09",
+    "materiel": "barnum-3x3",
+    "quantite": 6,
+    "jour_debut": 10,
+    "jour_fin": 11,
+    "demandeur_fictif": "Association Bel-Air Animations (fictive)"
+  },
+  {
+    "id": "res-10",
+    "materiel": "videoprojecteur-5000",
+    "quantite": 2,
+    "jour_debut": 14,
+    "jour_fin": 15,
+    "demandeur_fictif": "Médiathèque — ciné-club"
+  },
+  {
+    "id": "res-11",
+    "materiel": "gradin-mobile",
+    "quantite": 1,
+    "jour_debut": 20,
+    "jour_fin": 24,
+    "demandeur_fictif": "Collège des Tanneurs (fictif)"
+  },
+  {
+    "id": "res-12",
+    "materiel": "micro-hf",
+    "quantite": 4,
+    "jour_debut": 2,
+    "jour_fin": 2,
+    "demandeur_fictif": "Mairie — conseil municipal"
+  },
+  {
+    "id": "res-13",
+    "materiel": "par-led",
+    "quantite": 12,
+    "jour_debut": 25,
+    "jour_fin": 27,
+    "demandeur_fictif": "Compagnie Les Grands Vents (fictive)"
+  },
+  {
+    "id": "res-14",
+    "materiel": "pieds-praticable",
+    "quantite": 12,
+    "jour_debut": 60,
+    "jour_fin": 62,
+    "demandeur_fictif": "École de musique Do Ré Mi (fictive)"
+  },
+  {
+    "id": "res-15",
+    "materiel": "lyre-asservie",
+    "quantite": 4,
+    "jour_debut": 30,
+    "jour_fin": 31,
+    "demandeur_fictif": "École de danse Pas de Deux (fictive)"
+  }
+]

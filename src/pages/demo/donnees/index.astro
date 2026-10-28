@@ -1,0 +1,96 @@
+---
+// Contrôle des données fictives (phase 2). Page non indexée.
+// Le build échoue si un contrôle bloquant n'est pas respecté.
+import StatusBadge from '../../../components/ui/StatusBadge.astro';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import { runDataChecks } from '../../../lib/data-checks';
+import { formatDate } from '../../../lib/format';
+
+const { checks, volumes, festival, reference } = await runDataChecks();
+
+const failures = checks.filter((c) => c.blocking && !c.ok);
+if (failures.length) {
+  throw new Error(
+    `Données fictives invalides :\n${failures.map((c) => `- ${c.label} : ${c.detail}`).join('\n')}`,
+  );
+}
+const lastFestivalDay = new Date(festival.fin.getTime() - 86_400_000);
+---
+
+<PageLayout
+  title="Contrôle des données fictives"
+  lead="Volumes et cohérence des données du démonstrateur, vérifiés à chaque build."
+  description="Volumes et contrôles de cohérence des données fictives du démonstrateur Vaugrenelle."
+  noindex
+  breadcrumb={[{ label: 'Démonstration' }, { label: 'Données' }]}
+>
+  <div class="stack stack-l">
+    <section aria-labelledby="dates" class="stack">
+      <h2 id="dates">Dates de référence</h2>
+      <p>
+        Les dates sont calculées à partir de la date du build :{' '}
+        <strong>{formatDate(reference)}</strong>.
+      </p>
+      <p>
+        Festival Les Échappées : du <strong>{formatDate(festival.debut)}</strong> au{' '}
+        <strong>{formatDate(lastFestivalDay)}</strong>.
+      </p>
+    </section>
+
+    <section aria-labelledby="volumes" class="stack">
+      <h2 id="volumes">Volumes</h2>
+      <div class="table-wrap">
+        <table class="table" data-testid="volumes">
+          <caption class="visually-hidden">Volumes de données par collection</caption>
+          <thead>
+            <tr>
+              <th scope="col">Collection</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Minimum</th>
+            </tr>
+          </thead>
+          <tbody>
+            {volumes.map(([label, n, min]) => (
+              <tr>
+                <th scope="row">{label}</th>
+                <td data-volume={label}>{n}</td>
+                <td>{min || '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="controles" class="stack">
+      <h2 id="controles">Contrôles de cohérence</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <caption class="visually-hidden">Résultat des contrôles</caption>
+          <thead>
+            <tr>
+              <th scope="col">Contrôle</th>
+              <th scope="col">Résultat</th>
+              <th scope="col">Détail</th>
+            </tr>
+          </thead>
+          <tbody>
+            {checks.map((c) => (
+              <tr>
+                <th scope="row">{c.label}</th>
+                <td>
+                  {c.ok ? (
+                    <StatusBadge status="success" label="Conforme" />
+                  ) : (
+                    <StatusBadge status="danger" label="Non conforme" />
+                  )}
+                </td>
+                <td>{c.detail}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</PageLayout>

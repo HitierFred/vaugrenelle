@@ -1,0 +1,1632 @@
+[
+  {
+    "id": "enceinte-amplifiee-12",
+    "designation": "Enceinte amplifiée 12 pouces",
+    "famille": "son",
+    "marque_modele": "Sonora PX-12 (modèle fictif)",
+    "description": "Enceinte active polyvalente pour la voix et la musique d'ambiance. Elle couvre jusqu'à 150 personnes seule, davantage en paire.",
+    "quantite": 8,
+    "caracteristiques": [
+      {
+        "libelle": "Puissance acoustique",
+        "valeur": "1 200 W crête"
+      },
+      {
+        "libelle": "Connectique",
+        "valeur": "XLR, jack 6,35"
+      },
+      {
+        "libelle": "Fixation",
+        "valeur": "Embase pour pied 35 mm"
+      }
+    ],
+    "puissance_w": 400,
+    "poids_kg": 18,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 15
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 22.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 30
+      }
+    ],
+    "caution": 300,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "caisson-basses-18",
+    "designation": "Caisson de basses 18 pouces",
+    "famille": "son",
+    "marque_modele": "Sonora SB-18 (modèle fictif)",
+    "description": "Caisson actif pour renforcer le grave en plein air. À associer à une paire d'enceintes 12 pouces.",
+    "quantite": 4,
+    "caracteristiques": [
+      {
+        "libelle": "Puissance acoustique",
+        "valeur": "2 000 W crête"
+      },
+      {
+        "libelle": "Réponse",
+        "valeur": "35 Hz à 120 Hz"
+      },
+      {
+        "libelle": "Roulettes",
+        "valeur": "Oui"
+      }
+    ],
+    "puissance_w": 1000,
+    "poids_kg": 42,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 25
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 37.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 50
+      }
+    ],
+    "caution": 500,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "console-numerique-16",
+    "designation": "Console de mixage numérique 16 voies",
+    "famille": "son",
+    "marque_modele": "Mixwell D16 (modèle fictif)",
+    "description": "Console compacte avec effets intégrés et mémoires de scène. Prêtée avec un technicien pour les débutants.",
+    "quantite": 2,
+    "caracteristiques": [
+      {
+        "libelle": "Entrées",
+        "valeur": "16 micro/ligne"
+      },
+      {
+        "libelle": "Sorties",
+        "valeur": "8 auxiliaires"
+      },
+      {
+        "libelle": "Pilotage",
+        "valeur": "Tablette en Wi-Fi"
+      }
+    ],
+    "puissance_w": 60,
+    "poids_kg": 8,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 30
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 45.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 60
+      }
+    ],
+    "caution": 800,
+    "prestation_technicien_requise": true
+  },
+  {
+    "id": "micro-dynamique",
+    "designation": "Micro dynamique de chant",
+    "famille": "son",
+    "marque_modele": "Vocalis V58 (modèle fictif)",
+    "description": "Micro robuste pour la voix, peu sensible aux bruits de manipulation.",
+    "quantite": 16,
+    "caracteristiques": [
+      {
+        "libelle": "Directivité",
+        "valeur": "Cardioïde"
+      },
+      {
+        "libelle": "Connectique",
+        "valeur": "XLR"
+      }
+    ],
+    "poids_kg": 0.3,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 2
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 3.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 4
+      }
+    ],
+    "caution": 50,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "micro-hf",
+    "designation": "Système micro sans fil",
+    "famille": "son",
+    "marque_modele": "Vocalis HF-2 (modèle fictif)",
+    "description": "Récepteur et micro main sans fil pour les discours et les animations.",
+    "quantite": 6,
+    "caracteristiques": [
+      {
+        "libelle": "Portée",
+        "valeur": "100 m en champ libre"
+      },
+      {
+        "libelle": "Autonomie",
+        "valeur": "8 heures sur piles"
+      }
+    ],
+    "puissance_w": 20,
+    "poids_kg": 2,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 10
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 15.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 20
+      }
+    ],
+    "caution": 250,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "enceinte-batterie",
+    "designation": "Enceinte sur batterie",
+    "famille": "son",
+    "marque_modele": "Nomade Audio B8 (modèle fictif)",
+    "description": "Enceinte autonome pour les déambulations et les lieux sans électricité.",
+    "quantite": 6,
+    "caracteristiques": [
+      {
+        "libelle": "Autonomie",
+        "valeur": "10 heures"
+      },
+      {
+        "libelle": "Entrées",
+        "valeur": "Micro, ligne, Bluetooth"
+      }
+    ],
+    "poids_kg": 9,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 12
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 18.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 24
+      }
+    ],
+    "caution": 200,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "pied-enceinte",
+    "designation": "Pied d'enceinte",
+    "famille": "son",
+    "marque_modele": "Stativ PE-35 (modèle fictif)",
+    "description": "Pied télescopique pour enceinte jusqu'à 30 kg.",
+    "quantite": 16,
+    "caracteristiques": [
+      {
+        "libelle": "Hauteur",
+        "valeur": "1,20 à 2 m"
+      },
+      {
+        "libelle": "Charge maximale",
+        "valeur": "30 kg"
+      }
+    ],
+    "poids_kg": 4,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 2
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 3.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 4
+      }
+    ],
+    "caution": 30,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "retour-de-scene",
+    "designation": "Retour de scène 12 pouces",
+    "famille": "son",
+    "marque_modele": "Sonora M12 (modèle fictif)",
+    "description": "Enceinte de retour posée au sol pour que les artistes s'entendent.",
+    "quantite": 6,
+    "caracteristiques": [
+      {
+        "libelle": "Puissance acoustique",
+        "valeur": "800 W crête"
+      },
+      {
+        "libelle": "Angle",
+        "valeur": "Double inclinaison"
+      }
+    ],
+    "puissance_w": 350,
+    "poids_kg": 16,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 10
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 15.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 20
+      }
+    ],
+    "caution": 200,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "projecteur-led-200",
+    "designation": "Projecteur LED 200 W",
+    "famille": "lumiere",
+    "marque_modele": "Lumen PC-200 (modèle fictif)",
+    "description": "Projecteur à lentille plan-convexe, lumière blanche réglable. Base de tout éclairage de scène.",
+    "quantite": 12,
+    "caracteristiques": [
+      {
+        "libelle": "Température de couleur",
+        "valeur": "2 700 à 6 500 K"
+      },
+      {
+        "libelle": "Pilotage",
+        "valeur": "DMX 512"
+      }
+    ],
+    "puissance_w": 200,
+    "poids_kg": 7,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 6
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 9.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 12
+      }
+    ],
+    "caution": 120,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "par-led",
+    "designation": "Projecteur PAR LED couleur",
+    "famille": "lumiere",
+    "marque_modele": "Lumen Par-18 (modèle fictif)",
+    "description": "Projecteur couleur compact pour la mise en lumière de façades et de scènes.",
+    "quantite": 24,
+    "caracteristiques": [
+      {
+        "libelle": "Couleurs",
+        "valeur": "Rouge, vert, bleu, blanc"
+      },
+      {
+        "libelle": "Indice de protection",
+        "valeur": "IP65, extérieur"
+      }
+    ],
+    "puissance_w": 150,
+    "poids_kg": 3,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 4
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 6.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 8
+      }
+    ],
+    "caution": 80,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "decoupe-led",
+    "designation": "Découpe LED 25-50°",
+    "famille": "lumiere",
+    "marque_modele": "Lumen DK-300 (modèle fictif)",
+    "description": "Projecteur à couteaux pour cadrer précisément la lumière.",
+    "quantite": 8,
+    "caracteristiques": [
+      {
+        "libelle": "Zoom",
+        "valeur": "25 à 50°"
+      },
+      {
+        "libelle": "Porte-gobo",
+        "valeur": "Oui"
+      }
+    ],
+    "puissance_w": 300,
+    "poids_kg": 11,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 10
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 15.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 20
+      }
+    ],
+    "caution": 250,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "lyre-asservie",
+    "designation": "Lyre asservie wash",
+    "famille": "lumiere",
+    "marque_modele": "Lumen MW-600 (modèle fictif)",
+    "description": "Projecteur motorisé pour les spectacles et concerts. Programmation par un technicien.",
+    "quantite": 4,
+    "caracteristiques": [
+      {
+        "libelle": "Mouvement",
+        "valeur": "Pan 540°, tilt 270°"
+      },
+      {
+        "libelle": "Pilotage",
+        "valeur": "DMX 512, 18 canaux"
+      }
+    ],
+    "puissance_w": 600,
+    "poids_kg": 22,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 30
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 45.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 60
+      }
+    ],
+    "caution": 900,
+    "prestation_technicien_requise": true
+  },
+  {
+    "id": "console-lumiere",
+    "designation": "Console lumière 1024 canaux",
+    "famille": "lumiere",
+    "marque_modele": "Lumen Desk 2 (modèle fictif)",
+    "description": "Console d'éclairage pour piloter projecteurs fixes et asservis.",
+    "quantite": 2,
+    "caracteristiques": [
+      {
+        "libelle": "Univers DMX",
+        "valeur": "2"
+      },
+      {
+        "libelle": "Mémoires",
+        "valeur": "1 000"
+      }
+    ],
+    "puissance_w": 50,
+    "poids_kg": 6,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 25
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 37.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 50
+      }
+    ],
+    "caution": 700,
+    "prestation_technicien_requise": true
+  },
+  {
+    "id": "machine-brouillard",
+    "designation": "Machine à brouillard",
+    "famille": "lumiere",
+    "marque_modele": "Brumea H900 (modèle fictif)",
+    "description": "Machine à brouillard léger pour rendre les faisceaux visibles. Liquide fourni.",
+    "quantite": 3,
+    "caracteristiques": [
+      {
+        "libelle": "Débit",
+        "valeur": "Réglable"
+      },
+      {
+        "libelle": "Pilotage",
+        "valeur": "DMX ou télécommande"
+      }
+    ],
+    "puissance_w": 900,
+    "poids_kg": 12,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 10
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 15.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 20
+      }
+    ],
+    "caution": 200,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "projecteur-poursuite",
+    "designation": "Poursuite LED 400 W",
+    "famille": "lumiere",
+    "marque_modele": "Lumen FS-400 (modèle fictif)",
+    "description": "Projecteur de poursuite pour suivre un artiste sur scène.",
+    "quantite": 2,
+    "caracteristiques": [
+      {
+        "libelle": "Portée",
+        "valeur": "Jusqu'à 40 m"
+      },
+      {
+        "libelle": "Iris",
+        "valeur": "Motorisé"
+      }
+    ],
+    "puissance_w": 400,
+    "poids_kg": 25,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 20
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 30.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 40
+      }
+    ],
+    "caution": 600,
+    "prestation_technicien_requise": true
+  },
+  {
+    "id": "guirlande-guinguette",
+    "designation": "Guirlande guinguette 25 m",
+    "famille": "lumiere",
+    "marque_modele": "Festiluz G25 (modèle fictif)",
+    "description": "Guirlande de 25 ampoules LED pour les buvettes et les bals.",
+    "quantite": 10,
+    "caracteristiques": [
+      {
+        "libelle": "Longueur",
+        "valeur": "25 m"
+      },
+      {
+        "libelle": "Indice de protection",
+        "valeur": "IP44"
+      }
+    ],
+    "puissance_w": 250,
+    "poids_kg": 4,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 5
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 7.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 10
+      }
+    ],
+    "caution": 60,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "videoprojecteur-10000",
+    "designation": "Vidéoprojecteur 10 000 lumens",
+    "famille": "video",
+    "marque_modele": "Optika VX-10 (modèle fictif)",
+    "description": "Vidéoprojecteur de forte puissance pour le cinéma en plein air et le mapping.",
+    "quantite": 2,
+    "caracteristiques": [
+      {
+        "libelle": "Luminosité",
+        "valeur": "10 000 lumens"
+      },
+      {
+        "libelle": "Résolution",
+        "valeur": "1 920 × 1 200"
+      }
+    ],
+    "puissance_w": 900,
+    "poids_kg": 24,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 60
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 90.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 120
+      }
+    ],
+    "caution": 1500,
+    "prestation_technicien_requise": true
+  },
+  {
+    "id": "videoprojecteur-5000",
+    "designation": "Vidéoprojecteur 5 000 lumens",
+    "famille": "video",
+    "marque_modele": "Optika VX-5 (modèle fictif)",
+    "description": "Vidéoprojecteur pour les salles et les conférences.",
+    "quantite": 3,
+    "caracteristiques": [
+      {
+        "libelle": "Luminosité",
+        "valeur": "5 000 lumens"
+      },
+      {
+        "libelle": "Entrées",
+        "valeur": "HDMI, réseau"
+      }
+    ],
+    "puissance_w": 450,
+    "poids_kg": 9,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 30
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 45.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 60
+      }
+    ],
+    "caution": 800,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "ecran-cadre-6m",
+    "designation": "Écran sur cadre 6 × 3,4 m",
+    "famille": "video",
+    "marque_modele": "Vista F6 (modèle fictif)",
+    "description": "Écran de projection tendu sur cadre, face avant ou rétroprojection.",
+    "quantite": 2,
+    "caracteristiques": [
+      {
+        "libelle": "Dimensions",
+        "valeur": "6 × 3,4 m"
+      },
+      {
+        "libelle": "Format",
+        "valeur": "16/9"
+      }
+    ],
+    "poids_kg": 45,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 25
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 37.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 50
+      }
+    ],
+    "caution": 400,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "ecran-led-exterieur",
+    "designation": "Mur LED extérieur 4 × 2,5 m",
+    "famille": "video",
+    "marque_modele": "Vista Outdoor P4 (modèle fictif)",
+    "description": "Écran LED lisible en plein jour, monté sur remorque. Installation par la Régie.",
+    "quantite": 1,
+    "caracteristiques": [
+      {
+        "libelle": "Surface",
+        "valeur": "10 m²"
+      },
+      {
+        "libelle": "Pas de pixel",
+        "valeur": "4 mm"
+      }
+    ],
+    "puissance_w": 3600,
+    "poids_kg": 380,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 250
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 375.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 500
+      }
+    ],
+    "caution": 5000,
+    "prestation_technicien_requise": true
+  },
+  {
+    "id": "regie-video",
+    "designation": "Mélangeur vidéo 4 entrées",
+    "famille": "video",
+    "marque_modele": "Optika Mix4 (modèle fictif)",
+    "description": "Mélangeur pour enchaîner caméras, ordinateurs et vidéos.",
+    "quantite": 2,
+    "caracteristiques": [
+      {
+        "libelle": "Entrées",
+        "valeur": "4 HDMI"
+      },
+      {
+        "libelle": "Diffusion",
+        "valeur": "Sortie USB pour la retransmission"
+      }
+    ],
+    "puissance_w": 40,
+    "poids_kg": 3,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 20
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 30.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 40
+      }
+    ],
+    "caution": 500,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "pont-alu-3m",
+    "designation": "Pont aluminium triangulaire 3 m",
+    "famille": "structure",
+    "marque_modele": "Structa T30 (modèle fictif)",
+    "description": "Élément de pont pour suspendre projecteurs et enceintes, sur pieds ou sur tour de levage.",
+    "quantite": 20,
+    "caracteristiques": [
+      {
+        "libelle": "Section",
+        "valeur": "Triangulaire 30 cm"
+      },
+      {
+        "libelle": "Charge répartie",
+        "valeur": "300 kg sur 6 m"
+      }
+    ],
+    "poids_kg": 15,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 5
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 7.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 10
+      }
+    ],
+    "caution": 100,
+    "prestation_technicien_requise": false,
+    "verification": {
+      "type": "Vérification annuelle des structures",
+      "echeance_jours": 140
+    }
+  },
+  {
+    "id": "tour-levage",
+    "designation": "Tour de levage 5 m",
+    "famille": "structure",
+    "marque_modele": "Structa Lift 5 (modèle fictif)",
+    "description": "Tour à manivelle pour lever un pont ou des enceintes jusqu'à 5 m.",
+    "quantite": 4,
+    "caracteristiques": [
+      {
+        "libelle": "Hauteur maximale",
+        "valeur": "5,2 m"
+      },
+      {
+        "libelle": "Charge maximale",
+        "valeur": "200 kg"
+      }
+    ],
+    "poids_kg": 85,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 25
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 37.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 50
+      }
+    ],
+    "caution": 500,
+    "prestation_technicien_requise": false,
+    "verification": {
+      "type": "Vérification semestrielle des appareils de levage (arrêté du 1er mars 2004)",
+      "echeance_jours": 9
+    }
+  },
+  {
+    "id": "palan-electrique",
+    "designation": "Palan électrique 500 kg",
+    "famille": "structure",
+    "marque_modele": "Structa Hoist 500 (modèle fictif)",
+    "description": "Palan à chaîne pour accrocher des ponts aux points d'accroche. Utilisation par un technicien habilité.",
+    "quantite": 6,
+    "caracteristiques": [
+      {
+        "libelle": "Charge maximale",
+        "valeur": "500 kg"
+      },
+      {
+        "libelle": "Vitesse",
+        "valeur": "4 m/min"
+      }
+    ],
+    "puissance_w": 800,
+    "poids_kg": 35,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 30
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 45.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 60
+      }
+    ],
+    "caution": 600,
+    "prestation_technicien_requise": true,
+    "verification": {
+      "type": "Vérification semestrielle des appareils de levage (arrêté du 1er mars 2004)",
+      "echeance_jours": 21
+    }
+  },
+  {
+    "id": "barnum-3x3",
+    "designation": "Barnum pliant 3 × 3 m",
+    "famille": "structure",
+    "marque_modele": "Abri Pro 33 (modèle fictif)",
+    "description": "Abri pliant pour les stands, les buvettes et les points d'accueil.",
+    "quantite": 12,
+    "caracteristiques": [
+      {
+        "libelle": "Surface",
+        "valeur": "9 m²"
+      },
+      {
+        "libelle": "Lestage",
+        "valeur": "4 poids de 15 kg fournis"
+      }
+    ],
+    "poids_kg": 32,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 15
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 22.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 30
+      }
+    ],
+    "caution": 200,
+    "prestation_technicien_requise": false,
+    "verification": {
+      "type": "Vérification annuelle des structures",
+      "echeance_jours": 200
+    }
+  },
+  {
+    "id": "tente-reception-5x10",
+    "designation": "Tente de réception 5 × 10 m",
+    "famille": "structure",
+    "marque_modele": "Abri Pro R510 (modèle fictif)",
+    "description": "Grande tente montée par la Régie pour les repas et les villages de festival.",
+    "quantite": 2,
+    "caracteristiques": [
+      {
+        "libelle": "Surface",
+        "valeur": "50 m²"
+      },
+      {
+        "libelle": "Montage",
+        "valeur": "4 heures, 3 agents"
+      }
+    ],
+    "poids_kg": 420,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 120
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 180.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 240
+      }
+    ],
+    "caution": 1500,
+    "prestation_technicien_requise": true,
+    "verification": {
+      "type": "Vérification annuelle des structures",
+      "echeance_jours": 95
+    }
+  },
+  {
+    "id": "gradin-mobile",
+    "designation": "Gradin mobile 100 places",
+    "famille": "structure",
+    "marque_modele": "Tribuna M100 (modèle fictif)",
+    "description": "Gradin sur remorque déplié en une heure. Livraison et montage obligatoires.",
+    "quantite": 1,
+    "caracteristiques": [
+      {
+        "libelle": "Places",
+        "valeur": "100 assises"
+      },
+      {
+        "libelle": "Emprise",
+        "valeur": "10 × 5 m"
+      }
+    ],
+    "poids_kg": 2400,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 300
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 450.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 600
+      }
+    ],
+    "caution": 4000,
+    "prestation_technicien_requise": true,
+    "verification": {
+      "type": "Vérification annuelle par un organisme agréé",
+      "echeance_jours": 60
+    }
+  },
+  {
+    "id": "barriere-ville",
+    "designation": "Barrière de ville 2 m",
+    "famille": "structure",
+    "marque_modele": "Securia BV2 (modèle fictif)",
+    "description": "Barrière métallique pour délimiter un périmètre ou canaliser le public.",
+    "quantite": 120,
+    "caracteristiques": [
+      {
+        "libelle": "Longueur",
+        "valeur": "2 m"
+      },
+      {
+        "libelle": "Hauteur",
+        "valeur": "1,10 m"
+      }
+    ],
+    "poids_kg": 15,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 1
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 1.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 2
+      }
+    ],
+    "caution": 10,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "groupe-electrogene-20",
+    "designation": "Groupe électrogène 20 kVA insonorisé",
+    "famille": "energie",
+    "marque_modele": "Voltis GE-20 (modèle fictif)",
+    "description": "Groupe silencieux pour alimenter un site sans réseau électrique. Livré et raccordé par la Régie.",
+    "quantite": 2,
+    "caracteristiques": [
+      {
+        "libelle": "Puissance",
+        "valeur": "20 kVA"
+      },
+      {
+        "libelle": "Niveau sonore",
+        "valeur": "65 dB à 7 m"
+      }
+    ],
+    "poids_kg": 520,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 90
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 135.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 180
+      }
+    ],
+    "caution": 1500,
+    "prestation_technicien_requise": true,
+    "verification": {
+      "type": "Vérification électrique annuelle",
+      "echeance_jours": 180
+    }
+  },
+  {
+    "id": "armoire-distribution",
+    "designation": "Armoire de distribution 63 A",
+    "famille": "energie",
+    "marque_modele": "Voltis AD-63 (modèle fictif)",
+    "description": "Armoire de répartition avec protections différentielles.",
+    "quantite": 4,
+    "caracteristiques": [
+      {
+        "libelle": "Entrée",
+        "valeur": "P17 63 A tétra"
+      },
+      {
+        "libelle": "Sorties",
+        "valeur": "2 × 32 A tétra, 6 × 16 A mono"
+      }
+    ],
+    "poids_kg": 30,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 20
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 30.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 40
+      }
+    ],
+    "caution": 400,
+    "prestation_technicien_requise": false,
+    "verification": {
+      "type": "Vérification électrique annuelle",
+      "echeance_jours": 75
+    }
+  },
+  {
+    "id": "coffret-16a",
+    "designation": "Coffret de distribution 6 × 16 A",
+    "famille": "energie",
+    "marque_modele": "Voltis CD-16 (modèle fictif)",
+    "description": "Petit coffret pour répartir une alimentation sur six prises protégées.",
+    "quantite": 10,
+    "caracteristiques": [
+      {
+        "libelle": "Entrée",
+        "valeur": "P17 32 A mono"
+      },
+      {
+        "libelle": "Indice de protection",
+        "valeur": "IP44"
+      }
+    ],
+    "poids_kg": 6,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 5
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 7.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 10
+      }
+    ],
+    "caution": 80,
+    "prestation_technicien_requise": false,
+    "verification": {
+      "type": "Vérification électrique annuelle",
+      "echeance_jours": 75
+    }
+  },
+  {
+    "id": "cable-p17-32",
+    "designation": "Câble P17 32 A tétra 25 m",
+    "famille": "energie",
+    "marque_modele": "Voltis C32 (modèle fictif)",
+    "description": "Rallonge triphasée pour relier une borne ou un groupe à une armoire.",
+    "quantite": 20,
+    "caracteristiques": [
+      {
+        "libelle": "Longueur",
+        "valeur": "25 m"
+      },
+      {
+        "libelle": "Section",
+        "valeur": "5 × 6 mm²"
+      }
+    ],
+    "poids_kg": 14,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 3
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 4.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 6
+      }
+    ],
+    "caution": 50,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "enrouleur-16a",
+    "designation": "Enrouleur 16 A 50 m",
+    "famille": "energie",
+    "marque_modele": "Voltis E50 (modèle fictif)",
+    "description": "Enrouleur électrique pour usage extérieur.",
+    "quantite": 30,
+    "caracteristiques": [
+      {
+        "libelle": "Longueur",
+        "valeur": "50 m"
+      },
+      {
+        "libelle": "Prises",
+        "valeur": "4 × 16 A"
+      }
+    ],
+    "poids_kg": 8,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 1
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 1.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 2
+      }
+    ],
+    "caution": 20,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "passe-cable",
+    "designation": "Passe-câble de sol 1 m",
+    "famille": "energie",
+    "marque_modele": "Securia PC1 (modèle fictif)",
+    "description": "Protection de câbles au sol, praticable par les piétons et les fauteuils roulants.",
+    "quantite": 40,
+    "caracteristiques": [
+      {
+        "libelle": "Canaux",
+        "valeur": "3"
+      },
+      {
+        "libelle": "Rampe",
+        "valeur": "Pente douce"
+      }
+    ],
+    "poids_kg": 9,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 1
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 1.5
+      },
+      {
+        "profil": "compagnie",
+        "jour": 2
+      }
+    ],
+    "caution": 15,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "praticable-2x1",
+    "designation": "Praticable 2 × 1 m",
+    "famille": "praticable",
+    "marque_modele": "Scenopro P21 (modèle fictif)",
+    "description": "Plateau de scène modulable, à poser sur pieds réglables.",
+    "quantite": 24,
+    "caracteristiques": [
+      {
+        "libelle": "Dimensions",
+        "valeur": "2 × 1 m"
+      },
+      {
+        "libelle": "Charge admissible",
+        "valeur": "750 kg/m²"
+      }
+    ],
+    "poids_kg": 32,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 6
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 9.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 12
+      }
+    ],
+    "caution": 100,
+    "prestation_technicien_requise": false,
+    "verification": {
+      "type": "Vérification annuelle des structures",
+      "echeance_jours": -26
+    }
+  },
+  {
+    "id": "pieds-praticable",
+    "designation": "Jeu de pieds réglables 40-80 cm",
+    "famille": "praticable",
+    "marque_modele": "Scenopro PR-80 (modèle fictif)",
+    "description": "Quatre pieds télescopiques pour un praticable.",
+    "quantite": 24,
+    "caracteristiques": [
+      {
+        "libelle": "Hauteur",
+        "valeur": "40 à 80 cm"
+      },
+      {
+        "libelle": "Nombre",
+        "valeur": "4 par jeu"
+      }
+    ],
+    "poids_kg": 6,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 2
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 3.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 4
+      }
+    ],
+    "caution": 30,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "escalier-praticable",
+    "designation": "Escalier 3 marches",
+    "famille": "praticable",
+    "marque_modele": "Scenopro E3 (modèle fictif)",
+    "description": "Escalier d'accès à la scène, avec main courante.",
+    "quantite": 4,
+    "caracteristiques": [
+      {
+        "libelle": "Hauteur",
+        "valeur": "60 cm"
+      },
+      {
+        "libelle": "Main courante",
+        "valeur": "Oui"
+      }
+    ],
+    "poids_kg": 18,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 4
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 6.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 8
+      }
+    ],
+    "caution": 60,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "garde-corps",
+    "designation": "Garde-corps 2 m",
+    "famille": "praticable",
+    "marque_modele": "Scenopro GC2 (modèle fictif)",
+    "description": "Garde-corps à fixer sur le bord d'un praticable de plus de 1 m de haut.",
+    "quantite": 12,
+    "caracteristiques": [
+      {
+        "libelle": "Longueur",
+        "valeur": "2 m"
+      },
+      {
+        "libelle": "Hauteur",
+        "valeur": "1 m"
+      }
+    ],
+    "poids_kg": 9,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 2
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 3.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 4
+      }
+    ],
+    "caution": 40,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "tapis-de-danse",
+    "designation": "Tapis de danse 10 × 1,6 m",
+    "famille": "praticable",
+    "marque_modele": "Dansol T10 (modèle fictif)",
+    "description": "Revêtement de sol pour la danse, noir mat, réversible blanc.",
+    "quantite": 8,
+    "caracteristiques": [
+      {
+        "libelle": "Dimensions",
+        "valeur": "10 × 1,6 m"
+      },
+      {
+        "libelle": "Usage",
+        "valeur": "Intérieur et extérieur sec"
+      }
+    ],
+    "poids_kg": 25,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 8
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 12.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 16
+      }
+    ],
+    "caution": 150,
+    "prestation_technicien_requise": false
+  },
+  {
+    "id": "jupe-de-scene",
+    "designation": "Jupe de scène noire 6 m",
+    "famille": "praticable",
+    "marque_modele": "Scenopro J6 (modèle fictif)",
+    "description": "Habillage du bord de scène, fixation par velcro.",
+    "quantite": 10,
+    "caracteristiques": [
+      {
+        "libelle": "Longueur",
+        "valeur": "6 m"
+      },
+      {
+        "libelle": "Hauteur",
+        "valeur": "80 cm"
+      }
+    ],
+    "poids_kg": 3,
+    "tarifs": [
+      {
+        "profil": "interne",
+        "jour": 0
+      },
+      {
+        "profil": "association",
+        "jour": 2
+      },
+      {
+        "profil": "commune-agglo",
+        "jour": 3.0
+      },
+      {
+        "profil": "compagnie",
+        "jour": 4
+      }
+    ],
+    "caution": 30,
+    "prestation_technicien_requise": false
+  }
+]

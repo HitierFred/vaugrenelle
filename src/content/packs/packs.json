@@ -1,0 +1,170 @@
+[
+  {
+    "id": "sono-petite-jauge",
+    "nom": "Sono petite jauge",
+    "usage": "Discours, assemblée générale, animation de quartier.",
+    "jauge_indicative": 150,
+    "composition": [
+      {
+        "materiel": "enceinte-amplifiee-12",
+        "quantite": 2
+      },
+      {
+        "materiel": "pied-enceinte",
+        "quantite": 2
+      },
+      {
+        "materiel": "console-numerique-16",
+        "quantite": 1
+      },
+      {
+        "materiel": "micro-dynamique",
+        "quantite": 2
+      },
+      {
+        "materiel": "micro-hf",
+        "quantite": 1
+      }
+    ]
+  },
+  {
+    "id": "sono-plein-air",
+    "nom": "Sono plein air",
+    "usage": "Concert ou bal en extérieur.",
+    "jauge_indicative": 800,
+    "composition": [
+      {
+        "materiel": "enceinte-amplifiee-12",
+        "quantite": 4
+      },
+      {
+        "materiel": "caisson-basses-18",
+        "quantite": 2
+      },
+      {
+        "materiel": "pied-enceinte",
+        "quantite": 4
+      },
+      {
+        "materiel": "console-numerique-16",
+        "quantite": 1
+      },
+      {
+        "materiel": "retour-de-scene",
+        "quantite": 2
+      },
+      {
+        "materiel": "micro-dynamique",
+        "quantite": 4
+      }
+    ]
+  },
+  {
+    "id": "lumiere-scene",
+    "nom": "Éclairage de scène",
+    "usage": "Éclairer une scène de 6 × 4 m pour un spectacle ou un concert.",
+    "jauge_indicative": 300,
+    "composition": [
+      {
+        "materiel": "par-led",
+        "quantite": 8
+      },
+      {
+        "materiel": "decoupe-led",
+        "quantite": 4
+      },
+      {
+        "materiel": "projecteur-led-200",
+        "quantite": 4
+      },
+      {
+        "materiel": "pont-alu-3m",
+        "quantite": 4
+      },
+      {
+        "materiel": "console-lumiere",
+        "quantite": 1
+      }
+    ]
+  },
+  {
+    "id": "guinguette",
+    "nom": "Guinguette",
+    "usage": "Buvette et bal populaire en soirée.",
+    "jauge_indicative": 200,
+    "composition": [
+      {
+        "materiel": "guirlande-guinguette",
+        "quantite": 4
+      },
+      {
+        "materiel": "enceinte-batterie",
+        "quantite": 2
+      },
+      {
+        "materiel": "barnum-3x3",
+        "quantite": 2
+      },
+      {
+        "materiel": "enrouleur-16a",
+        "quantite": 2
+      }
+    ]
+  },
+  {
+    "id": "cinema-plein-air",
+    "nom": "Cinéma plein air",
+    "usage": "Projection en extérieur à la nuit tombée.",
+    "jauge_indicative": 500,
+    "composition": [
+      {
+        "materiel": "videoprojecteur-10000",
+        "quantite": 1
+      },
+      {
+        "materiel": "ecran-cadre-6m",
+        "quantite": 1
+      },
+      {
+        "materiel": "enceinte-amplifiee-12",
+        "quantite": 2
+      },
+      {
+        "materiel": "caisson-basses-18",
+        "quantite": 1
+      },
+      {
+        "materiel": "console-numerique-16",
+        "quantite": 1
+      }
+    ]
+  },
+  {
+    "id": "scene-6x4",
+    "nom": "Scène 6 × 4 m",
+    "usage": "Petite scène extérieure avec escalier et habillage.",
+    "jauge_indicative": 300,
+    "composition": [
+      {
+        "materiel": "praticable-2x1",
+        "quantite": 12
+      },
+      {
+        "materiel": "pieds-praticable",
+        "quantite": 12
+      },
+      {
+        "materiel": "escalier-praticable",
+        "quantite": 1
+      },
+      {
+        "materiel": "garde-corps",
+        "quantite": 4
+      },
+      {
+        "materiel": "jupe-de-scene",
+        "quantite": 3
+      }
+    ]
+  }
+]

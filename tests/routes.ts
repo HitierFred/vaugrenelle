@@ -3,4 +3,5 @@
 export const ROUTES: { path: string; name: string }[] = [
   { path: './', name: 'Accueil' },
   { path: 'demo/composants/', name: 'Composants du design system' },
+  { path: 'demo/donnees/', name: 'Contrôle des données fictives' },
 ];

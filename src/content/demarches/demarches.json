@@ -1,0 +1,113 @@
+[
+  {
+    "id": "organiser-un-evenement",
+    "titre": "Organiser un événement",
+    "categorie": "evenements",
+    "resume": "Un seul dossier pour toutes les autorisations : occupation de l'espace public, buvette, sonorisation, fermeture de voie et prêt de matériel.",
+    "delai_indicatif": "Déposez votre dossier au moins 30 jours avant l'événement. Réponse sous 6 jours en moyenne.",
+    "pieces": [
+      "Statuts de l'association",
+      "Attestation d'assurance responsabilité civile",
+      "Plan d'implantation"
+    ],
+    "en_ligne": true
+  },
+  {
+    "id": "occuper-le-domaine-public",
+    "titre": "Occuper le domaine public",
+    "categorie": "domaine-public",
+    "resume": "Terrasse, étalage, échafaudage ou vente ambulante : demandez une autorisation et connaissez le montant de la redevance avant de déposer.",
+    "delai_indicatif": "15 jours avant l'occupation.",
+    "pieces": [
+      "Plan de l'emprise",
+      "Attestation d'assurance responsabilité civile",
+      "Extrait Kbis ou avis de situation SIRENE"
+    ],
+    "en_ligne": true
+  },
+  {
+    "id": "debit-de-boissons-temporaire",
+    "titre": "Ouvrir une buvette temporaire",
+    "categorie": "evenements",
+    "resume": "Les associations peuvent ouvrir jusqu'à 5 buvettes temporaires par an. Le quota restant est affiché dans votre compte.",
+    "delai_indicatif": "15 jours avant la manifestation.",
+    "pieces": ["Statuts de l'association"],
+    "en_ligne": true
+  },
+  {
+    "id": "subvention-associative",
+    "titre": "Demander une subvention",
+    "categorie": "associations",
+    "resume": "Déposez votre demande de subvention de fonctionnement ou de projet. La campagne annuelle ouvre en septembre.",
+    "delai_indicatif": "Campagne annuelle : du 1er septembre au 31 octobre.",
+    "pieces": [
+      "Statuts de l'association",
+      "Budget prévisionnel",
+      "Relevé d'identité bancaire",
+      "Dernier rapport d'activité"
+    ],
+    "en_ligne": true
+  },
+  {
+    "id": "demande-de-tournage",
+    "titre": "Tourner un film dans la ville",
+    "categorie": "culture",
+    "resume": "Long métrage, documentaire ou clip : déclarez votre tournage et réservez les emplacements de stationnement de vos véhicules techniques.",
+    "delai_indicatif": "10 jours avant le tournage.",
+    "pieces": [
+      "Note d'intention",
+      "Plan de tournage",
+      "Attestation d'assurance responsabilité civile"
+    ],
+    "en_ligne": true
+  },
+  {
+    "id": "signaler-un-probleme",
+    "titre": "Signaler un problème dans la rue",
+    "categorie": "cadre-de-vie",
+    "resume": "Nid-de-poule, lampadaire éteint, dépôt sauvage : signalez-le avec une photo et suivez sa prise en charge.",
+    "delai_indicatif": "Prise en charge sous 72 heures.",
+    "pieces": [],
+    "en_ligne": true
+  },
+  {
+    "id": "pret-de-materiel",
+    "titre": "Emprunter du matériel municipal",
+    "categorie": "evenements",
+    "resume": "Son, lumière, structures, praticables : réservez le matériel de la Régie partagée, avec ou sans livraison et technicien.",
+    "delai_indicatif": "21 jours avant le retrait.",
+    "pieces": ["Attestation d'assurance responsabilité civile"],
+    "en_ligne": true
+  },
+  {
+    "id": "creer-une-association",
+    "titre": "Déclarer une nouvelle association",
+    "categorie": "associations",
+    "resume": "Faites connaître votre association à la Ville pour accéder aux salles, au matériel et aux subventions.",
+    "delai_indicatif": "Inscription à l'annuaire sous 7 jours.",
+    "pieces": ["Statuts de l'association", "Récépissé de déclaration en préfecture"],
+    "en_ligne": true
+  },
+  {
+    "id": "reserver-une-salle-municipale",
+    "titre": "Réserver une salle municipale",
+    "categorie": "associations",
+    "resume": "Salles de réunion et salles des fêtes, réservées en priorité aux associations de Vaugrenelle.",
+    "delai_indicatif": "30 jours avant l'utilisation.",
+    "pieces": ["Attestation d'assurance responsabilité civile"],
+    "en_ligne": false
+  },
+  {
+    "id": "accueil-de-compagnie",
+    "titre": "Accueillir une compagnie en résidence",
+    "categorie": "culture",
+    "resume": "Les compagnies de spectacle vivant peuvent candidater à une résidence de création à La Filature.",
+    "delai_indicatif": "Appel à candidatures deux fois par an.",
+    "pieces": [
+      "Dossier artistique",
+      "Fiche technique du spectacle",
+      "Extrait Kbis ou avis de situation SIRENE"
+    ],
+    "en_ligne": false
+  }
+]

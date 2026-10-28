@@ -115,3 +115,77 @@ Les pages indexables portent `data-pagefind-body` sur `<main>`. Avec `noindex`, 
 ### Liens vers des pages futures
 
 L'en-tête et le pied de page pointent vers les routes prévues au § 5 (`/sortir/agenda/`, `/agir/`, `/regie/`…). Ces liens mènent à une 404 jusqu'à la phase concernée.
+
+---
+
+## 2026-10-28 — Phase 2 : données fictives
+
+### Dates relatives à la date du build
+
+Le brief demande des événements « sur les 3 mois à venir à partir de la date du build ». Toutes les dates des contenus sont donc saisies en **décalage de jours** par rapport à une date de référence (`src/lib/reference-date.ts`) :
+
+| Collection   | Champ saisi                                                           | Champs calculés                   |
+| ------------ | --------------------------------------------------------------------- | --------------------------------- |
+| Événements   | `quand: { jour }` ou `quand: { festival_jour }`, `heure`, `duree_min` | `debut`, `fin`, `festival`        |
+| Matériel     | `verification.echeance_jours` (négatif = dépassée)                    | `verification.prochaine_echeance` |
+| Réservations | `jour_debut`, `jour_fin`                                              | `debut`, `fin`                    |
+| Actualités   | `publie_jour` (négatif)                                               | `date`                            |
+
+- La référence est la date du jour à Paris. `VG_DATE_REFERENCE=AAAA-MM-JJ` la surcharge pour un build reproductible.
+- Les heures sont des heures de Paris, avec gestion des changements d'heure.
+- **[Écart]** Le champ `festival` du brief n'est pas saisi : il est déduit de `quand.festival_jour`, ce qui rend toute incohérence impossible.
+
+### Conversion à la lecture, pas dans le schéma
+
+Une première version convertissait les dates dans le `transform` Zod. **Problème constaté** : Astro met en cache le résultat des collections (`node_modules/.astro/data-store.json`) tant que les fichiers source ne changent pas. Un build local fait un autre jour aurait donc gardé des dates périmées.
+
+Solution retenue : les schémas gardent les décalages bruts, et `src/lib/content.ts` (`getEvenements()`, `getMateriel()`, `getReservations()`, `getActualites()`) calcule les dates à chaque lecture.
+
+Une règle ESLint (`no-restricted-syntax`) interdit `getCollection`/`getEntry` sur ces quatre collections en dehors de `src/lib/content.ts`. Écarté : invalider le cache via la configuration Astro. C'est inopérant, car l'empreinte de configuration ne couvre pas `vite.define`.
+
+### Festival « Les Échappées »
+
+**[Écart avec le cahier des charges]** Le CDC situe le festival en été, sur 4 jours. Pour respecter le brief (12 événements dans les 3 mois à venir), il dure bien **4 jours, du jeudi au dimanche**, mais il commence le premier jeudi situé au moins 42 jours après la date du build. Il tombe ainsi toujours dans la fenêtre de l'agenda, en laissant 6 semaines d'événements « de saison » avant lui. Les événements hors festival évitent les jours 40 à 52.
+
+### Rebuild hebdomadaire
+
+La CI reconstruit et redéploie le site chaque lundi à 4 h UTC (`schedule` dans `ci.yml`), pour que le site en ligne reste dans sa fenêtre de 3 mois.
+
+### Lieux : 7 au lieu de 6
+
+Le brief liste 6 lieux, mais le CDC (§ 1.2) et la page P2 `/regie/sites-equipes/` parlent de **4 sites équipés** de l'espace public. J'ai ajouté l'**esplanade de la Gare** : elle n'a que 12 kVA, ce qui sert aussi au scénario de dépassement électrique de la phase 5. Les coordonnées sont exprimées dans un repère 1000 × 700, celui de la future carte SVG.
+
+### Identifiants
+
+- Les entrées Markdown (événements, actualités) prennent comme identifiant le nom du fichier, qui sert de `slug`.
+- Les entrées JSON (lieux, matériel, packs, démarches, réservations) portent un champ `id`, imposé par le chargeur `file()` d'Astro, qui tient lieu de `slug`.
+- Le schéma impose minuscules et tirets.
+
+### Champs ajoutés au brief
+
+- Événements : `duree_min`, nécessaire pour calculer `fin`.
+- Démarches : `resume`, pour le catalogue avec recherche ; `categorie` est une énumération.
+- Actualités : `rubrique`.
+- Matériel : `famille` est une énumération des 6 familles, au lieu d'un texte libre.
+
+### Contrôles d'intégrité au build
+
+Zod valide chaque entrée. Les règles qui croisent les collections sont dans `src/lib/data-checks.ts`, exécuté par la page `/demo/donnees/` (non indexée). **Le build échoue** si un contrôle bloquant n'est pas respecté :
+
+- volumes minimum ;
+- événements dans la fenêtre de 3 mois et festival cohérent ;
+- références de lieux et de matériel existantes ;
+- quantités des packs au plus égales au stock ;
+- réservations jamais supérieures au stock un même jour ;
+- au moins 2 échéances de vérification proches et 1 dépassée ;
+- 4 sites publics alimentés ;
+- au moins 3 événements dans les 7 prochains jours.
+
+Le build a été validé avec 8 dates de référence (changements d'heure, passage d'année, année bissextile).
+
+### Scénarios préparés pour les phases suivantes (données seulement)
+
+- **Indisponibilité** : l'enceinte 12 pouces est entièrement réservée pendant le festival (5 + 3 sur 8).
+- **Hors service** : le praticable 2 × 1 m a une vérification dépassée de 26 jours, et il figure dans le pack « Scène 6 × 4 m ».
+- **Échéances proches** : tour de levage à J+9, palan électrique à J+21.
+- **Dépassement électrique** : l'esplanade de la Gare n'a que 12 kVA, et les packs son et lumière, plus le mur LED, dépassent largement cette puissance.

@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  # Reconstruction hebdomadaire : les dates fictives sont relatives à la date du build
+  schedule:
+    - cron: '0 4 * * 1'
 
 permissions:
   contents: read
@@ -38,7 +41,7 @@ jobs:
           path: playwright-report/
           retention-days: 7
       - name: Artefact GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist/
@@ -46,7 +49,7 @@ jobs:
   deploy:
     name: Déploiement GitHub Pages
     needs: ci
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       pages: write

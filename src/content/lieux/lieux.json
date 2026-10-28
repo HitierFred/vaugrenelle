@@ -1,0 +1,82 @@
+[
+  {
+    "id": "filature-chapiteau",
+    "nom": "La Filature — chapiteau",
+    "type": "chapiteau",
+    "adresse": "12 rue des Fileuses, 00100 Vaugrenelle",
+    "coords": { "x": 640, "y": 220 },
+    "jauge": 900,
+    "accessibilite": "Plain-pied. 12 emplacements pour fauteuils roulants en bas de gradin. Boucle magnétique. Toilettes adaptées dans le bâtiment d'accueil.",
+    "alimentations": [
+      { "puissance_kva": 120, "prises": "1 × P17 125 A tétra, 4 × P17 32 A tétra" }
+    ],
+    "accroches": { "nombre": 24, "charge_max_kg": 500 }
+  },
+  {
+    "id": "filature-halle-a",
+    "nom": "La Filature — halle A",
+    "type": "salle",
+    "adresse": "12 rue des Fileuses, 00100 Vaugrenelle",
+    "coords": { "x": 690, "y": 260 },
+    "jauge": 600,
+    "accessibilite": "Plain-pied. Configuration modulable : places pour fauteuils roulants au premier rang. Toilettes adaptées.",
+    "alimentations": [{ "puissance_kva": 90, "prises": "2 × P17 63 A tétra, 6 × 16 A mono" }],
+    "accroches": { "nombre": 40, "charge_max_kg": 750 }
+  },
+  {
+    "id": "theatre-jean-vilar",
+    "nom": "Théâtre Jean-Vilar",
+    "type": "salle",
+    "adresse": "3 place du Théâtre, 00100 Vaugrenelle",
+    "coords": { "x": 430, "y": 330 },
+    "jauge": 520,
+    "accessibilite": "Entrée accessible par la rue Molière. 8 places pour fauteuils roulants au parterre. Boucle magnétique. Séances en audiodescription sur certaines dates.",
+    "alimentations": [{ "puissance_kva": 150, "prises": "Puissance scène : 1 × P17 125 A tétra" }],
+    "accroches": { "nombre": 32, "charge_max_kg": 400 }
+  },
+  {
+    "id": "place-de-la-halle",
+    "nom": "Place de la Halle",
+    "type": "espace-public",
+    "adresse": "Place de la Halle, 00100 Vaugrenelle",
+    "coords": { "x": 380, "y": 410 },
+    "jauge": 3000,
+    "accessibilite": "Sol pavé plat. Zone réservée aux personnes à mobilité réduite côté rue de la Monnaie. Toilettes adaptées sous la halle.",
+    "alimentations": [
+      { "puissance_kva": 36, "prises": "2 × P17 32 A tétra (bornes escamotables)" },
+      { "puissance_kva": 12, "prises": "4 × 16 A mono" }
+    ],
+    "accroches": { "nombre": 8, "charge_max_kg": 250 }
+  },
+  {
+    "id": "quai-des-teinturiers",
+    "nom": "Quai des Teinturiers",
+    "type": "espace-public",
+    "adresse": "Quai des Teinturiers, 00100 Vaugrenelle",
+    "coords": { "x": 520, "y": 520 },
+    "jauge": 1500,
+    "accessibilite": "Quai en enrobé, accès par rampe depuis le pont Neuf. Pas d'ombre en journée.",
+    "alimentations": [{ "puissance_kva": 18, "prises": "1 × P17 32 A tétra, 2 × 16 A mono" }],
+    "accroches": { "nombre": 4, "charge_max_kg": 150 }
+  },
+  {
+    "id": "parc-brossard",
+    "nom": "Parc Brossard",
+    "type": "espace-public",
+    "adresse": "Avenue du Parc, 00100 Vaugrenelle",
+    "coords": { "x": 200, "y": 250 },
+    "jauge": 4000,
+    "accessibilite": "Allées stabilisées. Pelouse non praticable en fauteuil par temps de pluie. Toilettes adaptées à l'entrée nord.",
+    "alimentations": [{ "puissance_kva": 24, "prises": "1 × P17 32 A tétra, 4 × 16 A mono" }]
+  },
+  {
+    "id": "esplanade-de-la-gare",
+    "nom": "Esplanade de la Gare",
+    "type": "espace-public",
+    "adresse": "Esplanade de la Gare, 00100 Vaugrenelle",
+    "coords": { "x": 820, "y": 470 },
+    "jauge": 1200,
+    "accessibilite": "Plain-pied, sol béton. Arrêt de bus accessible à 30 mètres.",
+    "alimentations": [{ "puissance_kva": 12, "prises": "2 × 16 A mono (coffret de distribution)" }]
+  }
+]
