@@ -2,7 +2,7 @@
 
 Résultats datés des audits du démonstrateur, mesurés sur le **site déployé** (GitHub Pages, fichiers compressés) : https://hitierfred.github.io/vaugrenelle/
 
-Date des mesures : **28 octobre 2026**, après la refonte graphique « affiche de rue » (photos AVIF, police de titres Anton). Données brutes : `docs/audit/mesures.json`, `docs/audit/lighthouse.json` et `docs/audit/lighthouse/*.json`.
+Date des mesures : **28 octobre 2026**, après la refonte institutionnelle (DM Serif Display, photos de la ville en AVIF, rubrique Habiter).
 
 ## Synthèse des critères du brief (§ 8)
 
@@ -14,10 +14,10 @@ Date des mesures : **28 octobre 2026**, après la refonte graphique « affiche d
 | Accessibilité   | Un seul `h1`, `lang="fr"`, `title` unique                                         | Vérifié sur les 88 pages construites                                                             | ✅                        |
 | Accessibilité   | Libellés visibles, erreurs reliées, résumé focalisé                               | Tests Guichet et Régie                                                                           | ✅                        |
 | Sans JavaScript | Pages de contenu lisibles et navigables                                           | 9 pages testées sans JavaScript                                                                  | ✅                        |
-| Poids           | Médiane < 500 Ko, aucune page > 1 Mo                                              | Médiane **68,9 Ko**, maximum **200,7 Ko**                                                        | ✅                        |
-| Requêtes        | < 25 par page                                                                     | Maximum **10**                                                                                   | ✅                        |
-| Performance     | Lighthouse mobile : Perf ≥ 95, Accessibilité 100, Bonnes pratiques ≥ 95, SEO ≥ 95 | **100 / 100 / 100 / 100** sur les 12 pages P1 mesurées                                           | ✅                        |
-| Écoconception   | EcoIndex A ou B sur les pages P1                                                  | **A ou B sur les 21 pages** (16 A, 5 B)                                                          | ✅                        |
+| Poids           | Médiane < 500 Ko, aucune page > 1 Mo                                              | Médiane **77,4 Ko**, maximum **336,9 Ko**                                                        | ✅                        |
+| Requêtes        | < 25 par page                                                                     | Maximum **11**                                                                                   | ✅                        |
+| Performance     | Lighthouse mobile : Perf ≥ 95, Accessibilité 100, Bonnes pratiques ≥ 95, SEO ≥ 95 | **99–100 / 100 / 100 / 100** sur les 12 pages P1 mesurées                                        | ✅                        |
+| Écoconception   | EcoIndex A ou B sur les pages P1                                                  | **A ou B sur les 23 pages** (18 A, 5 B)                                                          | ✅                        |
 | Responsive      | 320 à 1 440 px sans défilement horizontal, zoom 200 %                             | 5 largeurs × 21 pages, plus mise en page à 640 px (zoom 200 % d'un écran de 1 280 px)            | ✅                        |
 | Tiers           | 0 requête vers un domaine externe                                                 | Vérifié sur chaque page                                                                          | ✅                        |
 

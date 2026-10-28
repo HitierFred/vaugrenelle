@@ -4,13 +4,13 @@
     {
       "indicateur": "Violations axe-core (tous niveaux)",
       "valeur": "0",
-      "detail": "24 audits automatisés : 21 pages, puis les parcours du Guichet et de la Régie à chaque étape, et les coulisses remplies",
+      "detail": "26 audits automatisés : 23 pages, puis les parcours du Guichet et de la Régie à chaque étape, et les coulisses remplies",
       "date": "2026-10-28",
       "source": "Tests Playwright et @axe-core/playwright, exécutés à chaque intégration continue"
     },
     {
       "indicateur": "Tests de parcours automatisés",
-      "valeur": "167",
+      "valeur": "177",
       "detail": "Navigation, filtres, Guichet Unique (dont pièce expirée et conflit de date), Régie (dont indisponibilité et dépassement électrique), coulisses, liens internes, responsive de 320 à 1 440 px, focus clavier, lisibilité sans JavaScript",
       "date": "2026-10-28",
       "source": "Playwright"
@@ -24,22 +24,22 @@
     },
     {
       "indicateur": "Score Lighthouse (mobile)",
-      "valeur": "100 / 100 / 100 / 100",
-      "detail": "Performance, accessibilité, bonnes pratiques et SEO, identiques sur les 12 pages principales mesurées",
+      "valeur": "99–100 / 100 / 100 / 100",
+      "detail": "Performance, accessibilité, bonnes pratiques et SEO sur les 12 pages principales mesurées",
       "date": "2026-10-28",
       "source": "Lighthouse 13.6.0, profil mobile, site déployé"
     },
     {
       "indicateur": "EcoIndex des pages principales",
       "valeur": "A ou B",
-      "detail": "16 pages en A, 5 en B, sur 21 pages mesurées (objectif : A ou B)",
+      "detail": "18 pages en A, 5 en B, sur 23 pages mesurées (objectif : A ou B)",
       "date": "2026-10-28",
       "source": "Formule ouverte EcoIndex (GreenIT), site déployé"
     },
     {
       "indicateur": "Poids médian transféré",
-      "valeur": "69 Ko",
-      "detail": "Maximum 200,7 Ko avec une photo, 10 requêtes au plus (objectifs : moins de 500 Ko, 1 Mo et 25 requêtes)",
+      "valeur": "77 Ko",
+      "detail": "Maximum 337 Ko avec ses photos, 11 requêtes au plus (objectifs : moins de 500 Ko, 1 Mo et 25 requêtes)",
       "date": "2026-10-28",
       "source": "Playwright, octets transférés compressés, site déployé"
     }
