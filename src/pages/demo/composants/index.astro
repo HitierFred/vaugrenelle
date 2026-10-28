@@ -88,12 +88,8 @@ const dispo: Record<string, number> = {
       <ul class="demo-swatches">
         {swatches.map(([token, label]) => (
           <li>
-            <span class="demo-swatch" style={`background: var(${token})`} />
-            <span>
-              <strong>{label}</strong>
-              <br />
-              <code>{token}</code>
-            </span>
+            <strong style={`--swatch: var(${token})`}>{label}</strong>
+            <code>{token}</code>
           </li>
         ))}
       </ul>
@@ -335,18 +331,10 @@ const dispo: Record<string, number> = {
         l'en-tête, onglet actif, bande des cartes.
       </p>
       <div class="demo-themes">
-        <div class="demo-theme">
-          <span>Commun</span>
-        </div>
-        <div class="demo-theme theme-filature">
-          <span>La Filature</span>
-        </div>
-        <div class="demo-theme theme-theatre">
-          <span>Théâtre Jean-Vilar</span>
-        </div>
-        <div class="demo-theme theme-festival">
-          <span>Les Échappées</span>
-        </div>
+        <div class="demo-theme">Commun</div>
+        <div class="demo-theme theme-filature">La Filature</div>
+        <div class="demo-theme theme-theatre">Théâtre Jean-Vilar</div>
+        <div class="demo-theme theme-festival">Les Échappées</div>
       </div>
     </section>
   </div>
@@ -361,18 +349,26 @@ const dispo: Record<string, number> = {
     list-style: none;
 
     & li {
-      display: flex;
-      gap: var(--sp-3);
-      align-items: center;
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      column-gap: var(--sp-3);
       font-size: var(--fs-300);
     }
-  }
-  .demo-swatch {
-    flex: none;
-    width: 3rem;
-    height: 3rem;
-    border: 1px solid var(--c-line-strong);
-    border-radius: var(--radius-s);
+    & strong,
+    & code {
+      grid-column: 2;
+    }
+    /* Pastille de couleur dessinée en CSS */
+    & strong::before {
+      content: '';
+      position: absolute;
+      width: 3rem;
+      height: 3rem;
+      margin-inline-start: calc(-3rem - var(--sp-3));
+      background: var(--swatch);
+      border: 1px solid var(--c-line-strong);
+      border-radius: var(--radius-s);
+    }
   }
   .demo-themes {
     display: grid;

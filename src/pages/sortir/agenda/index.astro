@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import AgendaFilters from '../../../components/islands/AgendaFilters.astro';
-import EventCard from '../../../components/ui/EventCard.astro';
+import EventRow from '../../../components/ui/EventRow.astro';
 import PageLayout from '../../../layouts/PageLayout.astro';
 import { getEvenements } from '../../../lib/content';
 import { DISCIPLINES, eventUrlPath, zoneColorFor } from '../../../lib/labels';
@@ -34,7 +34,7 @@ for (const e of evenements) {
     {[...groups].map(([month, items], gi) => (
       <section class="agenda-month" data-group aria-labelledby={`mois-${gi}`}>
         <h2 id={`mois-${gi}`}>{month}</h2>
-        <ul class="grid-cards">
+        <ul class="event-list">
           {items.map((e) => (
             <li
               data-event
@@ -46,17 +46,15 @@ for (const e of evenements) {
               data-festival={String(e.data.festival)}
               data-acces={e.data.accessibilite.join(' ')}
             >
-              <EventCard
+              <EventRow
                 titre={e.data.titre}
                 href={url(eventUrlPath(e.id))}
                 debut={e.data.debut}
                 lieu={nomLieu.get(e.data.lieu.id) ?? ''}
                 discipline={DISCIPLINES[e.data.discipline]}
-                compagnie={e.data.compagnie}
                 gratuit={e.data.gratuit}
                 accessibilite={e.data.accessibilite}
                 zoneColor={zoneColorFor(e.data.lieu.id, e.data.festival)}
-                headingLevel={3}
               />
             </li>
           ))}

@@ -1,0 +1,37 @@
+---
+// Ligne d'agenda compacte : même information qu'une carte, DOM réduit (écoconception)
+import type { Accessibilite } from './types';
+import { ACCESSIBILITE } from '../../lib/labels';
+import { formatDate, formatDayMonth, formatTime } from '../../lib/format';
+
+interface Props {
+  titre: string;
+  href: string;
+  debut: Date;
+  lieu: string;
+  discipline: string;
+  gratuit: boolean;
+  accessibilite: Accessibilite[];
+  zoneColor?: string;
+}
+
+const { titre, href, debut, lieu, discipline, gratuit, accessibilite, zoneColor } = Astro.props;
+const d = formatDayMonth(debut);
+const tags = [gratuit ? 'Gratuit' : 'Payant', ...accessibilite.map((a) => ACCESSIBILITE[a].court)];
+---
+
+<article class="event-row" style={zoneColor ? `--c-card-accent: ${zoneColor}` : undefined}>
+  <time class="event-row__date" datetime={debut.toISOString()} title={formatDate(debut)}>
+    {d.weekday} <b>{d.day}</b>
+    {d.month}
+  </time>
+  <div class="event-row__body">
+    <h3 class="event-row__title">
+      <a href={href}>{titre}</a>
+    </h3>
+    <p>
+      {formatTime(debut)} · {lieu} · {discipline}
+    </p>
+    <p class="event-row__tags">{tags.join(' · ')}</p>
+  </div>
+</article>

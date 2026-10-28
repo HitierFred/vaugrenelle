@@ -472,13 +472,22 @@
         display: none;
       }
 
-      & .icon {
+      /* Chevron en CSS : aucun élément ajouté au DOM */
+      &::after {
+        content: '';
+        flex: none;
+        width: 0.6em;
+        height: 0.6em;
+        margin-inline-end: 0.3em;
+        border-inline-end: 2px solid currentColor;
+        border-block-end: 2px solid currentColor;
+        transform: translateY(-25%) rotate(45deg);
         transition: transform 0.2s;
       }
     }
 
-    &[open] summary .icon {
-      transform: rotate(180deg);
+    &[open] summary::after {
+      transform: translateY(25%) rotate(-135deg);
     }
   }
   .accordion__body {
@@ -648,24 +657,14 @@
       padding: var(--sp-1);
       border: 1px solid var(--c-line);
       vertical-align: top;
-      font-size: var(--fs-300);
+      font-size: 0.8rem;
+      line-height: 1.2;
     }
   }
   .calendar__day {
     display: block;
     font-weight: 700;
-  }
-  .calendar__state {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    font-size: 0.8rem;
-    line-height: 1.2;
-
-    & .icon {
-      width: 1em;
-      height: 1em;
-    }
+    font-size: var(--fs-300);
   }
   .calendar td[data-state='libre'] {
     background: var(--c-success-bg);
@@ -1546,5 +1545,82 @@
       align-items: center;
       min-height: var(--target-min);
     }
+  }
+}
+
+@layer components {
+  /* ---------- Listes compactes (agenda, catalogue) ---------- */
+  .event-list,
+  .materiel-list {
+    display: grid;
+    padding: 0;
+    list-style: none;
+    border-block-start: 1px solid var(--c-line);
+
+    & > li {
+      max-width: none;
+      border-block-end: 1px solid var(--c-line);
+    }
+  }
+  .event-row {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: var(--sp-4);
+    padding-block: var(--sp-4);
+
+    & p {
+      font-size: var(--fs-300);
+    }
+  }
+  .event-row__date {
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    padding: var(--sp-2);
+    background: var(--c-ink);
+    color: var(--c-paper);
+    border-block-end: 4px solid var(--c-card-accent, var(--c-zone));
+    border-radius: var(--radius-s);
+    font-size: var(--fs-300);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.2;
+
+    & b {
+      font-size: var(--fs-600);
+      line-height: 1;
+    }
+  }
+  .event-row__body {
+    display: grid;
+    gap: var(--sp-1);
+  }
+  .event-row__title {
+    font-size: var(--fs-500);
+  }
+  .event-row__tags {
+    color: var(--c-muted);
+  }
+  .materiel-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--sp-1) var(--sp-4);
+    align-items: center;
+    padding-block: var(--sp-3);
+
+    & > p {
+      grid-column: 1;
+      font-size: var(--fs-300);
+    }
+    & > [data-badge] {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+    }
+  }
+  .materiel-row__title {
+    font-size: var(--fs-400);
+  }
+  .materiel-row__details {
+    color: var(--c-muted);
   }
 }

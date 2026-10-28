@@ -1,7 +1,6 @@
 ---
 // Calendrier mensuel de disponibilité + alternative en tableau par période.
 // Chaque case porte un texte et une icône : la couleur n'est jamais seule.
-import Icon from './Icon.astro';
 
 interface Props {
   year: number;
@@ -11,9 +10,18 @@ interface Props {
   availability: Record<string, number>;
   title?: string;
   from?: string; // AAAA-MM-JJ : les jours antérieurs sont affichés comme passés
+  legend?: boolean; // une seule légende quand plusieurs mois se suivent
 }
 
-const { year, month, total, availability, title = 'Disponibilités', from } = Astro.props;
+const {
+  year,
+  month,
+  total,
+  availability,
+  title = 'Disponibilités',
+  from,
+  legend = true,
+} = Astro.props;
 
 type DayState = 'libre' | 'partiel' | 'complet' | 'passe';
 interface Day {
@@ -38,6 +46,17 @@ const days: Day[] = Array.from({ length: daysInMonth }, (_, i) => {
 
 const cells: (Day | null)[] = [...Array(offset).fill(null), ...days];
 while (cells.length % 7) cells.push(null);
+// Cases vides consécutives fusionnées (moins d'éléments dans le DOM)
+function groupBlanks(week: (Day | null)[]): (Day | { blank: number })[] {
+  const out: (Day | { blank: number })[] = [];
+  for (const d of week) {
+    const last = out.at(-1);
+    if (d) out.push(d);
+    else if (last && 'blank' in last) last.blank++;
+    else out.push({ blank: 1 });
+  }
+  return out;
+}
 const weeks = Array.from({ length: cells.length / 7 }, (_, w) => cells.slice(w * 7, w * 7 + 7));
 
 const monthName = new Intl.DateTimeFormat('fr-FR', { month: 'long', timeZone: 'UTC' }).format(
@@ -59,7 +78,6 @@ const stateText: Record<DayState, string> = {
   complet: 'Complet',
   passe: 'Passé',
 };
-const stateIcon = { libre: 'check', partiel: 'alert', complet: 'error', passe: 'minus' } as const;
 
 // Regroupe les jours consécutifs de même disponibilité pour le tableau
 const periods: { from: number; to: number; dispo: number; state: DayState }[] = [];
@@ -86,24 +104,21 @@ const caption = `${title} — ${monthName} ${year}`;
     <tbody>
       {weeks.map((week) => (
         <tr>
-          {week.map((d) =>
-            d ? (
-              <td data-state={d.state}>
-                <span class="calendar__day">{d.day}</span>
-                <span class="calendar__state">
-                  <Icon name={stateIcon[d.state]} />
-                  {d.state === 'passe' ? (
-                    <span class="calendar__label">{stateText[d.state]}</span>
-                  ) : (
-                    <span>
-                      {d.dispo}/{total}
-                      <span class="calendar__label"> {stateText[d.state]}</span>
-                    </span>
-                  )}
-                </span>
-              </td>
+          {groupBlanks(week).map((cell) =>
+            'blank' in cell ? (
+              <td data-outside colspan={cell.blank > 1 ? cell.blank : undefined} />
             ) : (
-              <td data-outside />
+              <td data-state={cell.state}>
+                <b class="calendar__day">{cell.day}</b>
+                {cell.state === 'passe' ? (
+                  stateText[cell.state]
+                ) : (
+                  <>
+                    {cell.dispo}/{total}
+                    <span class="calendar__label"> {stateText[cell.state]}</span>
+                  </>
+                )}
+              </td>
             ),
           )}
         </tr>
@@ -111,22 +126,23 @@ const caption = `${title} — ${monthName} ${year}`;
     </tbody>
   </table>
 
-  <ul class="calendar-legend" aria-label="Légende">
-    <li class="cluster">
-      <Icon name="check" /> Libre : tout le parc est disponible
-    </li>
-    <li class="cluster">
-      <Icon name="alert" /> Partiel : une partie est réservée
-    </li>
-    <li class="cluster">
-      <Icon name="error" /> Complet : rien n'est disponible
-    </li>
-  </ul>
+  {legend && (
+    <ul class="calendar-legend" aria-label="Légende">
+      <li>
+        <strong>Libre</strong> : tout le parc est disponible
+      </li>
+      <li>
+        <strong>Partiel</strong> : une partie est réservée
+      </li>
+      <li>
+        <strong>Complet</strong> : rien n'est disponible
+      </li>
+    </ul>
+  )}
 
   <details class="accordion">
     <summary>
       <span>Voir les disponibilités sous forme de tableau</span>
-      <Icon name="chevron-down" />
     </summary>
     <div class="accordion__body table-wrap">
       <table class="table">

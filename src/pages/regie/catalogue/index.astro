@@ -1,6 +1,6 @@
 ---
 import RegieCatalogue from '../../../components/islands/RegieCatalogue.astro';
-import MaterielCard from '../../../components/ui/MaterielCard.astro';
+import MaterielRow from '../../../components/ui/MaterielRow.astro';
 import PageLayout from '../../../layouts/PageLayout.astro';
 import { getMateriel } from '../../../lib/content';
 import { formatDate, isoDate } from '../../../lib/format';
@@ -29,25 +29,23 @@ const groups = Object.entries(FAMILLES).map(([id, label]) => ({
     {groups.map((g) => (
       <section class="agenda-month" data-group aria-labelledby={`fam-${g.id}`}>
         <h2 id={`fam-${g.id}`}>{g.label}</h2>
-        <ul class="grid-cards">
+        <ul class="materiel-list">
           {g.items.map((m) => {
             const v = m.data.verification;
             const hs = !!v && isoDate(v.prochaine_echeance) < today;
             return (
               <li data-materiel={m.id}>
-                <MaterielCard
+                <MaterielRow
                   designation={m.data.designation}
                   href={url(`/regie/catalogue/${m.id}/`)}
-                  famille={g.label}
                   marqueModele={m.data.marque_modele}
                   quantite={m.data.quantite}
-                  disponibilite={hs ? 'hors-service' : 'reservable'}
-                  motif={
+                  puissanceW={m.data.puissance_w}
+                  horsService={
                     hs
                       ? `Vérification réglementaire dépassée depuis le ${formatDate(v!.prochaine_echeance)}.`
                       : undefined
                   }
-                  puissanceW={m.data.puissance_w}
                 />
               </li>
             );

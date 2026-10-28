@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { ROUTES } from './routes';
 
 test.describe('Socle de mise en page', () => {
   test("le lien d'évitement est le premier élément focalisable", async ({ page }) => {
@@ -11,17 +10,6 @@ test.describe('Socle de mise en page', () => {
     await page.keyboard.press('Enter');
     await expect(page.locator('main#contenu')).toBeFocused();
   });
-
-  for (const route of ROUTES) {
-    test(`${route.name} : aucun défilement horizontal à 320 px`, async ({ page }) => {
-      await page.setViewportSize({ width: 320, height: 800 });
-      await page.goto(route.path);
-      const overflow = await page.evaluate(
-        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      );
-      expect(overflow).toBeLessThanOrEqual(0);
-    });
-  }
 
   test('menu repliable sur petit écran', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 800 });

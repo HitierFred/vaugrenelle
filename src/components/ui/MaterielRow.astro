@@ -1,0 +1,36 @@
+---
+// Ligne de catalogue compacte. Points d'accroche pour le filtre par période :
+// [data-dispo-text] et [data-badge].
+import StatusBadge from './StatusBadge.astro';
+
+interface Props {
+  designation: string;
+  href: string;
+  marqueModele: string;
+  quantite: number;
+  puissanceW?: number;
+  horsService?: string; // motif
+}
+
+const { designation, href, marqueModele, quantite, puissanceW, horsService } = Astro.props;
+const details = [marqueModele, puissanceW ? `${puissanceW.toLocaleString('fr-FR')} W` : null]
+  .filter(Boolean)
+  .join(' · ');
+---
+
+<article class="materiel-row">
+  <h3 class="materiel-row__title">
+    <a href={href}>{designation}</a>
+  </h3>
+  <p class="materiel-row__details">{details}</p>
+  <p class="materiel-row__dispo" data-dispo-text>
+    {horsService ? horsService : `${quantite} en parc`}
+  </p>
+  <span data-badge>
+    {horsService ? (
+      <StatusBadge status="danger" label="Hors service" />
+    ) : (
+      <StatusBadge status="neutral" label="Réservable" />
+    )}
+  </span>
+</article>

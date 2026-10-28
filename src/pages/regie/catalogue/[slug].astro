@@ -135,13 +135,14 @@ const data = await getRegieData();
         {hs ? (
           <p>Article hors service : aucune disponibilité.</p>
         ) : (
-          parMois.map((p) => (
+          parMois.map((p, i) => (
             <AvailabilityCalendar
               year={p.year}
               month={p.month}
               total={m.quantite}
               availability={p.availability}
               from={today}
+              legend={i === parMois.length - 1}
               title={m.designation}
             />
           ))
