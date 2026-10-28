@@ -14,6 +14,12 @@ export const ROUTES: { path: string; name: string }[] = [
   { path: 'regie/reserver/', name: 'Réserver du matériel' },
   { path: 'demo/coulisses/', name: 'Coulisses' },
   { path: 'mon-compte/', name: 'Mon compte' },
+  { path: 'a-propos-du-projet/', name: 'À propos du projet' },
+  { path: 'accessibilite/', name: 'Accessibilité' },
+  { path: 'ecoconception/', name: 'Écoconception' },
+  { path: 'algorithmes-publics/', name: 'Algorithmes publics' },
+  { path: 'mentions-legales/', name: 'Mentions légales' },
+  { path: 'plan-du-site/', name: 'Plan du site' },
   { path: 'demo/composants/', name: 'Composants du design system' },
   { path: 'demo/donnees/', name: 'Contrôle des données fictives' },
 ];

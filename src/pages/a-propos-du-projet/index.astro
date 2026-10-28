@@ -1,0 +1,259 @@
+---
+// Page portfolio (brief § 10). La section « L'auteur » est à compléter par l'auteur.
+import StatusBadge from '../../components/ui/StatusBadge.astro';
+import PageLayout from '../../layouts/PageLayout.astro';
+import preuves from '../../data/preuves.json';
+import { url } from '../../lib/paths';
+
+const fmt = (iso: string) =>
+  new Intl.DateTimeFormat('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(`${iso}T12:00:00Z`));
+const sommaire = [
+  ['le-cas', 'Le cas'],
+  ['la-demarche', 'La démarche'],
+  ['les-partis-pris', 'Les partis pris'],
+  ['les-preuves', 'Les preuves'],
+  ['les-limites', 'Les limites assumées'],
+  ['l-auteur', "L'auteur"],
+];
+---
+
+<PageLayout
+  title="À propos du projet"
+  lead="Ce site est un démonstrateur : la maquette fonctionnelle du futur portail d'une ville fictive. Il accompagne un cahier des charges complet et sert de pièce de portfolio."
+  description="Démarche, partis pris, preuves d'accessibilité et d'écoconception, et limites du démonstrateur du portail de la Ville fictive de Vaugrenelle."
+  breadcrumb={[{ label: 'À propos du projet' }]}
+>
+  <nav aria-label="Sommaire de la page" slot="header">
+    <ul class="cluster no-measure" style="list-style: none; padding: 0">
+      {sommaire.map(([id, label]) => (
+        <li>
+          <a href={`#${id}`}>{label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="prose stack" style="--stack-space: var(--sp-12); max-width: var(--measure)">
+    <section aria-labelledby="le-cas" class="stack">
+      <h2 id="le-cas">Le cas</h2>
+      <p>
+        Vaugrenelle est une commune fictive de 34 200 habitants, ville-centre d'une agglomération de
+        27 communes. Elle s'est fait connaître par les arts de la rue : un pôle national à La
+        Filature, un théâtre municipal et un festival, Les Échappées, qui attire 80 000 spectateurs.
+      </p>
+      <p>
+        En octobre 2026, la Ville reçoit un trophée national de l'innovation numérique pour son
+        Guichet Unique : un seul dossier remplace les 5 à 7 démarches nécessaires pour organiser un
+        événement. Mais ce guichet reste isolé, à côté de 5 sites différents, d'une billetterie
+        externe et d'un parc de matériel géré sur tableur.
+      </p>
+      <p>
+        Pourquoi le spectacle vivant ? Parce qu'il croise tous les métiers d'une collectivité :
+        l'information culturelle, les autorisations, l'espace public, la sécurité, la logistique.
+        C'est un terrain idéal pour montrer qu'un portail public peut être à la fois simple pour
+        l'usager et utile aux services.
+      </p>
+    </section>
+
+    <section aria-labelledby="la-demarche" class="stack">
+      <h2 id="la-demarche">La démarche</h2>
+      <ol class="timeline">
+        <li>
+          <strong>Fiche commune</strong>
+          <span>
+            Chiffres clés, équipements culturels, constat sur l'existant : la matière première d'un
+            projet crédible.
+          </span>
+        </li>
+        <li>
+          <strong>Arborescence</strong>
+          <span>
+            Cinq rubriques, trois niveaux au plus, toute démarche à trois clics de l'accueil.
+          </span>
+        </li>
+        <li>
+          <strong>Cahier des charges</strong>
+          <span>
+            Un cahier des charges fonctionnel et technique complet, en 4 lots : portail, Guichet
+            Unique, Régie partagée, billetterie.
+            <a href={url('/documents/cahier-des-charges-vaugrenelle.md')} download>
+              Télécharger le cahier des charges (Markdown, 68 Ko)
+            </a>
+          </span>
+        </li>
+        <li>
+          <strong>Brief de développement</strong>
+          <span>
+            Le passage du cahier des charges à un démonstrateur : périmètre, design system, données,
+            critères de qualité, ordre des phases.
+            <a href={url('/documents/brief-developpement-vaugrenelle.md')} download>
+              Télécharger le brief (Markdown, 22 Ko)
+            </a>
+          </span>
+        </li>
+        <li>
+          <strong>Réalisation</strong>
+          <span>
+            Dix phases courtes, chacune vérifiée par des tests automatisés et consignée dans un
+            journal des décisions techniques.
+          </span>
+        </li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="les-partis-pris" class="stack">
+      <h2 id="les-partis-pris">Les partis pris</h2>
+      <h3>Un portail unique au lieu de cinq sites</h3>
+      <p>
+        L'usager ne devrait pas avoir à connaître l'organigramme de la mairie. Un seul site, un seul
+        compte, une seule recherche. La Filature, le théâtre et le festival gardent leur couleur,
+        mais dans un design system commun.
+      </p>
+      <h3>Automatiser l'instruction, jamais la décision</h3>
+      <p>
+        Les automatismes préparent le travail : ils lisent les pièces, vérifient les délais,
+        détectent les conflits et routent le dossier vers les bons services. Mais un agent décide
+        toujours. Seul un critère objectif, comme une pièce expirée, peut bloquer un dépôt, et le
+        motif est toujours expliqué. Les <a href={url('/demo/coulisses/')}>coulisses</a> montrent
+        chaque événement échangé et la place de l'humain.
+      </p>
+      <h3>La sobriété comme règle de conception</h3>
+      <p>
+        Pas de framework côté navigateur, pas de traceur, pas de service tiers, pas de photo
+        décorative. Les pages sont générées à l'avance ; JavaScript n'est chargé que pour les
+        parcours interactifs. Une seule police, auto-hébergée, choisie pour sa lisibilité.
+      </p>
+      <h3>L'accessibilité dès le premier composant</h3>
+      <p>
+        Chaque composant a été conçu avec le clavier et les lecteurs d'écran : résumé d'erreurs,
+        onglets, calendrier doublé d'un tableau, carte doublée d'une liste. Les contrôles
+        automatiques tournent à chaque modification.
+      </p>
+    </section>
+
+    <section aria-labelledby="les-preuves" class="stack">
+      <h2 id="les-preuves">Les preuves</h2>
+      <p>Des chiffres mesurés et datés, pas des promesses.</p>
+      <div class="table-wrap no-measure">
+        <table class="table">
+          <caption class="visually-hidden">Mesures de qualité du démonstrateur</caption>
+          <thead>
+            <tr>
+              <th scope="col">Indicateur</th>
+              <th scope="col">Résultat</th>
+              <th scope="col">Détail</th>
+              <th scope="col">Date et outil</th>
+            </tr>
+          </thead>
+          <tbody>
+            {preuves.mesures.map((m) => (
+              <tr>
+                <th scope="row">{m.indicateur}</th>
+                <td>
+                  {m.valeur === null ? (
+                    <StatusBadge status="neutral" label="À mesurer" icon="clock" />
+                  ) : (
+                    <strong>{m.valeur}</strong>
+                  )}
+                </td>
+                <td>{m.detail}</td>
+                <td>
+                  {m.date ? fmt(m.date) : 'Audit final en cours'}
+                  <br />
+                  <span class="text-small muted">{m.source}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="les-limites" class="stack">
+      <h2 id="les-limites">Les limites assumées</h2>
+      <p>
+        Ce démonstrateur montre les parcours ; il ne les fait pas fonctionner pour de vrai. Voici ce
+        qui est simulé, et ce qu'il faudrait en production, avec le renvoi au lot concerné du cahier
+        des charges.
+      </p>
+      <div class="table-wrap no-measure">
+        <table class="table">
+          <caption class="visually-hidden">
+            Ce qui est simulé et ce qu'il faudrait en production
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Dans le démonstrateur</th>
+              <th scope="col">En production</th>
+              <th scope="col">Lot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Connexion simulée en un clic</th>
+              <td>
+                Fournisseur d'identité de l'État et compte local, comptes « structure » à plusieurs
+                membres
+              </td>
+              <td>Lot 1</td>
+            </tr>
+            <tr>
+              <th scope="row">Données enregistrées dans le navigateur</th>
+              <td>
+                Back-office instructeur, base de données hébergée en France, durées de conservation
+              </td>
+              <td>Lots 1 et 2</td>
+            </tr>
+            <tr>
+              <th scope="row">Lecture des pièces déduite du nom du fichier</th>
+              <td>
+                OCR et classification hébergés dans l'UE, jeu d'évaluation, journalisation de chaque
+                inférence
+              </td>
+              <td>Lot 2</td>
+            </tr>
+            <tr>
+              <th scope="row">Bus d'événements dans le stockage local</th>
+              <td>Orchestrateur auto-hébergé, webhooks signés, rejeu et file d'erreurs</td>
+              <td>Lot 2</td>
+            </tr>
+            <tr>
+              <th scope="row">Disponibilités calculées à partir de 15 réservations fictives</th>
+              <td>
+                Planning croisé matériel, véhicules et personnel, application mobile de sortie par
+                QR code
+              </td>
+              <td>Lot 3</td>
+            </tr>
+            <tr>
+              <th scope="row">Convention de prêt en HTML imprimable</th>
+              <td>
+                Convention en PDF accessible, signature électronique, état des lieux sur mobile
+              </td>
+              <td>Lot 3</td>
+            </tr>
+            <tr>
+              <th scope="row">Bouton « Réserver » sans effet</th>
+              <td>
+                Billetterie en marque blanche, paiement, billets accessibles et contrôle d'accès
+              </td>
+              <td>Lot 4</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="l-auteur" class="stack">
+      <h2 id="l-auteur">L'auteur</h2>
+      <p class="empty-state" data-auteur-a-completer>
+        [Nom, titre, lien de contact ou de profil] — section à compléter par l'auteur.
+      </p>
+    </section>
+  </div>
+</PageLayout>

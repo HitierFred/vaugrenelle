@@ -1,0 +1,47 @@
+{
+  "_commentaire": "Mesures publiées sur la page « À propos du projet ». Chaque valeur est datée. Les mesures Lighthouse, EcoIndex et poids sont réalisées en phase 8 (docs/AUDIT.md).",
+  "mesures": [
+    {
+      "indicateur": "Violations axe-core (tous niveaux)",
+      "valeur": "0",
+      "detail": "24 audits automatisés : 21 pages, puis les parcours du Guichet et de la Régie à chaque étape, et les coulisses remplies",
+      "date": "2026-10-28",
+      "source": "Tests Playwright et @axe-core/playwright, exécutés à chaque intégration continue"
+    },
+    {
+      "indicateur": "Tests de parcours automatisés",
+      "valeur": "114",
+      "detail": "Navigation, filtres, Guichet Unique (dont pièce expirée et conflit de date), Régie (dont indisponibilité et dépassement électrique), coulisses, liens internes",
+      "date": "2026-10-28",
+      "source": "Playwright"
+    },
+    {
+      "indicateur": "Requêtes vers un domaine tiers",
+      "valeur": "0",
+      "detail": "Vérifié par test sur chaque page",
+      "date": "2026-10-28",
+      "source": "Playwright (écoute des requêtes réseau)"
+    },
+    {
+      "indicateur": "Score Lighthouse (mobile)",
+      "valeur": null,
+      "detail": "Performance, accessibilité, bonnes pratiques, SEO",
+      "date": null,
+      "source": "Lighthouse"
+    },
+    {
+      "indicateur": "EcoIndex des pages principales",
+      "valeur": null,
+      "detail": "Objectif : A ou B",
+      "date": null,
+      "source": "EcoIndex"
+    },
+    {
+      "indicateur": "Poids médian transféré",
+      "valeur": null,
+      "detail": "Objectif : moins de 500 Ko, aucune page au-delà de 1 Mo",
+      "date": null,
+      "source": "Mesure du build"
+    }
+  ]
+}

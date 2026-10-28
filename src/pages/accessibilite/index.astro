@@ -1,0 +1,95 @@
+---
+import Alert from '../../components/ui/Alert.astro';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { url } from '../../lib/paths';
+---
+
+<PageLayout
+  title="Déclaration d'accessibilité"
+  heading="Accessibilité"
+  lead="La Ville de Vaugrenelle (collectivité fictive) s'engage à rendre ses services numériques accessibles. Cette déclaration porte sur le démonstrateur."
+  description="Déclaration d'accessibilité du démonstrateur Vaugrenelle : état de conformité, résultats des tests, technologies utilisées et moyens de signaler un problème."
+  breadcrumb={[{ label: 'Accessibilité' }]}
+>
+  <div class="prose stack" style="--stack-space: var(--sp-8); max-width: var(--measure)">
+    <Alert variant="info" title="Déclaration de démonstration" live={false}>
+      <p>
+        Cette page reprend la structure d'une déclaration d'accessibilité réglementaire, appliquée à
+        un site fictif. Elle n'a pas de valeur juridique.
+      </p>
+    </Alert>
+
+    <section aria-labelledby="etat" class="stack">
+      <h2 id="etat">État de conformité</h2>
+      <p>
+        Le démonstrateur est <strong>non conforme</strong> au référentiel général d'amélioration de
+        l'accessibilité (RGAA 4.1.2) : aucun audit complet des critères n'a encore été réalisé.
+        C'est la mention obligatoire tant qu'un audit n'a pas eu lieu, même si les contrôles
+        automatiques ne relèvent aucune erreur.
+      </p>
+    </section>
+
+    <section aria-labelledby="resultats" class="stack">
+      <h2 id="resultats">Résultats des tests</h2>
+      <ul>
+        <li>
+          Contrôle automatique axe-core (WCAG 2.2 niveau AA) sur toutes les pages principales et à
+          chaque étape des parcours : aucune violation, quel que soit le niveau de gravité.
+        </li>
+        <li>
+          Parcours au clavier testés automatiquement : lien d'évitement, menu, onglets, formulaires
+          en plusieurs étapes, résumé d'erreurs.
+        </li>
+        <li>Rendu vérifié de 320 à 1 440 pixels de large, sans défilement horizontal.</li>
+      </ul>
+      <p>
+        Les contrôles automatiques ne couvrent qu'une partie des critères. Un audit manuel avec des
+        lecteurs d'écran et des tests avec des personnes en situation de handicap restent
+        nécessaires.
+      </p>
+    </section>
+
+    <section aria-labelledby="mesures" class="stack">
+      <h2 id="mesures">Ce qui a été fait</h2>
+      <ul>
+        <li>
+          Une police très lisible, Atkinson Hyperlegible, conçue pour les personnes malvoyantes.
+        </li>
+        <li>Des contrastes d'au moins 4,5:1 pour le texte et 3:1 pour les éléments d'interface.</li>
+        <li>Des zones cliquables d'au moins 44 × 44 pixels.</li>
+        <li>
+          Un état n'est jamais indiqué par la seule couleur : chaque badge a un libellé et une
+          icône.
+        </li>
+        <li>Les animations s'arrêtent si vous avez demandé à réduire les mouvements.</li>
+        <li>La carte du festival est doublée d'une liste, chaque calendrier d'un tableau.</li>
+        <li>Les pages de contenu restent lisibles sans JavaScript.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="non-accessible" class="stack">
+      <h2 id="non-accessible">Contenus non accessibles</h2>
+      <p>
+        La convention de prêt est générée en HTML et non en PDF accessible. Les fichiers de
+        démonstration à télécharger (cahier des charges, brief) sont au format texte Markdown.
+      </p>
+    </section>
+
+    <section aria-labelledby="technologies" class="stack">
+      <h2 id="technologies">Technologies et environnement de test</h2>
+      <p>HTML, CSS, JavaScript et SVG. Tests automatisés avec le navigateur Chromium.</p>
+    </section>
+
+    <section aria-labelledby="contact" class="stack">
+      <h2 id="contact">Signaler un problème</h2>
+      <p>
+        Si vous ne pouvez pas accéder à un contenu ou à un service, vous pouvez le signaler à
+        l'auteur du démonstrateur (voir la page{' '}
+        <a href={url('/a-propos-du-projet/')}>À propos du projet</a>). Sur un vrai portail public,
+        un formulaire de contact et les voies de recours prévues par la loi figureraient ici.
+      </p>
+    </section>
+
+    <p class="text-small muted">Déclaration établie le 28 octobre 2026.</p>
+  </div>
+</PageLayout>

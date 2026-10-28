@@ -409,3 +409,38 @@ Le panier (`vg:regie:panier`) est partagé entre la fiche matériel (« Ajouter 
   - la réinitialisation, annulation comprise ;
   - le brouillon signalé dans Mon compte ;
   - un audit axe des deux pages remplies.
+
+---
+
+## 2026-10-28 — Phase 7 : page « À propos du projet » et pages de pied de page
+
+### À propos du projet
+
+Les 6 sections du brief (§ 10) :
+
+1. **Le cas.**
+2. **La démarche**, présentée en chronologie.
+3. **Les partis pris.**
+4. **Les preuves.**
+5. **Les limites assumées** : un tableau « dans le démonstrateur / en production », avec le renvoi au lot concerné.
+6. **L'auteur** : la section affiche le texte du brief `[Nom, titre, lien de contact ou de profil]` à compléter. **Rien n'est inventé.**
+
+**Les preuves** viennent de `src/data/preuves.json` : chaque mesure est datée et sourcée. Les mesures Lighthouse, EcoIndex et de poids sont marquées « À mesurer » jusqu'à l'audit de la phase 8, qui complétera ce fichier. Valeurs actuelles : 0 violation axe sur 24 audits, 114 tests de parcours, 0 requête tierce.
+
+### Documents téléchargeables
+
+Le cahier des charges et le brief sont générés au build par deux routes statiques (`src/pages/documents/*.md.ts`). Elles lisent `docs/CDC_Portail_Vaugrenelle.md` et `CLAUDE.md`, sans copie : la source reste unique.
+
+À noter : **le brief (`CLAUDE.md`) est publié**. Il figure déjà dans le dépôt public, mais l'auteur peut retirer le lien et la route s'il ne souhaite pas le diffuser depuis le site.
+
+### Pages de pied de page
+
+- **Accessibilité** : reprend la structure d'une déclaration réglementaire (état de conformité, résultats, mesures, contenus non accessibles, technologies, contact). L'état est **« non conforme »**, la mention imposée tant qu'aucun audit RGAA complet n'a été mené, même avec 0 erreur automatique. Le libellé du pied de page est cohérent avec cet état.
+- **Écoconception** : budget par page (repris du brief), choix de conception, hébergement. Les mesures renvoient aux preuves.
+- **Algorithmes publics** (CDC § 12.3) : une fiche par traitement (finalité, données, règles, intervention humaine) pour la lecture des pièces, les contrôles du dossier, les disponibilités, la puissance électrique et le calcul du montant. **Les seuils et constantes sont importés des modules qui les appliquent** (`SEUILS`, `DELAI_MINIMUM_JOURS`, `PRESTATIONS`) : la page publique ne peut pas diverger du code.
+- **Mentions légales (fictives)** : avertissement sur le caractère fictif, éditeur (renvoi à l'auteur), hébergement GitHub Pages, données personnelles (aucune collecte, stockage local, moyen de tout effacer), absence de cookies et de traceurs, crédits (police OFL, Astro, Pagefind).
+- **Plan du site** : il est **généré à partir des contenus** (30 événements, 40 références par famille) et reste donc à jour sans saisie. Ses liens font 44 px de haut.
+
+### Contrôle des liens
+
+`tests/liens.spec.ts` parcourt toutes les pages HTML construites et vérifie que chaque lien interne mène à une page existante et reste sous la base `/vaugrenelle/`. La seule exception déclarée est `/habiter/` (P2, phase 9), liée depuis l'en-tête.

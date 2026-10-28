@@ -1,0 +1,141 @@
+---
+// Transparence algorithmique (CDC § 12.3) : une fiche par traitement.
+// Les seuils et constantes sont importés des modules qui les appliquent.
+import Alert from '../../components/ui/Alert.astro';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { PRESTATIONS } from '../../lib/availability';
+import { SEUILS } from '../../lib/extraction';
+import { formatPrice } from '../../lib/format';
+import { url } from '../../lib/paths';
+import { DELAI_MINIMUM_JOURS } from '../../lib/rules';
+
+const pct = (n: number) => n.toLocaleString('fr-FR', { minimumFractionDigits: 2 });
+
+const fiches = [
+  {
+    id: 'extraction',
+    titre: 'Lecture automatique des pièces justificatives',
+    finalite:
+      'Pré-remplir les informations des pièces et repérer les pièces invalides, pour accélérer l’instruction.',
+    donnees:
+      'Le fichier déposé. Dans le démonstrateur, seul son nom est utilisé : le fichier n’est jamais lu ni envoyé.',
+    regles: [
+      'Le type de pièce est reconnu (assurance, statuts, plan…), sinon la pièce est classée « non reconnue ».',
+      `Un score de confiance est calculé. À partir de ${pct(SEUILS.preValide)}, les champs sont pré-validés.`,
+      `Entre ${pct(SEUILS.aVerifier)} et ${pct(SEUILS.preValide)}, ils sont pré-remplis mais un agent doit les vérifier.`,
+      `Sous ${pct(SEUILS.aVerifier)}, rien n’est pré-rempli : un agent vérifie la pièce à la main.`,
+      'Une attestation d’assurance dont la validité est dépassée bloque l’étape, avec une demande de régularisation.',
+    ],
+    humain:
+      'Un agent vérifie toute pièce sous le seuil de 0,90. Il peut lever un blocage contesté par l’usager.',
+  },
+  {
+    id: 'controles',
+    titre: 'Contrôles du dossier « Organiser un événement »',
+    finalite:
+      'Signaler avant le dépôt ce qui empêcherait l’instruction, avec un motif compréhensible.',
+    donnees: 'Les dates, le lieu, les pièces jointes et l’agenda des événements déjà programmés.',
+    regles: [
+      'Complétude : chaque pièce demandée doit être jointe.',
+      'Validité : une pièce expirée est bloquante.',
+      'Disponibilité : le lieu ne doit pas accueillir un autre événement aux mêmes dates. Des dates et des lieux libres sont proposés.',
+      `Délai : le dossier doit être déposé au moins ${DELAI_MINIMUM_JOURS} jours avant l’événement.`,
+      'Les démarches incluses dépendent des besoins déclarés (sonorisation, buvette, fermeture de rue, structures, matériel) et du lieu.',
+    ],
+    humain:
+      'Les contrôles ne décident de rien : ils préparent le dossier. La décision est prise et signée par un agent habilité.',
+  },
+  {
+    id: 'disponibilites',
+    titre: 'Disponibilité du matériel de la Régie',
+    finalite: 'Afficher ce qui peut réellement être emprunté sur une période.',
+    donnees:
+      'Le stock de chaque référence, les réservations existantes et les dates de vérification réglementaire.',
+    regles: [
+      'Disponible = quantité en parc moins la quantité réservée le jour le plus chargé de la période.',
+      'Un article dont la vérification réglementaire est dépassée est hors service et ne peut pas être réservé.',
+      'Un pack n’est disponible que si tous ses éléments le sont.',
+    ],
+    humain:
+      'Le régisseur arbitre les conflits selon les priorités : programmation municipale, festival, associations de la commune, communes de l’agglomération.',
+  },
+  {
+    id: 'electrique',
+    titre: 'Contrôle de la puissance électrique',
+    finalite: 'Éviter de réserver du matériel qu’un site de l’espace public ne peut pas alimenter.',
+    donnees: 'La puissance de chaque matériel et celle des alimentations du site.',
+    regles: [
+      'La somme des puissances du matériel est comparée à celle du site (1 kVA compté pour 1 kW).',
+      'En cas de dépassement, la réservation est bloquée, sauf si un groupe électrogène est ajouté.',
+    ],
+    humain: 'La régie technique valide le plan électrique avant l’installation.',
+  },
+  {
+    id: 'tarifs',
+    titre: 'Calcul du montant d’un prêt de matériel',
+    finalite: 'Appliquer la grille tarifaire délibérée de façon identique pour tous.',
+    donnees: 'Le profil de l’emprunteur, le matériel, la durée et la prestation choisie.',
+    regles: [
+      'Montant = prix par jour selon le profil × quantité × nombre de jours, plus la prestation.',
+      `Prestations : ${Object.values(PRESTATIONS)
+        .map(
+          (p) =>
+            `${p.label.toLowerCase()} (${p.prix === 0 ? 'gratuit' : `${formatPrice(p.prix)}${p.parJour ? ' par jour' : ''}`})`,
+        )
+        .join(', ')}.`,
+      'Les services municipaux empruntent gratuitement, sans caution.',
+    ],
+    humain: 'La gratuité exceptionnelle ou une remise relève d’une décision de la Ville.',
+  },
+];
+---
+
+<PageLayout
+  title="Algorithmes publics"
+  lead="La Ville utilise des traitements automatiques pour préparer les dossiers et gérer le matériel. Voici, en langage clair, ce qu'ils font et où intervient un humain."
+  description="Transparence des algorithmes publics du démonstrateur Vaugrenelle : lecture des pièces, contrôles du dossier, disponibilités, contrôle électrique et tarifs."
+  breadcrumb={[{ label: 'Algorithmes publics' }]}
+>
+  <div class="stack" style="--stack-space: var(--sp-8); max-width: var(--measure)">
+    <Alert variant="info" title="Votre droit à l'information" live={false}>
+      <p>
+        Quand une décision vous concernant est préparée par un traitement algorithmique, vous avez
+        le droit d'en connaître les règles et les données utilisées. Les règles ci-dessous sont
+        celles réellement appliquées par le démonstrateur.
+      </p>
+    </Alert>
+
+    <nav aria-label="Liste des traitements">
+      <ul>
+        {fiches.map((f) => (
+          <li>
+            <a href={`#${f.id}`}>{f.titre}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    {fiches.map((f) => (
+      <section aria-labelledby={f.id} class="stack card">
+        <h2 id={f.id}>{f.titre}</h2>
+        <h3>Finalité</h3>
+        <p>{f.finalite}</p>
+        <h3>Données utilisées</h3>
+        <p>{f.donnees}</p>
+        <h3>Règles</h3>
+        <ul>
+          {f.regles.map((r) => (
+            <li>{r}</li>
+          ))}
+        </ul>
+        <h3>Intervention humaine</h3>
+        <p>{f.humain}</p>
+      </section>
+    ))}
+
+    <p>
+      Pour voir ces traitements à l'œuvre, consultez les{' '}
+      <a href={url('/demo/coulisses/')}>coulisses de la démonstration</a>.
+    </p>
+  </div>
+</PageLayout>

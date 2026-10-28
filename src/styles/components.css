@@ -1523,3 +1523,28 @@
     display: none;
   }
 }
+
+@layer components {
+  .sitemap {
+    & ul {
+      display: grid;
+      gap: var(--sp-1);
+      padding-inline-start: var(--sp-6);
+    }
+    & > ul {
+      padding: 0;
+      list-style: none;
+      gap: var(--sp-4);
+
+      & > li > a {
+        font-size: var(--fs-500);
+        font-weight: 700;
+      }
+    }
+    & a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--target-min);
+    }
+  }
+}

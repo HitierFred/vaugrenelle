@@ -1,0 +1,83 @@
+---
+import Alert from '../../components/ui/Alert.astro';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { url } from '../../lib/paths';
+---
+
+<PageLayout
+  title="Mentions légales"
+  heading="Mentions légales (fictives)"
+  lead="Ce site est un démonstrateur réalisé pour un portfolio. La Ville de Vaugrenelle n'existe pas."
+  description="Mentions légales du démonstrateur Vaugrenelle : éditeur, hébergement, données personnelles, cookies et crédits."
+  breadcrumb={[{ label: 'Mentions légales' }]}
+>
+  <div class="prose stack" style="--stack-space: var(--sp-8); max-width: var(--measure)">
+    <Alert variant="warning" title="Collectivité fictive" live={false}>
+      <p>
+        Les noms de la Ville, de ses lieux, des compagnies, des associations et des personnes sont
+        inventés. Toute ressemblance avec des structures ou des personnes réelles serait fortuite.
+      </p>
+    </Alert>
+
+    <section aria-labelledby="editeur" class="stack">
+      <h2 id="editeur">Éditeur</h2>
+      <p>
+        Démonstrateur conçu et réalisé par l'auteur présenté sur la page{' '}
+        <a href={url('/a-propos-du-projet/#l-auteur')}>À propos du projet</a>. Il ne représente
+        aucune collectivité et n'est pas un service public.
+      </p>
+    </section>
+
+    <section aria-labelledby="hebergement" class="stack">
+      <h2 id="hebergement">Hébergement</h2>
+      <p>
+        Le site est hébergé par GitHub Pages, un service de GitHub, Inc. Le code source est publié
+        sur GitHub.
+      </p>
+    </section>
+
+    <section aria-labelledby="donnees" class="stack">
+      <h2 id="donnees">Données personnelles</h2>
+      <p>
+        <strong>Aucune donnée personnelle n'est collectée ni transmise.</strong>
+      </p>
+      <ul>
+        <li>
+          Ce que vous saisissez dans les formulaires (dossier, réservation) reste dans votre
+          navigateur, dans son stockage local. Rien n'est envoyé à un serveur.
+        </li>
+        <li>
+          Les fichiers que vous choisissez ne sont jamais lus ni envoyés : seul leur nom est
+          utilisé.
+        </li>
+        <li>
+          Vous pouvez tout effacer à tout moment depuis les{' '}
+          <a href={url('/demo/coulisses/#reinitialiser')}>coulisses de la démonstration</a>, ou en
+          effaçant les données du site dans votre navigateur.
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="cookies" class="stack">
+      <h2 id="cookies">Cookies et traceurs</h2>
+      <p>
+        Ce site ne dépose aucun cookie et n'utilise aucun traceur ni outil de mesure d'audience. Il
+        ne charge aucune ressource depuis un autre site.
+      </p>
+    </section>
+
+    <section aria-labelledby="credits" class="stack">
+      <h2 id="credits">Crédits</h2>
+      <ul>
+        <li>
+          Police Atkinson Hyperlegible, Braille Institute of America, licence SIL Open Font License
+          1.1.
+        </li>
+        <li>
+          Site construit avec Astro (licence MIT). Recherche statique avec Pagefind (licence MIT).
+        </li>
+        <li>Icônes, logotype et illustrations dessinés pour ce projet.</li>
+      </ul>
+    </section>
+  </div>
+</PageLayout>

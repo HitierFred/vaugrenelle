@@ -1,0 +1,98 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { url } from '../../lib/paths';
+---
+
+<PageLayout
+  title="Déclaration d'écoconception"
+  heading="Écoconception"
+  lead="Un service numérique public doit être utile, léger et durable. Voici les choix faits pour ce démonstrateur, inspirés du référentiel général d'écoconception (RGESN)."
+  description="Déclaration d'écoconception du démonstrateur Vaugrenelle : choix techniques, budget environnemental par page et mesures."
+  breadcrumb={[{ label: 'Écoconception' }]}
+>
+  <div class="prose stack" style="--stack-space: var(--sp-8); max-width: var(--measure)">
+    <section aria-labelledby="budget" class="stack">
+      <h2 id="budget">Budget environnemental par page</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <caption class="visually-hidden">Objectifs par page</caption>
+          <thead>
+            <tr>
+              <th scope="col">Indicateur</th>
+              <th scope="col">Objectif</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Poids médian transféré</th>
+              <td>Moins de 500 Ko</td>
+            </tr>
+            <tr>
+              <th scope="row">Poids maximal</th>
+              <td>Moins de 1 Mo</td>
+            </tr>
+            <tr>
+              <th scope="row">Requêtes</th>
+              <td>Moins de 25</td>
+            </tr>
+            <tr>
+              <th scope="row">Services tiers</th>
+              <td>Aucun</td>
+            </tr>
+            <tr>
+              <th scope="row">EcoIndex</th>
+              <td>Note A ou B</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Les mesures datées sont publiées sur la page{' '}
+        <a href={url('/a-propos-du-projet/#les-preuves')}>À propos du projet</a>.
+      </p>
+    </section>
+
+    <section aria-labelledby="choix" class="stack">
+      <h2 id="choix">Choix de conception</h2>
+      <ul>
+        <li>
+          <strong>Des pages générées à l'avance.</strong> Aucun serveur ne calcule les pages à
+          chaque visite.
+        </li>
+        <li>
+          <strong>Le moins de JavaScript possible.</strong> Aucun framework n'est chargé dans le
+          navigateur. Seuls les parcours interactifs (filtres, formulaires) chargent un petit
+          script.
+        </li>
+        <li>
+          <strong>Une seule police</strong>, en deux graisses, réduite aux caractères latins : 34 Ko
+          au total.
+        </li>
+        <li>
+          <strong>Aucune photo décorative.</strong> Les visuels sont des compositions géométriques
+          en SVG.
+        </li>
+        <li>
+          <strong>Aucun traceur, aucune mesure d'audience, aucun service tiers.</strong>
+        </li>
+        <li>
+          <strong>Des contenus utiles.</strong> Chaque page répond à un besoin des parcours :
+          s'informer, faire une démarche, emprunter du matériel.
+        </li>
+        <li>
+          <strong>Des appareils anciens pris en compte.</strong> Le site fonctionne sur un petit
+          écran, avec une connexion lente, et reste lisible sans JavaScript.
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="hebergement" class="stack">
+      <h2 id="hebergement">Hébergement</h2>
+      <p>
+        Le démonstrateur est hébergé gratuitement sur GitHub Pages. Un vrai portail public serait
+        hébergé en France, chez un hébergeur engagé sur l'efficacité énergétique et la durée de vie
+        du matériel, comme le prévoit le cahier des charges.
+      </p>
+    </section>
+  </div>
+</PageLayout>
