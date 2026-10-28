@@ -1,0 +1,137 @@
+---
+// Faux back-office de la démonstration : journal du bus d'événements,
+// dossiers déposés, réservations et pédagogie de chaque automatisme.
+import Alert from '../../../components/ui/Alert.astro';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import { PEDAGOGIE } from '../../../lib/bus-pedagogie';
+import { url } from '../../../lib/paths';
+---
+
+<PageLayout
+  title="Coulisses de la démonstration"
+  lead="Ce que voient les services pendant que vous faites vos démarches : les événements métier échangés entre les briques du portail, et ce qui se passerait en production."
+  description="Coulisses du démonstrateur Vaugrenelle : journal du bus d'événements au format CloudEvents, dossiers du Guichet Unique et réservations de la Régie."
+  noindex
+  breadcrumb={[{ label: 'Démonstration' }, { label: 'Coulisses' }]}
+>
+  <vg-coulisses>
+    <div class="stack" style="--stack-space: var(--sp-12)">
+      <div data-nojs>
+        <Alert variant="info" title="Le journal nécessite JavaScript" live={false}>
+          <p>
+            Les événements sont conservés dans votre navigateur. Activez JavaScript pour les
+            afficher. Le tableau des automatismes, plus bas, reste lisible.
+          </p>
+        </Alert>
+      </div>
+
+      <section aria-labelledby="journal" class="stack" data-live hidden>
+        <div class="section-head">
+          <h2 id="journal">Journal du bus d'événements</h2>
+          <p class="filters__count" role="status" data-count></p>
+        </div>
+        <p>
+          Chaque action des parcours publie un événement au format{' '}
+          <a href="https://cloudevents.io/" hreflang="en">
+            CloudEvents 1.0
+          </a>
+          . Il ne transporte que des identifiants et des statuts : les données détaillées restent
+          dans le dossier.
+        </p>
+        <div class="field" style="max-width: 24rem">
+          <label class="field__label" for="filtre-type">
+            Type d'événement
+          </label>
+          <select class="select" id="filtre-type" data-filter>
+            <option value="">Tous les types</option>
+            {Object.entries(PEDAGOGIE).map(([type, p]) => (
+              <option value={type}>
+                {p.titre} ({type})
+              </option>
+            ))}
+          </select>
+        </div>
+        <ol class="journal" reversed data-journal></ol>
+        <div class="empty-state stack stack-s" data-empty hidden>
+          <p>
+            <strong>Aucun événement pour l'instant.</strong>
+          </p>
+          <p>
+            Déposez un dossier dans le{' '}
+            <a href={url('/agir/organiser-un-evenement/')}>Guichet Unique</a> ou{' '}
+            <a href={url('/regie/reserver/')}>réservez du matériel</a> : les événements apparaîtront
+            ici.
+          </p>
+        </div>
+      </section>
+
+      <section aria-labelledby="dossiers" class="stack" data-live hidden>
+        <h2 id="dossiers">Dossiers déposés au Guichet Unique</h2>
+        <div data-dossiers></div>
+      </section>
+
+      <section aria-labelledby="reservations" class="stack" data-live hidden>
+        <h2 id="reservations">Réservations de la Régie partagée</h2>
+        <div data-reservations></div>
+      </section>
+
+      <section aria-labelledby="automatismes" class="stack">
+        <h2 id="automatismes">Les automatismes et le contrôle humain</h2>
+        <p>
+          Principe du cahier des charges : automatiser l'instruction, jamais la décision. Voici,
+          pour chaque événement, ce qui se passerait sur le vrai portail.
+        </p>
+        <div class="table-wrap">
+          <table class="table">
+            <caption class="visually-hidden">
+              Événements métier, destinataires et contrôle humain
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Événement</th>
+                <th scope="col">Émetteur → destinataires</th>
+                <th scope="col">En production</th>
+                <th scope="col">Contrôle humain</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(PEDAGOGIE).map(([type, p]) => (
+                <tr>
+                  <th scope="row">
+                    {p.titre}
+                    <br />
+                    <code>{type}</code>
+                  </th>
+                  <td>
+                    {p.emetteur} → {p.destinataires}
+                  </td>
+                  <td>{p.action}</td>
+                  <td>{p.controleHumain}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section aria-labelledby="reinitialiser" class="stack" data-live hidden>
+        <h2 id="reinitialiser">Réinitialiser la démonstration</h2>
+        <p>
+          Efface de ce navigateur le journal, les dossiers, les réservations, le brouillon et le
+          panier. Rien d'autre n'est stocké.
+        </p>
+        <div class="cluster" data-reset-zone>
+          <button class="btn btn--secondary" type="button" data-reset>
+            Réinitialiser la démonstration
+          </button>
+        </div>
+        <div role="status" data-reset-status></div>
+      </section>
+    </div>
+  </vg-coulisses>
+</PageLayout>
+
+<script>
+  import { defineCoulisses } from '../../../components/islands/coulisses';
+  defineCoulisses();
+</script>

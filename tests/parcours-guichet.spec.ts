@@ -1,20 +1,9 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { dateIn, pdf } from './helpers';
 
 const URL = 'agir/organiser-un-evenement/';
 
-// Date AAAA-MM-JJ à J + n, en heure de Paris
-function dateIn(days: number): string {
-  const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris' }).format(new Date());
-  const [y, m, d] = today.split('-').map(Number);
-  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
-}
-
-const pdf = (name: string) => ({
-  name,
-  mimeType: 'application/pdf',
-  buffer: Buffer.from('%PDF-1.4 démo'),
-});
 const next = (page: Page) =>
   page.getByRole('button', { name: /^(Continuer|Déposer le dossier)$/ }).click();
 const summary = (page: Page) => page.locator('[data-error-summary]');

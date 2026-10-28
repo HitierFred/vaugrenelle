@@ -1,0 +1,139 @@
+---
+// Tableau de bord simulé : dossiers, réservations de matériel, billets.
+// Les données viennent du stockage local de la démonstration.
+import Alert from '../../components/ui/Alert.astro';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { COMPTE_DEMO } from '../../lib/annuaire';
+import { url } from '../../lib/paths';
+---
+
+<PageLayout
+  title="Mon compte"
+  heading="Mon compte (simulé)"
+  lead={`Compte de démonstration de ${COMPTE_DEMO.nom}, personne fictive. Vous y retrouvez les dossiers et réservations faits dans ce navigateur.`}
+  description="Tableau de bord simulé du compte usager du démonstrateur Vaugrenelle : dossiers, réservations de matériel et billets."
+  noindex
+  breadcrumb={[{ label: 'Mon compte' }]}
+>
+  <vg-mon-compte data-base={url('/')}>
+    <div class="stack" style="--stack-space: var(--sp-12)">
+      <div data-nojs>
+        <Alert variant="info" title="JavaScript est nécessaire" live={false}>
+          <p>
+            Les données de démonstration sont conservées dans votre navigateur. Activez JavaScript
+            pour les afficher.
+          </p>
+        </Alert>
+      </div>
+
+      <div data-live hidden data-encours></div>
+
+      <section aria-labelledby="mes-dossiers" class="stack" data-live hidden>
+        <h2 id="mes-dossiers">Mes dossiers</h2>
+        <div data-dossiers></div>
+      </section>
+
+      <section aria-labelledby="mes-reservations" class="stack" data-live hidden>
+        <h2 id="mes-reservations">Mes réservations de matériel</h2>
+        <div data-reservations></div>
+      </section>
+
+      <section aria-labelledby="mes-billets" class="stack">
+        <h2 id="mes-billets">Mes billets</h2>
+        <p class="empty-state">
+          La billetterie relève du lot 4 du cahier des charges : aucune place n'est réservée dans
+          cette démonstration. <a href={url('/sortir/agenda/')}>Consulter l'agenda</a>
+        </p>
+      </section>
+
+      <p class="text-small muted">
+        Pour voir ces données du côté des services, ouvrez les{' '}
+        <a href={url('/demo/coulisses/')}>coulisses de la démonstration</a>.
+      </p>
+    </div>
+  </vg-mon-compte>
+</PageLayout>
+
+<script>
+  import { addDaysIso, formatIso, todayIso } from '../../lib/dates-client';
+  import { KEYS, read } from '../../lib/store';
+  import { badge, escapeHtml } from '../../components/islands/form-kit';
+  import type { Dossier } from '../../components/islands/guichet/guichet';
+  import type { ReservationConfirmee } from '../../components/islands/regie-client';
+
+  const euros = (n: number) =>
+    new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
+
+  class MonCompte extends HTMLElement {
+    connectedCallback() {
+      const base = this.dataset.base ?? '/';
+      const q = (sel: string) => this.querySelector<HTMLElement>(sel)!;
+      q('[data-nojs]').hidden = true;
+      this.querySelectorAll<HTMLElement>('[data-live]').forEach((s) => (s.hidden = false));
+      const today = todayIso();
+
+      // Démarches en cours (brouillon, panier)
+      const brouillon = read<{ savedAt: string } | null>(KEYS.brouillonGuichet, null);
+      const panier = read<{ articles: unknown[]; packs?: unknown[] } | null>(
+        KEYS.panierRegie,
+        null,
+      );
+      const encours: string[] = [];
+      if (brouillon)
+        encours.push(
+          `<li>Un dossier « Organiser un événement » est en cours. <a href="${base}agir/organiser-un-evenement/">Reprendre le dossier</a></li>`,
+        );
+      if (panier && (panier.articles.length || panier.packs?.length))
+        encours.push(
+          `<li>Votre panier de matériel n'est pas vide. <a href="${base}regie/reserver/">Poursuivre la réservation</a></li>`,
+        );
+      q('[data-encours]').innerHTML = encours.length
+        ? `<div class="alert alert--info"><div class="stack stack-s"><h2 class="alert__title">En cours</h2><ul>${encours.join('')}</ul></div></div>`
+        : '';
+
+      // Dossiers : statut et prochaine étape de la chronologie
+      const dossiers = read<Dossier[]>(KEYS.dossiers, []).slice().reverse();
+      q('[data-dossiers]').innerHTML = dossiers.length
+        ? `<ul class="grid-cards">${dossiers
+            .map((d) => {
+              const prochaine = d.chronologie.find((c) => c.date > today) ?? d.chronologie.at(-1)!;
+              return `<li><article class="card">
+                <p class="card__discipline">Dossier ${escapeHtml(d.numero)}</p>
+                <h3 class="card__title">${escapeHtml(d.titre)}</h3>
+                <p>${escapeHtml(formatIso(d.debut))}, ${escapeHtml(d.lieu)}</p>
+                <p>${badge('info', 'info', d.statut)}</p>
+                <p class="text-small"><strong>Prochaine étape :</strong> ${escapeHtml(prochaine.etape)}, le ${escapeHtml(formatIso(prochaine.date, false))}.</p>
+                <details class="accordion"><summary><span>${d.sousDemarches.length} démarche${d.sousDemarches.length > 1 ? 's' : ''} incluse${d.sousDemarches.length > 1 ? 's' : ''}</span></summary>
+                  <div class="accordion__body"><ul>${d.sousDemarches.map((s) => `<li>${escapeHtml(s)}</li>`).join('')}</ul></div></details>
+              </article></li>`;
+            })
+            .join('')}</ul>`
+        : `<p class="empty-state">Aucun dossier. <a href="${base}agir/organiser-un-evenement/">Organiser un événement</a></p>`;
+
+      // Réservations : à venir, en cours ou terminées
+      const reservations = read<ReservationConfirmee[]>(KEYS.reservations, []).slice().reverse();
+      q('[data-reservations]').innerHTML = reservations.length
+        ? `<ul class="grid-cards">${reservations
+            .map((r) => {
+              const etat =
+                r.fin < today
+                  ? badge('neutral', 'minus', 'Terminée')
+                  : r.debut <= today
+                    ? badge('warning', 'alert', 'Matériel sorti')
+                    : badge('success', 'check', 'Confirmée');
+              const rappel = r.debut > today ? addDaysIso(r.debut, -1) : null;
+              return `<li><article class="card">
+                <p class="card__discipline">Réservation ${escapeHtml(r.numero)}</p>
+                <h3 class="card__title">Du ${escapeHtml(formatIso(r.debut, false))} au ${escapeHtml(formatIso(r.fin, false))}</h3>
+                <p>${escapeHtml(r.lieu)} · ${escapeHtml(r.prestation)}</p>
+                <p>${etat}</p>
+                <p class="text-small">Montant : <strong>${euros(r.total)}</strong> · Caution : ${euros(r.caution)}</p>
+                ${rappel ? `<p class="text-small">Un rappel vous sera envoyé le ${escapeHtml(formatIso(rappel, false))}.</p>` : ''}
+              </article></li>`;
+            })
+            .join('')}</ul>`
+        : `<p class="empty-state">Aucune réservation. <a href="${base}regie/reserver/">Réserver du matériel</a></p>`;
+    }
+  }
+  customElements.define('vg-mon-compte', MonCompte);
+</script>

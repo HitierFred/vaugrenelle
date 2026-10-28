@@ -1,13 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { dateIn } from './helpers';
 
 const URL = 'regie/reserver/';
-
-function dateIn(days: number): string {
-  const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris' }).format(new Date());
-  const [y, m, d] = today.split('-').map(Number);
-  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
-}
 
 const next = (page: Page) =>
   page.getByRole('button', { name: /^(Continuer|Confirmer la réservation)$/ }).click();

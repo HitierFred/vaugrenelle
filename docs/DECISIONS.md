@@ -371,3 +371,41 @@ Le panier (`vg:regie:panier`) est partagé entre la fiche matériel (« Ajouter 
 - le catalogue filtré par famille et par période ;
 - la fiche avec ajout au panier repris dans la réservation ;
 - un audit axe à 4 états du parcours.
+
+---
+
+## 2026-10-28 — Phase 6 : Coulisses et Mon compte
+
+### Coulisses (`/demo/coulisses/`, non indexée)
+
+- **Journal du bus** : du plus récent au plus ancien (`<ol reversed>`). Chaque entrée affiche :
+  - l'horodatage (heure de Paris), le type en code et le sujet (numéro de dossier ou de réservation) ;
+  - un **résumé en français** généré par `lib/bus-pedagogie.ts` ;
+  - une ligne « En production » (destinataires et contrôle humain) ;
+  - la **charge utile CloudEvents complète** dans un `<details>`. Le `<pre>` est focalisable pour défiler au clavier.
+- **Filtre par type** : le compteur indique « n sur N ».
+- **Tableaux** des dossiers déposés et des réservations confirmées.
+- **Tableau « Les automatismes et le contrôle humain »** pour les 7 types du brief : émetteur, destinataires, ce qui se passerait en production, contrôle humain. Il est rendu au build et reste lisible sans JavaScript.
+- **Réinitialisation en deux temps** (« Oui, réinitialiser » ou « Annuler »), sans `confirm()` natif. Le focus est géré et le résultat annoncé dans une région `role="status"`. Elle efface le bus, les dossiers, les réservations, le brouillon et le panier.
+- **Mise à jour automatique** : l'événement `storage` rafraîchit l'affichage quand un parcours est mené dans un autre onglet.
+- **Lien externe** : la mention de CloudEvents renvoie vers cloudevents.io. C'est un simple lien, sans aucune requête au chargement.
+
+### Mon compte (`/mon-compte/`, non indexée)
+
+- **Tableau de bord simulé** du compte fictif d'Alex Moreau :
+  - « En cours » : brouillon du Guichet et panier de la Régie, avec un lien pour reprendre ;
+  - « Mes dossiers » : statut, prochaine étape de la chronologie prévisionnelle, démarches incluses ;
+  - « Mes réservations » : confirmée, matériel sorti ou terminée selon la date, montant et caution ;
+  - « Mes billets » : un état vide qui renvoie au lot 4.
+- **Pas de seconde connexion simulée** : la page présente directement le compte de démonstration. L'avertissement du chapeau et le bandeau permanent suffisent à l'identifier comme fictif.
+
+### Tests
+
+- `tests/helpers.ts` regroupe `dateIn`, `pdf`, `deposerDossier` et `reserverMateriel`. Les fichiers de tests du Guichet et de la Régie l'utilisent aussi.
+- `tests/coulisses.spec.ts` couvre :
+  - l'état vide ;
+  - les **événements des phases 4 et 5 dans le journal**, à partir d'un dépôt de dossier et d'une réservation réels : résumés, charge utile, ordre, filtre, tableaux ;
+  - la même information dans Mon compte ;
+  - la réinitialisation, annulation comprise ;
+  - le brouillon signalé dans Mon compte ;
+  - un audit axe des deux pages remplies.

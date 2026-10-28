@@ -1454,3 +1454,72 @@
     display: block;
   }
 }
+
+@layer components {
+  /* ---------- Journal du bus ---------- */
+  .journal {
+    display: grid;
+    gap: var(--sp-4);
+    padding: 0;
+    list-style: none;
+  }
+  .journal__item {
+    display: grid;
+    gap: var(--sp-2);
+    padding: var(--sp-4);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-inline-start: 6px solid var(--c-info);
+    border-radius: var(--radius-s);
+    max-width: none;
+
+    &[data-type='piece.non_conforme'],
+    &[data-type='materiel.indisponible'] {
+      border-inline-start-color: var(--c-warning);
+    }
+    &[data-type='dossier.depose'],
+    &[data-type='reservation.confirmee'] {
+      border-inline-start-color: var(--c-success);
+    }
+  }
+  .journal__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-1) var(--sp-4);
+    font-size: var(--fs-300);
+    max-width: none;
+  }
+  .journal__type {
+    padding: 0 var(--sp-2);
+    background: var(--c-paper);
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-s);
+  }
+  .journal__payload {
+    & summary {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--target-min);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    & pre {
+      max-height: 20rem;
+      overflow: auto;
+      padding: var(--sp-3);
+      background: var(--c-ink);
+      color: var(--c-paper);
+      border-radius: var(--radius-s);
+      font-size: var(--fs-300);
+    }
+  }
+  [data-live][hidden],
+  [data-nojs][hidden] {
+    display: none;
+  }
+}
+@layer components {
+  [data-encours]:empty {
+    display: none;
+  }
+}

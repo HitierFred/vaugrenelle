@@ -12,6 +12,8 @@ export const ROUTES: { path: string; name: string }[] = [
   { path: 'regie/catalogue/', name: 'Catalogue du matériel' },
   { path: 'regie/catalogue/enceinte-amplifiee-12/', name: 'Fiche matériel' },
   { path: 'regie/reserver/', name: 'Réserver du matériel' },
+  { path: 'demo/coulisses/', name: 'Coulisses' },
+  { path: 'mon-compte/', name: 'Mon compte' },
   { path: 'demo/composants/', name: 'Composants du design system' },
   { path: 'demo/donnees/', name: 'Contrôle des données fictives' },
 ];
