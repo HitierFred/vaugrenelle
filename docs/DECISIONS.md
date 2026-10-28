@@ -554,3 +554,84 @@ Des **illustrations SVG** sont dessinées pour le projet : une funambule (bloc �
   - le bandeau incliné est placé dans une enveloppe `overflow-x: clip` ;
   - l'échelle `--fs-800` est réduite sur petit écran, pour que « VAUGRENELLE, » tienne à 320 px.
 - **EcoIndex** : A ou B sur les 21 pages. Le poids maximal est de 201 Ko (photo du repas de rue) et le DOM ne grossit presque pas.
+
+---
+
+## 2026-10-28 — Deuxième refonte : direction institutionnelle et sobre
+
+### Pourquoi
+
+Les retours de l'auteur sur la version « affiche de rue » :
+
+- un rendu trop tape-à-l'œil, qui risquait de choquer des **agents territoriaux** habitués à des interfaces normalisées ;
+- un bandeau incliné jugé laid ;
+- un logo peu réussi ;
+- trop peu d'images de la ville ;
+- une 404 sur « Habiter ».
+
+### Direction
+
+Inspirée des portails des grandes villes : fond clair et aéré, **une couleur principale** (bleu ardoise), **un accent discret** (terre cuite) et des **teintes pâles** pour distinguer les rubriques et les disciplines. L'émotion passe par la photo, plus par les aplats.
+
+**[Écart au brief, validé]** Les tokens du brief sont remplacés. `CLAUDE.md` (§ 2 et § 4) est mis à jour.
+
+### Ce qui change
+
+- **Typographie** : **DM Serif Display** (OFL, 25 Ko) remplace Anton pour `h1` et `h2`, en casse normale. Total des polices : 59 Ko.
+- **Palette** (contrastes mesurés) :
+  - encre sur papier 15:1 ;
+  - texte blanc sur le bleu principal 11,5:1 ;
+  - couleurs fortes sur leurs teintes de 4,6:1 (teal) à 9,8:1 (bleu) ;
+  - texte encre sur toutes les teintes ≥ 13:1.
+- **Logo** : une arche de scène bleu ardoise, avec un « V » blanc et une étoile or, accompagnée de « Ville de / Vaugrenelle » en serif. Une version inversée figure au pied de page.
+- **Bandeau incliné et pastille supprimés.** Le bandeau de démonstration obligatoire est conservé, mais il passe sur une teinte or pâle, discrète.
+- **En-tête blanc**, rubrique active soulignée en bleu, « Mon compte » en pastille bleu pâle.
+- **Boutons** rectangulaires à coins doux (bleu plein ou contour). **Cartes** blanches avec une ombre légère. Onglets soulignés.
+- **Accueil** :
+  - une grande photo des quais de la ville, avec un **panneau blanc posé à côté** qui porte le titre, l'introduction, les boutons et les dates du festival. Le texte ne repose jamais sur l'image, ce qui garantit le contraste ;
+  - les accès rapides ;
+  - les 7 prochains jours ;
+  - « À la une » : le festival en photo, et les actualités ;
+  - « **Vivre à Vaugrenelle** » : 4 cartes avec photo (Habiter, Sortir, Agir, Régie).
+- **Bandeaux de page** : teinte pâle de la rubrique, filet de la couleur forte et photo.
+- **Festival** : teinte terre cuite, carte aux repères bleus.
+
+### Photos
+
+**[Écart au brief, validé]** La règle « une photo au plus par page » est levée : l'auteur veut plus d'images de la ville. Le budget de poids reste respecté :
+
+- les photos sous le premier écran sont chargées à la demande (`loading="lazy"`) ;
+- la compression est réglée sous la valeur par défaut d'Astro (qualité 40 pour les cartes, 45 à 50 pour les bandeaux). Les valeurs plus élevées essayées d'abord alourdissaient les pages ;
+- résultat : 222 Ko pour l'accueil et 340 Ko pour la page Habiter, sous les 500 Ko.
+
+8 nouvelles photos Unsplash, toutes sous licence gratuite :
+
+| Sujet             | Photographe       |
+| ----------------- | ----------------- |
+| Quais             | Wolfgang Fritz    |
+| Rue avec cycliste | 11th gate         |
+| Mairie            | Tanya Barrow      |
+| Aire de jeux      | Milin John        |
+| Bénévoles         | Vitaly Gariev     |
+| Parc              | Daniel J. Schwarz |
+| Vélo              | Marcus Ganahl     |
+| Terrasse          | Jem S             |
+
+Les crédits sont dans les mentions légales. L'illustration de funambule est retirée.
+
+### Rubrique Habiter (fin de la 404)
+
+`/habiter/` et 5 pages de contenu type (P2 du brief), décrites dans `src/data/habiter.ts` :
+
+- mairie et vie municipale ;
+- famille, éducation, jeunesse ;
+- solidarités ;
+- cadre de vie ;
+- signaler un problème.
+
+Chaque page a sa photo, sa teinte, ses sections, un encart « Infos pratiques » (heures avec espaces insécables) et des liens « Voir aussi ». La rubrique est ajoutée au plan du site. L'exception `/habiter/` du contrôle des liens est supprimée : plus aucun lien interne n'est cassé.
+
+### Contrôles
+
+- 177 tests de parcours et 26 audits axe passent.
+- Le test de focus reconnaît les cartes à photo, dont le contour de focus est porté par la carte entière.

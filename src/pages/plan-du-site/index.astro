@@ -6,6 +6,7 @@ import { getEvenements, getMateriel } from '../../lib/content';
 import { eventUrlPath } from '../../lib/labels';
 import { url } from '../../lib/paths';
 import { FAMILLES } from '../../lib/regie-data';
+import { PAGES_HABITER } from '../../data/habiter';
 
 const evenements = await getEvenements();
 const materiel = await getMateriel();
@@ -19,6 +20,11 @@ interface Item {
 
 const plan: Item[] = [
   { label: 'Accueil', href: '/' },
+  {
+    label: 'Habiter',
+    href: '/habiter/',
+    children: PAGES_HABITER.map((p) => ({ label: p.titre, href: `/habiter/${p.slug}/` })),
+  },
   {
     label: 'Sortir & découvrir',
     href: '/sortir/agenda/',

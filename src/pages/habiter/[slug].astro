@@ -1,0 +1,84 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { PAGES_HABITER, type PageHabiter } from '../../data/habiter';
+import { url } from '../../lib/paths';
+
+export function getStaticPaths() {
+  return PAGES_HABITER.map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+
+interface Props {
+  page: PageHabiter;
+}
+
+const { page } = Astro.props;
+const autres = PAGES_HABITER.filter((p) => p.slug !== page.slug);
+// Espaces insécables dans les heures (« 17 h 30 » ne se coupe pas)
+const insecable = (t: string) =>
+  t.replace(/(\d) h (\d)/g, '$1\u00a0h\u00a0$2').replace(/(\d) h\b/g, '$1\u00a0h');
+---
+
+<PageLayout
+  title={page.titre}
+  lead={page.resume}
+  description={page.resume}
+  breadcrumb={[{ label: 'Habiter', href: '/habiter/' }, { label: page.titre }]}
+  photo={page.photo}
+  photoAlt={page.alt}
+  tone={page.ton}
+>
+  <div class="event-layout">
+    <div class="prose stack stack-l">
+      {page.sections.map((s) => (
+        <section class="stack" aria-label={s.titre}>
+          <h2>{s.titre}</h2>
+          {s.paragraphes.map((t) => (
+            <p>{t}</p>
+          ))}
+          {s.liste && (
+            <ul>
+              {s.liste.map((l) => (
+                <li>{l}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))}
+      {page.liens && (
+        <p class="cluster">
+          {page.liens.map((l) => (
+            <a class="btn btn--secondary" href={url(l.href)}>
+              {l.label}
+            </a>
+          ))}
+        </p>
+      )}
+    </div>
+    <aside
+      class="event-facts"
+      aria-labelledby="pratique"
+      style={`--c-zone-strong: var(--s-${page.ton})`}
+    >
+      <h2 id="pratique">Infos pratiques</h2>
+      <dl>
+        {page.pratique.map((p) => (
+          <div>
+            <dt>{p.libelle}</dt>
+            <dd>{insecable(p.valeur)}</dd>
+          </div>
+        ))}
+      </dl>
+    </aside>
+  </div>
+
+  <section aria-labelledby="voir-aussi" class="stack" style="margin-block-start: var(--sp-16)">
+    <h2 id="voir-aussi">Voir aussi</h2>
+    <ul class="cluster no-measure" style="list-style: none; padding: 0">
+      {autres.map((p) => (
+        <li>
+          <a href={url(`/habiter/${p.slug}/`)}>{p.titre}</a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</PageLayout>

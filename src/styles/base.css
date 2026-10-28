@@ -63,20 +63,20 @@
     font-weight: 700;
     text-wrap: balance;
   }
-  /* Titres d'affiche : police condensée */
+  /* Grands titres : serif d'affichage */
   h1,
   h2 {
     font-family: var(--font-display);
     font-weight: 400;
-    letter-spacing: 0.005em;
+    letter-spacing: -0.005em;
   }
   h1 {
     font-size: var(--fs-700);
-    line-height: 0.95;
+    line-height: 1.05;
   }
   h2 {
     font-size: var(--fs-600);
-    line-height: 1;
+    line-height: 1.1;
   }
   h3 {
     font-size: var(--fs-500);
@@ -92,12 +92,12 @@
   }
 
   a {
-    color: var(--c-ink);
+    color: var(--c-primary);
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
 
     &:hover {
-      text-decoration-thickness: 3px;
+      text-decoration-thickness: 2px;
       text-decoration-color: var(--c-accent);
     }
   }

@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 // Pages prévues dans une phase ultérieure (brief § 5, P2)
-const A_VENIR = ['/habiter/'];
+const A_VENIR: string[] = [];
 const BASE = '/vaugrenelle';
 const DIST = join(process.cwd(), 'dist');
 

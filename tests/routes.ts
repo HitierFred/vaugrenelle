@@ -2,6 +2,8 @@
 // La liste s'enrichit à chaque phase (routes P1 du brief, § 5).
 export const ROUTES: { path: string; name: string }[] = [
   { path: './', name: 'Accueil' },
+  { path: 'habiter/', name: 'Habiter' },
+  { path: 'habiter/mairie-et-vie-municipale/', name: 'Page Habiter' },
   { path: 'sortir/agenda/', name: 'Agenda' },
   { path: 'sortir/agenda/hauts-vols/', name: 'Fiche événement payant' },
   { path: 'sortir/agenda/ouverture-des-echappees/', name: 'Fiche événement du festival' },

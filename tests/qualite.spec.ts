@@ -81,7 +81,8 @@ for (const route of ROUTES) {
           return outline || s.boxShadow !== 'none';
         };
         // Carte entièrement cliquable : le contour est porté par la carte
-        const ok = visible(el) || !!(el.closest('.card') && visible(el.closest('.card')!));
+        const card = el.closest('.card, .photo-card');
+        const ok = visible(el) || !!(card && visible(card));
         const r = el.getBoundingClientRect();
         return {
           key: el.outerHTML.slice(0, 80),

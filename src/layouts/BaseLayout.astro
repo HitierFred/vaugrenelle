@@ -22,13 +22,13 @@ const { title, description, noindex = false, theme = 'default' } = Astro.props;
 const fullTitle = `${title} — Vaugrenelle (démonstration)`;
 const font400 = url('/fonts/atkinson-hyperlegible-latin-400-normal.woff2');
 const font700 = url('/fonts/atkinson-hyperlegible-latin-700-normal.woff2');
-const fontDisplay = url('/fonts/anton-latin-400-normal.woff2');
+const fontDisplay = url('/fonts/dm-serif-display-latin-400-normal.woff2');
 
 // @font-face injectées ici pour suivre la base du site
 const fontFaces = `@layer base {
 @font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:400;font-display:swap;src:url('${font400}') format('woff2')}
 @font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:700;font-display:swap;src:url('${font700}') format('woff2')}
-@font-face{font-family:'Anton';font-style:normal;font-weight:400;font-display:swap;src:url('${fontDisplay}') format('woff2')}
+@font-face{font-family:'DM Serif Display';font-style:normal;font-weight:400;font-display:swap;src:url('${fontDisplay}') format('woff2')}
 }`;
 ---
 
@@ -43,7 +43,7 @@ const fontFaces = `@layer base {
     <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
     <link rel="preload" href={fontDisplay} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={font400} as="font" type="font/woff2" crossorigin />
-    <meta name="theme-color" content="#f6f1e7" />
+    <meta name="theme-color" content="#ffffff" />
     <style is:inline set:html={fontFaces} />
     <script is:inline>
       document.documentElement.classList.add('js');

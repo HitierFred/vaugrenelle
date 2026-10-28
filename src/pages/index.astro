@@ -1,8 +1,12 @@
 ---
 import { getEntry } from 'astro:content';
 import { Picture } from 'astro:assets';
-import roueCyr from '../assets/photos/roue-cyr.jpg';
-import Funambule from '../components/illustrations/Funambule.astro';
+import cerceaux from '../assets/photos/cerceaux-de-feu.jpg';
+import projecteurs from '../assets/photos/projecteurs.jpg';
+import repas from '../assets/photos/repas-de-rue.jpg';
+import rueCycliste from '../assets/photos/rue-cycliste.jpg';
+import terrasse from '../assets/photos/terrasse.jpg';
+import villeRiviere from '../assets/photos/ville-riviere.jpg';
 import Pictos from '../components/illustrations/Pictos.astro';
 import EventCard from '../components/ui/EventCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -18,14 +22,6 @@ const actualites = (await getActualites()).slice(0, 3);
 const festivalEvents = evenements.filter((e) => e.data.festival);
 const festivalLieux = new Set(festivalEvents.map((e) => e.data.lieu.id)).size;
 const dernierJour = new Date(FESTIVAL.fin.getTime() - 86_400_000);
-
-const dayMonth = (d: Date, opts: Intl.DateTimeFormatOptions) =>
-  new Intl.DateTimeFormat('fr-FR', { ...opts, timeZone: 'Europe/Paris' }).format(d);
-const datesCourtes = `${dayMonth(FESTIVAL.debut, { day: 'numeric' })}–${dayMonth(dernierJour, {
-  day: 'numeric',
-  month: 'short',
-})}`;
-const ticker = `Les Échappées ★ ${datesCourtes} ★ ${festivalEvents.length} spectacles ★ ${festivalLieux} lieux ★ Presque tous gratuits ★ `;
 
 const lieux = new Map(
   await Promise.all(
@@ -55,65 +51,86 @@ const quickLinks = [
     picto: 'projecteur',
   },
 ] as const;
+
+const rubriques = [
+  {
+    href: '/habiter/',
+    titre: 'Habiter',
+    texte: 'Mairie, écoles, solidarités, cadre de vie : la vie quotidienne à Vaugrenelle.',
+    photo: rueCycliste,
+    alt: 'Une cycliste remonte une rue commerçante bordée de façades anciennes.',
+    teinte: 'var(--s-bleu)',
+  },
+  {
+    href: '/sortir/agenda/',
+    titre: 'Sortir & découvrir',
+    texte: 'Spectacles, concerts, festival : tout l’agenda culturel de la ville.',
+    photo: terrasse,
+    alt: 'Des habitants dînent en terrasse sur une place, sous des guirlandes lumineuses.',
+    teinte: 'var(--s-prune)',
+  },
+  {
+    href: '/agir/',
+    titre: 'Agir & organiser',
+    texte: 'Un seul dossier pour organiser un événement, et toutes les démarches en ligne.',
+    photo: repas,
+    alt: 'Un repas de quartier sur de longues tables installées au milieu d’une rue.',
+    teinte: 'var(--s-teal)',
+  },
+  {
+    href: '/regie/',
+    titre: 'Régie partagée',
+    texte: 'Le matériel technique de la Ville, ouvert aux associations et aux compagnies.',
+    photo: projecteurs,
+    alt: 'Une rampe de projecteurs de scène suspendue dans une salle de spectacle.',
+    teinte: 'var(--s-or)',
+  },
+];
 ---
 
 <BaseLayout
   title="Accueil"
   description="Portail de la Ville fictive de Vaugrenelle : agenda culturel, festival Les Échappées, démarches en ligne et réservation du matériel municipal."
 >
-  <div class="container">
-    <section class="hero" aria-labelledby="titre-accueil">
-      <div class="hero__poster on-aplat">
-        <h1 id="titre-accueil" class="hero__title">
-          <span>Vaugrenelle,</span>
-          <span>la ville</span>
-          <span>comme scène</span>
-        </h1>
-        <div class="stack">
-          <p class="hero__lead">
-            Sortir, organiser un événement, emprunter du matériel : tous les services de la Ville au
-            même endroit.
-          </p>
-          <p class="cluster">
-            <a class="btn btn--primary" href={url('/sortir/agenda/')}>
-              Voir l’agenda
-            </a>
-            <a class="btn btn--secondary" href={url('/agir/')}>
-              Faire une démarche
-            </a>
-          </p>
-        </div>
-      </div>
-      <div class="hero__media">
+  <div class="container stack" style="--stack-space: var(--sp-16)">
+    <section class="home-hero" aria-labelledby="titre-accueil">
+      <div class="home-hero__media">
         <Picture
-          src={roueCyr}
+          src={villeRiviere}
           formats={['avif', 'webp']}
-          widths={[480, 800, 1200]}
-          sizes="(min-width: 60rem) 45vw, 100vw"
-          alt="Un artiste de rue tourne dans une roue Cyr, entouré d’un public attentif sur une place."
+          widths={[640, 1000, 1400]}
+          sizes="(min-width: 76rem) 76rem, 100vw"
+          alt="Les quais de Vaugrenelle : une rivière bordée d’arbres, de maisons anciennes et d’une tour."
           loading="eager"
           fetchpriority="high"
+          quality={50}
         />
-        <a class="sticker" href={url('/sortir/festival/')}>
-          <b>Les Échappées</b>
-          {datesCourtes}
-          <span class="visually-hidden">
-            {' '}
-            : du {formatDate(FESTIVAL.debut)} au {formatDate(dernierJour)}, voir le programme du
-            festival
+      </div>
+      <div class="home-hero__panel">
+        <p class="eyebrow">Bienvenue</p>
+        <h1 id="titre-accueil">Vaugrenelle, la ville comme scène</h1>
+        <p class="home-hero__lead">
+          Sortir, organiser un événement, emprunter du matériel : tous les services de la Ville au
+          même endroit.
+        </p>
+        <p class="cluster">
+          <a class="btn btn--primary" href={url('/sortir/agenda/')}>
+            Voir l’agenda
+          </a>
+          <a class="btn btn--secondary" href={url('/agir/')}>
+            Faire une démarche
+          </a>
+        </p>
+        <p class="home-hero__festival">
+          <strong>Festival Les Échappées</strong>
+          <span>
+            du {formatDate(FESTIVAL.debut)} au {formatDate(dernierJour)}
           </span>
-        </a>
+          <a href={url('/sortir/festival/')}>Voir le programme</a>
+        </p>
       </div>
     </section>
-  </div>
 
-  <div class="ticker-wrap" aria-hidden="true">
-    <div class="ticker">
-      <p>{ticker.repeat(4)}</p>
-    </div>
-  </div>
-
-  <div class="container stack" style="--stack-space: var(--sp-16)">
     <section aria-labelledby="acces">
       <h2 id="acces" class="visually-hidden">
         Accès rapides
@@ -122,11 +139,11 @@ const quickLinks = [
         {quickLinks.map((link) => (
           <li>
             <a href={url(link.href)}>
+              <Pictos name={link.picto} />
               <span>
                 <span class="quick-links__title">{link.label}</span>
                 <span class="quick-links__hint">{link.hint}</span>
               </span>
-              <Pictos name={link.picto} />
             </a>
           </li>
         ))}
@@ -136,9 +153,7 @@ const quickLinks = [
     <section aria-labelledby="sept-jours">
       <div class="section-head">
         <h2 id="sept-jours">Les 7 prochains jours</h2>
-        <a class="btn btn--secondary" href={url('/sortir/agenda/')}>
-          Tout l’agenda
-        </a>
+        <a href={url('/sortir/agenda/')}>Tout l’agenda</a>
       </div>
       {semaine.length ? (
         <ul class="grid-cards">
@@ -167,7 +182,15 @@ const quickLinks = [
       <h2 id="a-la-une">À la une</h2>
       <article class="feature">
         <div class="feature__art">
-          <Funambule />
+          <Picture
+            src={cerceaux}
+            formats={['avif', 'webp']}
+            widths={[480, 800]}
+            quality={45}
+            sizes="(min-width: 48rem) 50vw, 100vw"
+            alt="La nuit, une artiste fait tourner des cerceaux enflammés qui dessinent des spirales de lumière."
+            loading="lazy"
+          />
         </div>
         <div class="feature__body">
           <p class="feature__kicker">Festival des arts de la rue</p>
@@ -189,6 +212,35 @@ const quickLinks = [
               <time datetime={a.data.date.toISOString()}>{formatDate(a.data.date)}</time>
               <h3>{a.data.titre}</h3>
               <p>{a.data.resume}</p>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="vivre">
+      <div class="section-head">
+        <h2 id="vivre">Vivre à Vaugrenelle</h2>
+      </div>
+      <ul class="grid-cards">
+        {rubriques.map((r) => (
+          <li>
+            <article class="photo-card" style={`--c-card-accent: ${r.teinte}`}>
+              <Picture
+                src={r.photo}
+                formats={['avif', 'webp']}
+                widths={[360, 560]}
+                quality={40}
+                sizes="(min-width: 64rem) 25vw, (min-width: 40rem) 50vw, 100vw"
+                alt={r.alt}
+                loading="lazy"
+              />
+              <div class="photo-card__body">
+                <h3>
+                  <a href={url(r.href)}>{r.titre}</a>
+                </h3>
+                <p>{r.texte}</p>
+              </div>
             </article>
           </li>
         ))}

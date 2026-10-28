@@ -33,26 +33,24 @@ export function themeForLieu(lieuId: string): Theme {
   return 'default';
 }
 
-// Couleur d'aplat de chaque discipline (texte encre obligatoire)
+// Teinte de chaque discipline (fond pâle, texte encre)
 export const DISCIPLINE_COULEURS: Record<Discipline, string> = {
-  cirque: 'var(--c-orange)',
-  'theatre-de-rue': 'var(--c-jaune)',
-  musique: 'var(--c-rose)',
-  danse: 'var(--c-turquoise)',
-  marionnette: 'var(--c-violet)',
-  'jeune-public': 'var(--c-vert)',
+  cirque: 'var(--t-terre)',
+  'theatre-de-rue': 'var(--t-or)',
+  musique: 'var(--t-prune)',
+  danse: 'var(--t-teal)',
+  marionnette: 'var(--t-bleu)',
+  'jeune-public': 'var(--t-vert)',
 };
 
-// Nom de l'aplat de chaque discipline, pour les bandeaux de page
-export const DISCIPLINE_TONS: Record<
-  Discipline,
-  'orange' | 'jaune' | 'rose' | 'turquoise' | 'violet' | 'vert'
-> = {
-  cirque: 'orange',
-  'theatre-de-rue': 'jaune',
-  musique: 'rose',
-  danse: 'turquoise',
-  marionnette: 'violet',
+// Teinte de chaque discipline, pour les bandeaux de page
+export type Ton = 'terre' | 'or' | 'prune' | 'teal' | 'bleu' | 'vert' | 'sable';
+export const DISCIPLINE_TONS: Record<Discipline, Ton> = {
+  cirque: 'terre',
+  'theatre-de-rue': 'or',
+  musique: 'prune',
+  danse: 'teal',
+  marionnette: 'bleu',
   'jeune-public': 'vert',
 };
 

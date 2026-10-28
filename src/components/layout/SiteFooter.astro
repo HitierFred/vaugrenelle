@@ -1,5 +1,6 @@
 ---
 import { url } from '../../lib/paths';
+import Logo from './Logo.astro';
 
 const groups = [
   {
@@ -25,7 +26,8 @@ const groups = [
 <footer class="site-footer">
   <div class="container">
     <p class="site-footer__wordmark" aria-hidden="true">
-      Vaugrenelle
+      <Logo size={40} inverse />
+      Ville de Vaugrenelle
     </p>
     <div class="site-footer__grid">
       <div>

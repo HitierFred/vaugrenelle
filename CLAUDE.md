@@ -31,7 +31,7 @@ Un **démonstrateur fonctionnel**, statique et déployable gratuitement, du futu
 | Styles | **CSS natif** : variables, `@layer`, imbrication (nesting), requêtes de conteneur. Pas de Tailwind, pas de préprocesseur. | Sobriété, maîtrise du design system |
 | Recherche | **Pagefind** (index généré au build) | Recherche plein texte statique, sans serveur |
 | Images | `astro:assets` (sortie AVIF et WebP, dimensions explicites) | Écoconception |
-| Polices | **Atkinson Hyperlegible** auto-hébergée (2 graisses, sous-ensemble latin) pour le texte, **Anton** auto-hébergée pour les titres d'affiche, repli sur la pile système | Lisibilité, accessibilité, identité (révision du 28/10/2026) |
+| Polices | **Atkinson Hyperlegible** auto-hébergée (2 graisses, sous-ensemble latin) pour le texte, **DM Serif Display** auto-hébergée pour les titres, repli sur la pile système | Lisibilité, accessibilité, identité (révision du 28/10/2026) |
 | Tests | **Playwright** + **@axe-core/playwright** | Parcours et accessibilité automatisés |
 | Qualité | ESLint, Prettier, `astro check` | — |
 | Déploiement | **Netlify** ou **GitHub Pages** (au choix de l'auteur) | Gratuit, lien public |
@@ -85,14 +85,15 @@ Aucune dépendance supplémentaire sans le justifier dans `docs/DECISIONS.md` (p
 
 ### 4.2 Variables (référence : `src/styles/tokens.css`)
 
-> **Révision du 28 octobre 2026, validée par l'auteur** : direction « affiche de rue » assumée. Les variables d'origine sont remplacées par la palette ci-dessous ; le détail et les contrastes mesurés sont dans `docs/DECISIONS.md`.
+> **Révision du 28 octobre 2026, validée par l'auteur** : direction **institutionnelle et sobre**, portée par la photo. Elle remplace la version « affiche de rue », jugée trop tape-à-l'œil pour un public d'agents territoriaux. Le détail et les contrastes mesurés sont dans `docs/DECISIONS.md`.
 
-- **Base** : encre `#16142a`, papier `#f6f1e7`, surface `#ffffff`, texte secondaire `#5a5670` (6,2:1), accent texte et focus `#b83a0c` (5,1:1).
-- **Aplats d'affiche**, toujours avec du **texte encre** : orange `#ff5a1f`, jaune `#ffcf33`, rose `#ff8db5`, turquoise `#14b8a6`, violet `#b197fc`, vert `#4ade80`.
-- **Teintes pâles** pour les fonds secondaires : `--t-orange`, `--t-jaune`, `--t-rose`, `--t-turquoise`, `--t-violet`, `--t-vert`.
-- **Sous-chartes** (`--c-zone`) : La Filature en turquoise, le Théâtre Jean-Vilar en violet, Les Échappées en jaune. Une couleur d'aplat par discipline pour l'agenda.
-- **Typographie** : `--font-display` (Anton) pour `h1` et `h2`, `--font-sans` (Atkinson Hyperlegible) pour le reste ; échelle `--fs-300` à `--fs-800`.
-- **Formes** : rayons 6, 14 et 28 px, pastilles (`--radius-pill`), bordures encre de 2 px, aucune ombre portée.
+- **Base** : encre `#1b2232`, papier `#faf8f4`, surface `#ffffff`, texte secondaire `#565d6b` (6,2:1).
+- **Couleur principale** : bleu ardoise `#1f3a5f` (boutons, rubrique active, focus ; texte blanc à 11,5:1). Pied de page `#16243b`, or doux `#f2c46b` pour les détails sur fond sombre.
+- **Accent discret** : terre cuite `#b4462b` (5,1:1), réservé aux surtitres et aux survols.
+- **Teintes pâles** (`--t-*`) et **couleurs fortes assorties** (`--s-*`) : sable, terre, or, prune, teal, bleu, vert. Les teintes servent de fond aux bandeaux, aux dates et aux rubriques, toujours avec un texte encre ou la couleur forte assortie (≥ 4,6:1).
+- **Sous-chartes** (`--c-zone` et `--c-zone-strong`) : La Filature en teal, le Théâtre en prune, Les Échappées en terre cuite.
+- **Typographie** : `--font-display` (DM Serif Display) pour `h1` et `h2`, `--font-sans` (Atkinson Hyperlegible) pour le reste.
+- **Formes** : rayons de 4, 10 et 16 px, ombres très légères sur les cartes, filets fins.
 
 ### 4.3 Règles
 
@@ -102,7 +103,7 @@ Aucune dépendance supplémentaire sans le justifier dans `docs/DECISIONS.md` (p
 - **Aucune information n'est portée par la seule couleur** : chaque badge d'état a un libellé et une icône.
 - Les **animations** sont désactivées sous `prefers-reduced-motion: reduce`.
 - Les **icônes** sont en SVG inline, avec `aria-hidden="true"` si elles sont décoratives. Pas de bibliothèque d'icônes externe.
-- **Pas d'image décorative lourde** : au maximum **une photo par page** (licence libre, AVIF et WebP via `astro:assets`, crédits dans les mentions légales) ; les autres visuels sont des illustrations SVG dessinées pour le projet.
+- **Photos de la ville** (licence libre) : servies en AVIF et WebP par `astro:assets`, aux dimensions de l'écran, chargées à la demande hors du premier écran, crédits dans les mentions légales. Budget de poids par page respecté (< 500 Ko). Pictogrammes en SVG.
 - **Sur un aplat de couleur**, texte, liens et contour de focus passent à l'encre (classe `on-aplat`).
 
 ### 4.4 Composants minimum

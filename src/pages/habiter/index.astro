@@ -1,0 +1,42 @@
+---
+import { Picture } from 'astro:assets';
+import rueCycliste from '../../assets/photos/rue-cycliste.jpg';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { PAGES_HABITER } from '../../data/habiter';
+import { url } from '../../lib/paths';
+---
+
+<PageLayout
+  title="Habiter"
+  heading="Habiter Vaugrenelle"
+  lead="La mairie, les écoles, les solidarités et le cadre de vie : tout ce qui fait la vie quotidienne dans la ville."
+  description="Vie quotidienne à Vaugrenelle : mairie et conseil municipal, famille et éducation, solidarités, cadre de vie et signalements."
+  breadcrumb={[{ label: 'Habiter' }]}
+  photo={rueCycliste}
+  photoAlt="Une cycliste remonte une rue commerçante bordée de façades anciennes."
+  tone="bleu"
+>
+  <ul class="grid-cards">
+    {PAGES_HABITER.map((p) => (
+      <li>
+        <article class="photo-card" style={`--c-card-accent: var(--s-${p.ton})`}>
+          <Picture
+            src={p.photo}
+            formats={['avif', 'webp']}
+            widths={[360, 560]}
+            quality={40}
+            sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw"
+            alt={p.alt}
+            loading="lazy"
+          />
+          <div class="photo-card__body">
+            <h2>
+              <a href={url(`/habiter/${p.slug}/`)}>{p.titre}</a>
+            </h2>
+            <p>{p.resume}</p>
+          </div>
+        </article>
+      </li>
+    ))}
+  </ul>
+</PageLayout>

@@ -1,67 +1,73 @@
 /* Ordre des couches : déclaré une seule fois, avant toute règle */
 @layer reset, tokens, base, layout, components, utilities;
 
-/* Design system « La ville comme scène », version affiche de rue.
-   Règle de contraste : sur un aplat vif, le texte est toujours couleur encre. */
+/* Design system « La ville comme scène », version institutionnelle.
+   Sobre et lisible : une couleur principale, un accent discret, des teintes pâles
+   pour distinguer rubriques et disciplines. La photo porte l'émotion. */
 @layer tokens {
   :root {
     /* Couleurs de base */
-    --c-ink: #16142a; /* encre, texte principal (16:1 sur papier) */
-    --c-paper: #f6f1e7; /* fond, papier affiche */
+    --c-ink: #1b2232; /* texte principal (15:1 sur papier) */
+    --c-paper: #faf8f4; /* fond */
     --c-surface: #ffffff; /* cartes, champs */
-    --c-muted: #5a5670; /* texte secondaire (6,2:1 sur papier) */
-    --c-line: #e0d8c8; /* filets décoratifs */
-    --c-line-strong: #8a8578; /* bordures de champs (3,3:1) */
+    --c-muted: #565d6b; /* texte secondaire (6,2:1) */
+    --c-line: #e5e1d8; /* filets décoratifs */
+    --c-line-strong: #8a8f99; /* bordures de champs (3,1:1) */
 
-    /* Accent texte : liens d'action, focus (5,1:1 sur papier) */
-    --c-accent: #b83a0c;
+    /* Couleur principale de la Ville : boutons, rubrique active, pied de page */
+    --c-primary: #1f3a5f; /* 10,8:1 sur papier, texte blanc 11,5:1 */
+    --c-primary-ink: #ffffff;
+    --c-footer: #16243b;
+    --c-highlight: #f2c46b; /* or doux : focus et détails sur fond sombre (9,5:1) */
+
+    /* Accent discret : surtitres, survols (5,1:1 sur papier) */
+    --c-accent: #b4462b;
     --c-accent-ink: #ffffff;
 
-    /* Aplats d'affiche (texte encre obligatoire) */
-    --c-orange: #ff5a1f;
-    --c-jaune: #ffcf33;
-    --c-rose: #ff8db5;
-    --c-turquoise: #14b8a6;
-    --c-violet: #b197fc;
-    --c-vert: #4ade80;
-    --c-ciel: #93c5fd;
+    /* Teintes pâles (fonds) et couleurs fortes assorties (texte) */
+    --t-sable: #f1ece2;
+    --t-terre: #f6e8e2;
+    --s-terre: #a03d24;
+    --t-or: #f7efd9;
+    --s-or: #7a5a00;
+    --t-prune: #efe6f2;
+    --s-prune: #6d2e7f;
+    --t-teal: #dff0ee;
+    --s-teal: #0f766e;
+    --t-bleu: #e7edf5;
+    --s-bleu: #1f3a5f;
+    --t-vert: #e4f1ea;
+    --s-vert: #166534;
 
-    /* Teintes pâles (texte encre ou secondaire) */
-    --t-orange: #ffe1d3;
-    --t-jaune: #fff3c4;
-    --t-rose: #ffe3ef;
-    --t-turquoise: #d7f5ef;
-    --t-violet: #ece4ff;
-    --t-vert: #e2f7e9;
-
-    /* Couleurs de texte des sous-chartes (sur papier) */
-    --c-teal: #0f766e;
-    --c-plum: #7e22ce;
-    --c-festival: #b91c1c;
+    /* Couleurs des sous-chartes (texte sur papier) */
+    --c-teal: var(--s-teal);
+    --c-plum: var(--s-prune);
+    --c-festival: var(--s-terre);
 
     /* États */
     --c-success: #166534;
-    --c-warning: #92400e;
-    --c-danger: #b91c1c;
-    --c-info: #1d4ed8;
-    --c-success-bg: #e2f7e9;
-    --c-warning-bg: #fff3c4;
-    --c-danger-bg: #fdeceb;
-    --c-info-bg: #e8eefc;
+    --c-warning: #8a4b0b;
+    --c-danger: #b42318;
+    --c-info: #1f3a5f;
+    --c-success-bg: #e4f1ea;
+    --c-warning-bg: #f7efd9;
+    --c-danger-bg: #fbe9e7;
+    --c-info-bg: #e7edf5;
 
-    /* Couleur de zone : aplat de la rubrique, remplacé par les sous-chartes */
-    --c-zone: var(--c-orange);
+    /* Couleur de zone : teinte de la rubrique et couleur forte assortie */
+    --c-zone: var(--t-bleu);
+    --c-zone-strong: var(--s-bleu);
 
     /* Typographie */
     --font-sans: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    --font-display: 'Anton', Impact, 'Haettenschweiler', 'Arial Narrow Bold', sans-serif;
+    --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
     --fs-300: clamp(0.875rem, 0.85rem + 0.1vw, 0.95rem);
     --fs-400: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
-    --fs-500: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
-    --fs-600: clamp(1.9rem, 1.5rem + 1.8vw, 3rem);
-    --fs-700: clamp(2.6rem, 1.8rem + 4vw, 5.25rem);
-    --fs-800: clamp(2.4rem, 0.6rem + 9vw, 8.5rem);
-    --lh-tight: 1.05;
+    --fs-500: clamp(1.2rem, 1.1rem + 0.45vw, 1.45rem);
+    --fs-600: clamp(1.75rem, 1.45rem + 1.2vw, 2.5rem);
+    --fs-700: clamp(2.2rem, 1.6rem + 2.6vw, 3.75rem);
+    --fs-800: clamp(2.5rem, 1.5rem + 4vw, 4.75rem);
+    --lh-tight: 1.1;
     --lh-body: 1.6;
 
     /* Espacements (échelle 4 px) */
@@ -76,27 +82,30 @@
     --sp-24: 6rem;
 
     /* Formes */
-    --radius-s: 6px;
-    --radius-m: 14px;
-    --radius-l: 28px;
+    --radius-s: 4px;
+    --radius-m: 10px;
+    --radius-l: 16px;
     --radius-pill: 999px;
-    --focus-ring: 3px solid var(--c-accent);
+    --focus-ring: 3px solid var(--c-primary);
     --focus-offset: 3px;
     --measure: 68ch;
-    --container: 80rem;
+    --container: 76rem;
     --target-min: 44px;
-    --border-w: 2px;
-    --shadow-card: none;
+    --border-w: 1px;
+    --shadow-card: 0 1px 2px rgb(27 34 50 / 0.06), 0 4px 16px rgb(27 34 50 / 0.06);
   }
 
   /* Sous-chartes (zones culturelles) */
   .theme-filature {
-    --c-zone: var(--c-turquoise);
+    --c-zone: var(--t-teal);
+    --c-zone-strong: var(--s-teal);
   }
   .theme-theatre {
-    --c-zone: var(--c-violet);
+    --c-zone: var(--t-prune);
+    --c-zone-strong: var(--s-prune);
   }
   .theme-festival {
-    --c-zone: var(--c-jaune);
+    --c-zone: var(--t-terre);
+    --c-zone-strong: var(--s-terre);
   }
 }
