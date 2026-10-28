@@ -31,7 +31,7 @@ Un **démonstrateur fonctionnel**, statique et déployable gratuitement, du futu
 | Styles | **CSS natif** : variables, `@layer`, imbrication (nesting), requêtes de conteneur. Pas de Tailwind, pas de préprocesseur. | Sobriété, maîtrise du design system |
 | Recherche | **Pagefind** (index généré au build) | Recherche plein texte statique, sans serveur |
 | Images | `astro:assets` (sortie AVIF et WebP, dimensions explicites) | Écoconception |
-| Polices | **Atkinson Hyperlegible** auto-hébergée (2 graisses, sous-ensemble latin), repli sur la pile système | Lisibilité, accessibilité |
+| Polices | **Atkinson Hyperlegible** auto-hébergée (2 graisses, sous-ensemble latin) pour le texte, **Anton** auto-hébergée pour les titres d'affiche, repli sur la pile système | Lisibilité, accessibilité, identité (révision du 28/10/2026) |
 | Tests | **Playwright** + **@axe-core/playwright** | Parcours et accessibilité automatisés |
 | Qualité | ESLint, Prettier, `astro check` | — |
 | Déploiement | **Netlify** ou **GitHub Pages** (au choix de l'auteur) | Gratuit, lien public |
@@ -83,55 +83,16 @@ Aucune dépendance supplémentaire sans le justifier dans `docs/DECISIONS.md` (p
 
 « La ville comme scène » : une identité **affiche de spectacle de rue**. Elle s'appuie sur des aplats francs, une typographie forte en titres et un accent signalétique orange qui évoque le marquage au sol et les gélatines. La rigueur reste celle d'une administration pour les démarches. Les zones culturelles (Sortir, Filature, Festival) sont plus expressives, les zones de démarches plus calmes.
 
-### 4.2 Variables (à reprendre telles quelles dans `src/styles/tokens.css`)
+### 4.2 Variables (référence : `src/styles/tokens.css`)
 
-```css
-:root {
-  /* Couleurs de base */
-  --c-ink: #1b1f3b;          /* texte principal, nuit de scène */
-  --c-paper: #faf7f2;        /* fond, papier affiche */
-  --c-surface: #ffffff;      /* cartes, champs */
-  --c-muted: #5b5f77;        /* texte secondaire (contraste ≥ 4.5:1 sur paper) */
-  --c-line: #d9d4ca;         /* bordures décoratives */
-  --c-line-strong: #8a8578;  /* bordures de champs (contraste ≥ 3:1) */
+> **Révision du 28 octobre 2026, validée par l'auteur** : direction « affiche de rue » assumée. Les variables d'origine sont remplacées par la palette ci-dessous ; le détail et les contrastes mesurés sont dans `docs/DECISIONS.md`.
 
-  /* Accents */
-  --c-accent: #c2410c;       /* orange signalétique : liens d'action, focus, CTA */
-  --c-accent-ink: #ffffff;   /* texte sur accent */
-  --c-teal: #0f766e;         /* La Filature */
-  --c-plum: #7e22ce;         /* Théâtre Jean-Vilar */
-  --c-festival: #b91c1c;     /* Les Échappées */
-
-  /* États */
-  --c-success: #166534;
-  --c-warning: #92400e;
-  --c-danger: #b91c1c;
-  --c-info: #1d4ed8;
-
-  /* Typographie */
-  --font-sans: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --fs-300: clamp(0.875rem, 0.85rem + 0.1vw, 0.95rem);
-  --fs-400: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
-  --fs-500: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
-  --fs-600: clamp(1.6rem, 1.4rem + 1vw, 2.25rem);
-  --fs-700: clamp(2.2rem, 1.8rem + 2vw, 3.5rem);
-  --lh-tight: 1.15;
-  --lh-body: 1.6;
-
-  /* Espacements (échelle 4 px) */
-  --sp-1: 0.25rem; --sp-2: 0.5rem; --sp-3: 0.75rem; --sp-4: 1rem;
-  --sp-6: 1.5rem; --sp-8: 2rem; --sp-12: 3rem; --sp-16: 4rem;
-
-  /* Formes */
-  --radius-s: 4px; --radius-m: 8px;
-  --focus-ring: 3px solid var(--c-accent);
-  --focus-offset: 2px;
-  --measure: 68ch;
-  --container: 72rem;
-}
-```
-
-Un thème sombre (`prefers-color-scheme: dark`) est facultatif en phase 2. S'il est ajouté, il doit respecter les mêmes contrastes.
+- **Base** : encre `#16142a`, papier `#f6f1e7`, surface `#ffffff`, texte secondaire `#5a5670` (6,2:1), accent texte et focus `#b83a0c` (5,1:1).
+- **Aplats d'affiche**, toujours avec du **texte encre** : orange `#ff5a1f`, jaune `#ffcf33`, rose `#ff8db5`, turquoise `#14b8a6`, violet `#b197fc`, vert `#4ade80`.
+- **Teintes pâles** pour les fonds secondaires : `--t-orange`, `--t-jaune`, `--t-rose`, `--t-turquoise`, `--t-violet`, `--t-vert`.
+- **Sous-chartes** (`--c-zone`) : La Filature en turquoise, le Théâtre Jean-Vilar en violet, Les Échappées en jaune. Une couleur d'aplat par discipline pour l'agenda.
+- **Typographie** : `--font-display` (Anton) pour `h1` et `h2`, `--font-sans` (Atkinson Hyperlegible) pour le reste ; échelle `--fs-300` à `--fs-800`.
+- **Formes** : rayons 6, 14 et 28 px, pastilles (`--radius-pill`), bordures encre de 2 px, aucune ombre portée.
 
 ### 4.3 Règles
 
@@ -141,7 +102,8 @@ Un thème sombre (`prefers-color-scheme: dark`) est facultatif en phase 2. S'il 
 - **Aucune information n'est portée par la seule couleur** : chaque badge d'état a un libellé et une icône.
 - Les **animations** sont désactivées sous `prefers-reduced-motion: reduce`.
 - Les **icônes** sont en SVG inline, avec `aria-hidden="true"` si elles sont décoratives. Pas de bibliothèque d'icônes externe.
-- **Pas d'image décorative lourde** : les visuels d'en-tête sont des compositions CSS ou SVG (formes géométriques, aplats), avec au maximum une photo par page.
+- **Pas d'image décorative lourde** : au maximum **une photo par page** (licence libre, AVIF et WebP via `astro:assets`, crédits dans les mentions légales) ; les autres visuels sont des illustrations SVG dessinées pour le projet.
+- **Sur un aplat de couleur**, texte, liens et contour de focus passent à l'encre (classe `on-aplat`).
 
 ### 4.4 Composants minimum
 

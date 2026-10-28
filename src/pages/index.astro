@@ -1,15 +1,16 @@
 ---
-import Alert from '../components/ui/Alert.astro';
+import { getEntry } from 'astro:content';
+import { Picture } from 'astro:assets';
+import roueCyr from '../assets/photos/roue-cyr.jpg';
+import Funambule from '../components/illustrations/Funambule.astro';
+import Pictos from '../components/illustrations/Pictos.astro';
 import EventCard from '../components/ui/EventCard.astro';
-import Icon from '../components/ui/Icon.astro';
-import PosterArt from '../components/ui/PosterArt.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getActualites, getEvenements } from '../lib/content';
 import { formatDate } from '../lib/format';
-import { DISCIPLINES, eventUrlPath, zoneColorFor } from '../lib/labels';
+import { DISCIPLINE_COULEURS, DISCIPLINES, eventUrlPath } from '../lib/labels';
 import { url } from '../lib/paths';
 import { FESTIVAL, fromReference } from '../lib/reference-date';
-import { getEntry } from 'astro:content';
 
 const evenements = await getEvenements();
 const semaine = evenements.filter((e) => e.data.debut < fromReference(7));
@@ -17,6 +18,14 @@ const actualites = (await getActualites()).slice(0, 3);
 const festivalEvents = evenements.filter((e) => e.data.festival);
 const festivalLieux = new Set(festivalEvents.map((e) => e.data.lieu.id)).size;
 const dernierJour = new Date(FESTIVAL.fin.getTime() - 86_400_000);
+
+const dayMonth = (d: Date, opts: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat('fr-FR', { ...opts, timeZone: 'Europe/Paris' }).format(d);
+const datesCourtes = `${dayMonth(FESTIVAL.debut, { day: 'numeric' })}–${dayMonth(dernierJour, {
+  day: 'numeric',
+  month: 'short',
+})}`;
+const ticker = `Les Échappées ★ ${datesCourtes} ★ ${festivalEvents.length} spectacles ★ ${festivalLieux} lieux ★ Presque tous gratuits ★ `;
 
 const lieux = new Map(
   await Promise.all(
@@ -30,20 +39,20 @@ const quickLinks = [
   {
     href: '/agir/',
     label: 'Faire une démarche',
-    hint: "Organiser un événement, occuper l'espace public…",
-    icon: 'file',
+    hint: 'Organiser un événement, occuper l’espace public…',
+    picto: 'demarche',
   },
   {
     href: '/sortir/agenda/',
     label: 'Agenda et billetterie',
     hint: 'Spectacles, concerts, festival',
-    icon: 'ticket',
+    picto: 'billet',
   },
   {
     href: '/regie/reserver/',
     label: 'Réserver du matériel',
     hint: 'Son, lumière, scènes, structures',
-    icon: 'box',
+    picto: 'projecteur',
   },
 ] as const;
 ---
@@ -52,43 +61,114 @@ const quickLinks = [
   title="Accueil"
   description="Portail de la Ville fictive de Vaugrenelle : agenda culturel, festival Les Échappées, démarches en ligne et réservation du matériel municipal."
 >
-  <div class="container stack stack-l">
-    <Alert variant="info" title="Festival Les Échappées" live={false}>
-      <p>
-        Du {formatDate(FESTIVAL.debut)} au {formatDate(dernierJour)}, des rues du centre-ville sont
-        piétonnes. <a href={url('/sortir/festival/')}>Voir le programme et les accès</a>
-      </p>
-    </Alert>
-
+  <div class="container">
     <section class="hero" aria-labelledby="titre-accueil">
-      <div class="stack">
-        <h1 id="titre-accueil">Vaugrenelle, la ville comme scène</h1>
-        <p class="hero__lead">
-          Sortir, organiser un événement, emprunter du matériel : tous les services de la Ville au
-          même endroit.
-        </p>
-        <h2 class="visually-hidden">Accès rapides</h2>
-        <ul class="quick-links">
-          {quickLinks.map((link) => (
-            <li>
-              <a href={url(link.href)}>
-                <Icon name={link.icon} />
-                <span>
-                  {link.label}
-                  <span class="quick-links__hint">{link.hint}</span>
-                </span>
-              </a>
+      <div class="hero__poster on-aplat">
+        <h1 id="titre-accueil" class="hero__title">
+          <span>Vaugrenelle,</span>
+          <span>la ville</span>
+          <span>comme scène</span>
+        </h1>
+        <div class="stack">
+          <p class="hero__lead">
+            Sortir, organiser un événement, emprunter du matériel : tous les services de la Ville au
+            même endroit.
+          </p>
+          <p class="cluster">
+            <a class="btn btn--primary" href={url('/sortir/agenda/')}>
+              Voir l’agenda
+            </a>
+            <a class="btn btn--secondary" href={url('/agir/')}>
+              Faire une démarche
+            </a>
+          </p>
+        </div>
+      </div>
+      <div class="hero__media">
+        <Picture
+          src={roueCyr}
+          formats={['avif', 'webp']}
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 60rem) 45vw, 100vw"
+          alt="Un artiste de rue tourne dans une roue Cyr, entouré d’un public attentif sur une place."
+          loading="eager"
+          fetchpriority="high"
+        />
+        <a class="sticker" href={url('/sortir/festival/')}>
+          <b>Les Échappées</b>
+          {datesCourtes}
+          <span class="visually-hidden">
+            {' '}
+            : du {formatDate(FESTIVAL.debut)} au {formatDate(dernierJour)}, voir le programme du
+            festival
+          </span>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker">
+      <p>{ticker.repeat(4)}</p>
+    </div>
+  </div>
+
+  <div class="container stack" style="--stack-space: var(--sp-16)">
+    <section aria-labelledby="acces">
+      <h2 id="acces" class="visually-hidden">
+        Accès rapides
+      </h2>
+      <ul class="quick-links">
+        {quickLinks.map((link) => (
+          <li>
+            <a href={url(link.href)}>
+              <span>
+                <span class="quick-links__title">{link.label}</span>
+                <span class="quick-links__hint">{link.hint}</span>
+              </span>
+              <Pictos name={link.picto} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="sept-jours">
+      <div class="section-head">
+        <h2 id="sept-jours">Les 7 prochains jours</h2>
+        <a class="btn btn--secondary" href={url('/sortir/agenda/')}>
+          Tout l’agenda
+        </a>
+      </div>
+      {semaine.length ? (
+        <ul class="grid-cards">
+          {semaine.map((e) => (
+            <li data-fin={e.data.fin.toISOString()}>
+              <EventCard
+                titre={e.data.titre}
+                href={url(eventUrlPath(e.id))}
+                debut={e.data.debut}
+                lieu={lieux.get(e.data.lieu.id) ?? ''}
+                discipline={DISCIPLINES[e.data.discipline]}
+                compagnie={e.data.compagnie}
+                gratuit={e.data.gratuit}
+                accessibilite={e.data.accessibilite}
+                zoneColor={DISCIPLINE_COULEURS[e.data.discipline]}
+              />
             </li>
           ))}
         </ul>
-      </div>
-      <PosterArt />
+      ) : (
+        <p class="empty-state">Aucun spectacle cette semaine. Consultez l’agenda complet.</p>
+      )}
     </section>
 
-    <section aria-labelledby="a-la-une" class="stack">
+    <section aria-labelledby="a-la-une" class="stack" style="--stack-space: var(--sp-8)">
       <h2 id="a-la-une">À la une</h2>
-      <article class="feature theme-festival">
-        <PosterArt variant="festival" />
+      <article class="feature">
+        <div class="feature__art">
+          <Funambule />
+        </div>
         <div class="feature__body">
           <p class="feature__kicker">Festival des arts de la rue</p>
           <h3>Les Échappées</h3>
@@ -97,7 +177,7 @@ const quickLinks = [
             {formatDate(FESTIVAL.debut)} au {formatDate(dernierJour)}. {festivalEvents.length}{' '}
             spectacles dans {festivalLieux} lieux, presque tous gratuits.
           </p>
-          <a class="btn btn--on-dark" href={url('/sortir/festival/')}>
+          <a class="btn btn--primary btn--on-dark" href={url('/sortir/festival/')}>
             Découvrir le programme
           </a>
         </div>
@@ -113,34 +193,6 @@ const quickLinks = [
           </li>
         ))}
       </ul>
-    </section>
-
-    <section aria-labelledby="sept-jours" class="stack">
-      <div class="section-head">
-        <h2 id="sept-jours">Les 7 prochains jours</h2>
-        <a href={url('/sortir/agenda/')}>Tout l'agenda</a>
-      </div>
-      {semaine.length ? (
-        <ul class="grid-cards">
-          {semaine.map((e) => (
-            <li data-fin={e.data.fin.toISOString()}>
-              <EventCard
-                titre={e.data.titre}
-                href={url(eventUrlPath(e.id))}
-                debut={e.data.debut}
-                lieu={lieux.get(e.data.lieu.id) ?? ''}
-                discipline={DISCIPLINES[e.data.discipline]}
-                compagnie={e.data.compagnie}
-                gratuit={e.data.gratuit}
-                accessibilite={e.data.accessibilite}
-                zoneColor={zoneColorFor(e.data.lieu.id, e.data.festival)}
-              />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p class="empty-state">Aucun spectacle cette semaine. Consultez l'agenda complet.</p>
-      )}
     </section>
   </div>
 </BaseLayout>

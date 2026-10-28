@@ -6,7 +6,7 @@ import StatusBadge from '../../../components/ui/StatusBadge.astro';
 import PageLayout from '../../../layouts/PageLayout.astro';
 import { getEvenements, type Evenement } from '../../../lib/content';
 import { formatDate, formatPrice, formatTime } from '../../../lib/format';
-import { ACCESSIBILITE, DISCIPLINES, themeForLieu } from '../../../lib/labels';
+import { ACCESSIBILITE, DISCIPLINE_TONS, DISCIPLINES, themeForLieu } from '../../../lib/labels';
 import { url } from '../../../lib/paths';
 
 export async function getStaticPaths() {
@@ -44,8 +44,9 @@ const breadcrumb = [
   description={`${e.resume} ${formatDate(e.debut)}, ${lieu.data.nom}.`}
   theme={theme}
   breadcrumb={breadcrumb}
+  tone={DISCIPLINE_TONS[e.discipline]}
 >
-  <p class="event-kicker" slot="header">
+  <p class="event-kicker event-kicker--aplat" slot="header">
     {DISCIPLINES[e.discipline]} · {e.compagnie}
     {e.festival && ' · Festival Les Échappées'}
   </p>

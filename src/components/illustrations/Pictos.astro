@@ -1,0 +1,87 @@
+---
+// Pictogrammes illustrés des accès rapides (décoratifs).
+interface Props {
+  name: 'demarche' | 'billet' | 'projecteur';
+}
+const { name } = Astro.props;
+---
+
+<svg class="illu" viewBox="0 0 72 72" aria-hidden="true" focusable="false">
+  {name === 'demarche' && (
+    <>
+      <rect
+        x="12"
+        y="6"
+        width="40"
+        height="54"
+        rx="4"
+        fill="#fff"
+        stroke="#16142a"
+        stroke-width="3"
+      />
+      <path
+        d="M20 18h24M20 26h24M20 34h16"
+        stroke="#16142a"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+      <circle cx="48" cy="50" r="15" fill="#ff5a1f" stroke="#16142a" stroke-width="3" />
+      <path
+        d="M41 50l5 5 9-10"
+        fill="none"
+        stroke="#16142a"
+        stroke-width="3.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </>
+  )}
+  {name === 'billet' && (
+    <>
+      <path
+        d="M6 22a6 6 0 0 0 0 12v14h60V34a6 6 0 0 1 0-12V8H6z"
+        fill="#fff"
+        stroke="#16142a"
+        stroke-width="3"
+        stroke-linejoin="round"
+        transform="rotate(-8 36 30)"
+      />
+      <path
+        d="M46 10v36"
+        stroke="#16142a"
+        stroke-width="3"
+        stroke-dasharray="4 4"
+        transform="rotate(-8 36 30)"
+      />
+      <path
+        d="M24 20l3 7 7 1-5 5 1 7-6-4-6 4 1-7-5-5 7-1z"
+        fill="#ffcf33"
+        stroke="#16142a"
+        stroke-width="2"
+        stroke-linejoin="round"
+      />
+      <path d="M14 58h44" stroke="#16142a" stroke-width="3" stroke-linecap="round" />
+    </>
+  )}
+  {name === 'projecteur' && (
+    <>
+      <path d="M30 30L66 54v12H40z" fill="#ffcf33" opacity="0.9" />
+      <rect
+        x="10"
+        y="14"
+        width="26"
+        height="20"
+        rx="4"
+        fill="#16142a"
+        transform="rotate(25 23 24)"
+      />
+      <circle cx="34" cy="31" r="6" fill="#fff" stroke="#16142a" stroke-width="3" />
+      <path
+        d="M20 34l-6 28M20 34l8 28M10 62h24"
+        stroke="#16142a"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+    </>
+  )}
+</svg>

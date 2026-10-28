@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import repas from '../../assets/photos/repas-de-rue.jpg';
 import ListSearch from '../../components/islands/ListSearch.astro';
 import Icon from '../../components/ui/Icon.astro';
 import StatusBadge from '../../components/ui/StatusBadge.astro';
@@ -32,6 +33,9 @@ const groups = Object.entries(CATEGORIES)
   lead="Toutes les démarches de la Ville. Le Guichet Unique réunit en un seul dossier les autorisations nécessaires pour organiser un événement."
   description="Catalogue des démarches en ligne de Vaugrenelle : organiser un événement, occuper l'espace public, demander une subvention, emprunter du matériel."
   breadcrumb={[{ label: 'Agir & organiser' }]}
+  photo={repas}
+  photoAlt="Des habitants attablés le long d'une rue fermée à la circulation pour un repas de quartier."
+  tone="turquoise"
 >
   <ListSearch label="Rechercher une démarche" hint="Par exemple : buvette, terrasse, subvention.">
     {groups.map((g) => (

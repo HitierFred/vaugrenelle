@@ -1,10 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
+import chapiteau from '../../../assets/photos/chapiteau.jpg';
 import AgendaFilters from '../../../components/islands/AgendaFilters.astro';
 import EventRow from '../../../components/ui/EventRow.astro';
 import PageLayout from '../../../layouts/PageLayout.astro';
 import { getEvenements } from '../../../lib/content';
-import { DISCIPLINES, eventUrlPath, zoneColorFor } from '../../../lib/labels';
+import { DISCIPLINE_COULEURS, DISCIPLINES, eventUrlPath } from '../../../lib/labels';
 import { url } from '../../../lib/paths';
 
 const evenements = await getEvenements();
@@ -29,6 +30,9 @@ for (const e of evenements) {
   lead="Spectacles, concerts et animations à Vaugrenelle pour les trois prochains mois."
   description="Agenda culturel de Vaugrenelle : cirque, théâtre de rue, musique, danse, marionnettes et spectacles jeune public. Filtres par date, lieu, discipline, gratuité et accessibilité."
   breadcrumb={[{ label: 'Sortir & découvrir' }, { label: 'Agenda' }]}
+  photo={chapiteau}
+  photoAlt="Un grand chapiteau rayé rouge et blanc, illuminé de guirlandes, la nuit."
+  tone="rose"
 >
   <AgendaFilters lieux={lieux}>
     {[...groups].map(([month, items], gi) => (
@@ -54,7 +58,7 @@ for (const e of evenements) {
                 discipline={DISCIPLINES[e.data.discipline]}
                 gratuit={e.data.gratuit}
                 accessibilite={e.data.accessibilite}
-                zoneColor={zoneColorFor(e.data.lieu.id, e.data.festival)}
+                zoneColor={DISCIPLINE_COULEURS[e.data.discipline]}
               />
             </li>
           ))}

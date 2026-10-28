@@ -13,7 +13,7 @@ export const formatDate = (d: Date) =>
 export const formatTime = (d: Date) =>
   new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: TZ })
     .format(d)
-    .replace(':', ' h ');
+    .replace(':', '\u00a0h\u00a0'); // espaces insécables : l'heure ne se coupe pas
 
 export const formatDayMonth = (d: Date) => {
   const parts = new Intl.DateTimeFormat('fr-FR', {

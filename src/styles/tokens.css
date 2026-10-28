@@ -1,37 +1,67 @@
 /* Ordre des couches : déclaré une seule fois, avant toute règle */
 @layer reset, tokens, base, layout, components, utilities;
 
+/* Design system « La ville comme scène », version affiche de rue.
+   Règle de contraste : sur un aplat vif, le texte est toujours couleur encre. */
 @layer tokens {
   :root {
     /* Couleurs de base */
-    --c-ink: #1b1f3b; /* texte principal, nuit de scène */
-    --c-paper: #faf7f2; /* fond, papier affiche */
+    --c-ink: #16142a; /* encre, texte principal (16:1 sur papier) */
+    --c-paper: #f6f1e7; /* fond, papier affiche */
     --c-surface: #ffffff; /* cartes, champs */
-    --c-muted: #5b5f77; /* texte secondaire (contraste ≥ 4.5:1 sur paper) */
-    --c-line: #d9d4ca; /* bordures décoratives */
-    --c-line-strong: #8a8578; /* bordures de champs (contraste ≥ 3:1) */
+    --c-muted: #5a5670; /* texte secondaire (6,2:1 sur papier) */
+    --c-line: #e0d8c8; /* filets décoratifs */
+    --c-line-strong: #8a8578; /* bordures de champs (3,3:1) */
 
-    /* Accents */
-    --c-accent: #c2410c; /* orange signalétique : liens d'action, focus, CTA */
-    --c-accent-ink: #ffffff; /* texte sur accent */
-    --c-teal: #0f766e; /* La Filature */
-    --c-plum: #7e22ce; /* Théâtre Jean-Vilar */
-    --c-festival: #b91c1c; /* Les Échappées */
+    /* Accent texte : liens d'action, focus (5,1:1 sur papier) */
+    --c-accent: #b83a0c;
+    --c-accent-ink: #ffffff;
+
+    /* Aplats d'affiche (texte encre obligatoire) */
+    --c-orange: #ff5a1f;
+    --c-jaune: #ffcf33;
+    --c-rose: #ff8db5;
+    --c-turquoise: #14b8a6;
+    --c-violet: #b197fc;
+    --c-vert: #4ade80;
+    --c-ciel: #93c5fd;
+
+    /* Teintes pâles (texte encre ou secondaire) */
+    --t-orange: #ffe1d3;
+    --t-jaune: #fff3c4;
+    --t-rose: #ffe3ef;
+    --t-turquoise: #d7f5ef;
+    --t-violet: #ece4ff;
+    --t-vert: #e2f7e9;
+
+    /* Couleurs de texte des sous-chartes (sur papier) */
+    --c-teal: #0f766e;
+    --c-plum: #7e22ce;
+    --c-festival: #b91c1c;
 
     /* États */
     --c-success: #166534;
     --c-warning: #92400e;
     --c-danger: #b91c1c;
     --c-info: #1d4ed8;
+    --c-success-bg: #e2f7e9;
+    --c-warning-bg: #fff3c4;
+    --c-danger-bg: #fdeceb;
+    --c-info-bg: #e8eefc;
+
+    /* Couleur de zone : aplat de la rubrique, remplacé par les sous-chartes */
+    --c-zone: var(--c-orange);
 
     /* Typographie */
     --font-sans: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Anton', Impact, 'Haettenschweiler', 'Arial Narrow Bold', sans-serif;
     --fs-300: clamp(0.875rem, 0.85rem + 0.1vw, 0.95rem);
     --fs-400: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
     --fs-500: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
-    --fs-600: clamp(1.6rem, 1.4rem + 1vw, 2.25rem);
-    --fs-700: clamp(2.2rem, 1.8rem + 2vw, 3.5rem);
-    --lh-tight: 1.15;
+    --fs-600: clamp(1.9rem, 1.5rem + 1.8vw, 3rem);
+    --fs-700: clamp(2.6rem, 1.8rem + 4vw, 5.25rem);
+    --fs-800: clamp(2.4rem, 0.6rem + 9vw, 8.5rem);
+    --lh-tight: 1.05;
     --lh-body: 1.6;
 
     /* Espacements (échelle 4 px) */
@@ -43,39 +73,30 @@
     --sp-8: 2rem;
     --sp-12: 3rem;
     --sp-16: 4rem;
+    --sp-24: 6rem;
 
     /* Formes */
-    --radius-s: 4px;
-    --radius-m: 8px;
+    --radius-s: 6px;
+    --radius-m: 14px;
+    --radius-l: 28px;
+    --radius-pill: 999px;
     --focus-ring: 3px solid var(--c-accent);
-    --focus-offset: 2px;
+    --focus-offset: 3px;
     --measure: 68ch;
-    --container: 72rem;
-
-    /* --- Ajouts phase 1 (voir docs/DECISIONS.md) --- */
-
-    /* Fonds teintés des états : contraste du texte d'état ≥ 4.5:1 */
-    --c-success-bg: #ecf5ef;
-    --c-warning-bg: #fbf1e6;
-    --c-danger-bg: #fbeceb;
-    --c-info-bg: #ebf0fc;
-
-    /* Couleur de zone : remplacée par les sous-chartes */
-    --c-zone: var(--c-accent);
-
-    --target-min: 44px; /* cible tactile minimale */
+    --container: 80rem;
+    --target-min: 44px;
     --border-w: 2px;
-    --shadow-card: 0 1px 0 var(--c-line), 0 4px 12px rgb(27 31 59 / 0.06);
+    --shadow-card: none;
   }
 
   /* Sous-chartes (zones culturelles) */
   .theme-filature {
-    --c-zone: var(--c-teal);
+    --c-zone: var(--c-turquoise);
   }
   .theme-theatre {
-    --c-zone: var(--c-plum);
+    --c-zone: var(--c-violet);
   }
   .theme-festival {
-    --c-zone: var(--c-festival);
+    --c-zone: var(--c-jaune);
   }
 }

@@ -33,13 +33,27 @@ export function themeForLieu(lieuId: string): Theme {
   return 'default';
 }
 
-// Couleur de la bande des cartes événement
-export function zoneColorFor(lieuId: string, festival: boolean): string | undefined {
-  if (festival) return 'var(--c-festival)';
-  const theme = themeForLieu(lieuId);
-  if (theme === 'filature') return 'var(--c-teal)';
-  if (theme === 'theatre') return 'var(--c-plum)';
-  return undefined;
-}
+// Couleur d'aplat de chaque discipline (texte encre obligatoire)
+export const DISCIPLINE_COULEURS: Record<Discipline, string> = {
+  cirque: 'var(--c-orange)',
+  'theatre-de-rue': 'var(--c-jaune)',
+  musique: 'var(--c-rose)',
+  danse: 'var(--c-turquoise)',
+  marionnette: 'var(--c-violet)',
+  'jeune-public': 'var(--c-vert)',
+};
+
+// Nom de l'aplat de chaque discipline, pour les bandeaux de page
+export const DISCIPLINE_TONS: Record<
+  Discipline,
+  'orange' | 'jaune' | 'rose' | 'turquoise' | 'violet' | 'vert'
+> = {
+  cirque: 'orange',
+  'theatre-de-rue': 'jaune',
+  musique: 'rose',
+  danse: 'turquoise',
+  marionnette: 'violet',
+  'jeune-public': 'vert',
+};
 
 export const eventUrlPath = (id: string) => `/sortir/agenda/${id}/`;

@@ -495,3 +495,62 @@ Les preuves de la page « À propos du projet » sont mises à jour (`src/data/p
 À la demande de l'auteur, le brief de développement n'est plus publié sur le site : la route `src/pages/documents/brief-developpement-vaugrenelle.md.ts` et le lien de la page « À propos du projet » sont supprimés. La démarche décrit toujours l'étape du brief, sans lien. Seul le cahier des charges reste téléchargeable.
 
 `CLAUDE.md` est **conservé dans le dépôt** : le site ne l'utilise plus, mais il sert de brief aux sessions de développement (phase 9). Le dépôt GitHub étant public, le fichier y reste visible ; pour le masquer complètement, il faudrait rendre le dépôt privé ou retirer le fichier de son historique.
+
+---
+
+## 2026-10-28 — Refonte graphique « affiche de rue »
+
+### Pourquoi
+
+L'auteur a jugé le rendu « très moche ». Le diagnostic :
+
+- une même composition géométrique répétée sur toutes les pages, qui faisait office d'illustration provisoire ;
+- des styles qui se contredisaient : ombres décalées, cartes à ombre douce, encadré bleu ;
+- des titres plats et une palette sombre dominée par le bleu nuit ;
+- une mise en page de formulaire administratif.
+
+L'auteur a choisi la direction « **affiche de rue** » et autorisé trois **[écarts au brief]** : une police de titres, des illustrations SVG dessinées et des photos libres. Le brief (`CLAUDE.md`, § 2 et § 4) est mis à jour en conséquence.
+
+### Identité
+
+- **Palette** : papier crème et encre, **aplats vifs** (orange, jaune, rose, turquoise, violet, vert) **toujours avec du texte encre**. Contrastes mesurés : orange 5,8:1, violet 7,5:1, rose 8,3:1, jaune 12:1. Les teintes pâles servent aux fonds secondaires. L'accent texte et le focus restent un orange profond (5,1:1 sur papier).
+- **Contour de focus sur un aplat** : il passerait sous 3:1 en orange. La classe `on-aplat` passe donc le texte, les liens et le focus à l'encre.
+- **Typographie** : **Anton** (OFL, 18 Ko, sous-ensemble latin) pour `h1` et `h2`, préchargée. Atkinson Hyperlegible reste la police du texte et des titres de niveau 3. Total des polices : 53 Ko.
+- **Formes** : bordures encre de 2 px, rayons 14 et 28 px, boutons et onglets en pastilles, **plus aucune ombre portée**. Le survol des boutons principaux passe en aplat orange.
+- **Couleur par discipline** (`DISCIPLINE_COULEURS`, `DISCIPLINE_TONS`) : cirque en orange, théâtre de rue en jaune, musique en rose, danse en turquoise, marionnette en violet, jeune public en vert. Elle sert aux dates des cartes, aux lignes de l'agenda et au bandeau des fiches. Les sous-chartes de lieu (La Filature en turquoise, le Théâtre en violet, le festival en jaune) donnent la couleur de zone.
+- **Logo** : pastille orange avec un « V » d'affiche. Le pied de page affiche le mot-symbole « VAUGRENELLE » en très grand.
+
+### Photos (une par page au plus)
+
+5 photos sous **licence Unsplash** (usage libre), téléchargées une fois et conservées dans `src/assets/photos/` :
+
+| Page      | Photo           | Photographe     |
+| --------- | --------------- | --------------- |
+| Accueil   | Roue Cyr        | Kristijan Arsov |
+| Festival  | Cerceaux de feu | Jonny Clow      |
+| Agenda    | Chapiteau       | Ingo Ellerbusch |
+| Régie     | Projecteurs     | Don Starkey     |
+| Démarches | Repas de rue    | Margo Evardson  |
+
+- Elles sont servies par `<Picture>` d'`astro:assets` en **AVIF et WebP**, en 3 largeurs, avec des dimensions explicites. La photo de bandeau est chargée en priorité (`fetchpriority="high"`).
+- Les crédits figurent dans les mentions légales.
+- Rappel de l'avis de sécurité sur l'optimisation AVIF d'Astro 5 (voir la phase 0) : les images sont fournies par l'auteur, le risque est donc écarté.
+
+### Illustrations
+
+Des **illustrations SVG** sont dessinées pour le projet : une funambule (bloc « À la une ») et trois pictogrammes (document tamponné, billet, projecteur). Elles remplacent la composition géométrique, supprimée (`PosterArt`).
+
+### Composants et pages
+
+- **Accueil** : grande affiche orange avec titre en capitales, photo et pastille « Les Échappées » inclinée, bandeau figé incliné (décoratif, `aria-hidden`), tuiles d'accès rapide en aplats, cartes de la semaine, bloc festival rose et jaune avec la funambule. L'alerte bleue sur le festival est remplacée par la pastille, dont le lien porte les dates complètes pour les lecteurs d'écran.
+- **Bandeau de page** (`PageLayout`, props `photo`, `photoAlt` et `tone`) : aplat et photo pour l'agenda, les démarches et la Régie. Les fiches événement ont un aplat sans photo, de la couleur de leur discipline.
+- **En-tête collant**, légèrement translucide. Navigation en pastilles, rubrique active en encre.
+- **Transitions entre pages** (`@view-transition`), désactivées en mouvement réduit.
+
+### Contrôles
+
+- 167 tests de parcours et 24 audits axe passent.
+- Les débordements de l'accueil sont corrigés :
+  - le bandeau incliné est placé dans une enveloppe `overflow-x: clip` ;
+  - l'échelle `--fs-800` est réduite sur petit écran, pour que « VAUGRENELLE, » tienne à 320 px.
+- **EcoIndex** : A ou B sur les 21 pages. Le poids maximal est de 201 Ko (photo du repas de rue) et le DOM ne grossit presque pas.
